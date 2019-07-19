@@ -1,0 +1,6 @@
+[0m[[0m[33mwarn[0m] [0m[0m/Users/gregoryherman/SOC/SettlersOfCatan/src/main/scala/soc/behaviors/GameBehavior.scala:121:30: match may not be exhaustive.[0m
+[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following input: StateMessage(_, (x: soc.game.messages.CatanMessage forSome x not in (soc.game.messages.ErrorMessage, soc.game.messages.Response)))[0m
+[0m[[0m[33mwarn[0m] [0m[0m    Behaviors.receiveMessage {[0m
+[0m[[0m[33mwarn[0m] [0m[0m                             ^[0m
+[0m[[0m[33mwarn[0m] [0m[0mthere was one unchecked warning; re-run with -unchecked for details[0m
+[0m[[0m[33mwarn[0m] [0m[0mtwo warnings found[0m

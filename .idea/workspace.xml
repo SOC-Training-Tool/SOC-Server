@@ -1,0 +1,1146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e9bad142-6a61-41ad-8cf8-be2b5b463ebf" name="Default Changelist" comment="" />
+    <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <ignored path="$PROJECT_DIR$/project/project/target/" />
+    <ignored path="$PROJECT_DIR$/project/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="isMigrated" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="SBT">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SettlersOfCatan" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SettlersOfCatan" type="f1a62948:ProjectNode" />
+                <item name="SettlersOfCatan" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SettlersOfCatan" type="f1a62948:ProjectNode" />
+                <item name="SettlersOfCatan" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/PlayerState.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1110">
+              <caret line="74" column="87" selection-start-line="74" selection-start-column="87" selection-end-line="74" selection-end-column="87" />
+              <folding>
+                <element signature="e#25#94#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/CatanResourceSet.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/PerfectInfoPlayerState.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+              <folding>
+                <element signature="e#25#94#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/CatanPossibleMoves.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="129">
+              <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+              <folding>
+                <element signature="e#25#42#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/SOCPossibleHands.scala">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanGame.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/NoInfoPlayerState.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+              <folding>
+                <element signature="e#25#94#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/DiscardedCardsMapBuilder.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/ProbableResourceSet.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Scala Worksheet" />
+        <option value="Scala Class" />
+        <option value="Scala Trait" />
+        <option value="Scala Object" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>CatanResourceSet</find>
+      <find>Knight</find>
+      <find>`</find>
+      <find>log.print</find>
+      <find>buildR</find>
+      <find>EndTurnUpdate</find>
+      <find>log</find>
+      <find>PortTr</find>
+      <find>debug</find>
+      <find>nextPlayer</find>
+      <find>Build</find>
+      <find>7</find>
+      <find>(7)</find>
+      <find>portT</find>
+      <find>print</find>
+      <find>updateResources</find>
+      <find>buyDe</find>
+      <find>buy</find>
+      <find>build</find>
+      <find>development</find>
+      <find>settlement</find>
+      <find>Sett</find>
+      <find>Buy</find>
+      <find>updateRes</find>
+      <find>Settlement</find>
+      <find>City</find>
+      <find>info</find>
+      <find>city</find>
+      <find>println</find>
+      <find>=</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>Move</replace>
+      <replace>Message</replace>
+      <replace>info</replace>
+      <replace>deb</replace>
+      <replace>debug</replace>
+    </replaceStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/build.sbt" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/actors/GameSystem.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanPlayer.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanGame.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/MoveMessage.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/ResponseMessage.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/actors/PlayerActor.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/actors/GameActorSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanMove.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/Response.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/behaviors/sampleAskBehavior.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/resources/DiscardedCardsMapBuilder.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/UpdateMessage.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/actors/GameActor.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/RequestMessage.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/DevelopmentCardDeckBuilder.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/main/Main.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/resources/ProbableResourceSet.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/game/resources/SOCPossibleHandsSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/player/NoInfoPlayerStateSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/player/PlayerStateSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/resources/SOCPossibleHands.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/player/PerfectInfoPlayerStateSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/GameStateSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanSet.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/player/CatanPossibleMovesSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/SOCPossibleMove.scala" />
+        <option value="$PROJECT_DIR$/src/main/resources/applications.conf" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/behaviors/PlayerBehavior.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/StateMessage.scala" />
+        <option value="$PROJECT_DIR$/src/main/resources/application.conf" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/PlayerState.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/game/board/CatanBoardSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/board/CatanBoard.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/behaviors/GameBehavior.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/log/Log.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/log/SystemLog.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/Main.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/behaviors/Main.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/board/BaseCatanBoard.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/dice/Dice.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/dice/NormalDice.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/CatanMessage.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/MoveSelector.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/PossibleMoveSelector.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/CatanPossibleMoves.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/NoInfoPlayerState.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/PerfectInfoPlayerState.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/resources/CatanResourceSet.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanGameGenerator.scala" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="4" />
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="813" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="soc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="soc" type="462c0819:PsiDirectoryNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="soc" type="462c0819:PsiDirectoryNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="sqlite" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="restartRequiresConfirmation" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="soc.game" />
+      <recent name="soc.game.resources" />
+      <recent name="soc.game.board" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="soc.behaviors.Main" />
+      <module name="SettlersOfCatan" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="soc.behaviors.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CatanBoardSpec.longestRoadLength road scenario10" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+      <module name="SettlersOfCatan" />
+      <setting name="path" value="soc.game.board.CatanBoardSpec" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="showProgressMessages" value="true" />
+      <setting name="useSbt" value="false" />
+      <setting name="useUiWithSbt" value="false" />
+      <setting name="jrePath" value="" />
+      <envs />
+      <setting name="testKind" value="Test name" />
+      <setting name="path" value="soc.game.board.CatanBoardSpec" />
+      <setting name="testName" value="longestRoadLength road scenario10" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CatanBoardSpec.longestRoadLength road scenario1&#10;longestRoadLength road scenario2&#10;longestRoadLength road scenario3&#10;longestRoadLength road scenario4&#10;longestRoadLength road scenario5&#10;longestRoadLength road scenario6&#10;longestRoadLength road scenario7&#10;longestRoadLength road scenario8&#10;longestRoadLength road scenario9&#10;longestRoadLength road scenario10" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+      <module name="SettlersOfCatan" />
+      <setting name="path" value="soc.game.board.CatanBoardSpec" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="showProgressMessages" value="true" />
+      <setting name="useSbt" value="false" />
+      <setting name="useUiWithSbt" value="false" />
+      <setting name="jrePath" value="" />
+      <envs />
+      <setting name="testKind" value="Test name" />
+      <setting name="path" value="soc.game.board.CatanBoardSpec" />
+      <setting name="testName" value="longestRoadLength road scenario1&#10;longestRoadLength road scenario2&#10;longestRoadLength road scenario3&#10;longestRoadLength road scenario4&#10;longestRoadLength road scenario5&#10;longestRoadLength road scenario6&#10;longestRoadLength road scenario7&#10;longestRoadLength road scenario8&#10;longestRoadLength road scenario9&#10;longestRoadLength road scenario10" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CatanBoardSpec.longestRoadLength road scenario8" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+      <module name="SettlersOfCatan" />
+      <setting name="path" value="soc.game.board.CatanBoardSpec" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="showProgressMessages" value="true" />
+      <setting name="useSbt" value="false" />
+      <setting name="useUiWithSbt" value="false" />
+      <setting name="jrePath" value="" />
+      <envs />
+      <setting name="testKind" value="Test name" />
+      <setting name="path" value="soc.game.board.CatanBoardSpec" />
+      <setting name="testName" value="longestRoadLength road scenario8" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CatanBoardSpec.longestRoadLength without settlements road scenario1&#10;longestRoadLength without settlements road scenario2&#10;longestRoadLength without settlements road scenario3&#10;longestRoadLength without settlements road scenario4&#10;longestRoadLength without settlements road scenario5&#10;longestRoadLength without settlements road scenario6&#10;longestRoadLength without settlements road scenario7&#10;longestRoadLength without settlements road scenario8&#10;longestRoadLength without settlements road scenario9&#10;longestRoadLength without settlements road scenario10" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+      <module name="SettlersOfCatan" />
+      <setting name="path" value="soc.game.board.CatanBoardSpec" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="showProgressMessages" value="true" />
+      <setting name="useSbt" value="false" />
+      <setting name="useUiWithSbt" value="false" />
+      <setting name="jrePath" value="" />
+      <envs />
+      <setting name="testKind" value="Test name" />
+      <setting name="path" value="soc.game.board.CatanBoardSpec" />
+      <setting name="testName" value="longestRoadLength without settlements road scenario1&#10;longestRoadLength without settlements road scenario2&#10;longestRoadLength without settlements road scenario3&#10;longestRoadLength without settlements road scenario4&#10;longestRoadLength without settlements road scenario5&#10;longestRoadLength without settlements road scenario6&#10;longestRoadLength without settlements road scenario7&#10;longestRoadLength without settlements road scenario8&#10;longestRoadLength without settlements road scenario9&#10;longestRoadLength without settlements road scenario10" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="ScalaTest.CatanBoardSpec.longestRoadLength without settlements road scenario1&#10;longestRoadLength without settlements road scenario2&#10;longestRoadLength without settlements road scenario3&#10;longestRoadLength without settlements road scenario4&#10;longestRoadLength without settlements road scenario5&#10;longestRoadLength without settlements road scenario6&#10;longestRoadLength without settlements road scenario7&#10;longestRoadLength without settlements road scenario8&#10;longestRoadLength without settlements road scenario9&#10;longestRoadLength without settlements road scenario10" />
+        <item itemvalue="ScalaTest.CatanBoardSpec.longestRoadLength road scenario1&#10;longestRoadLength road scenario2&#10;longestRoadLength road scenario3&#10;longestRoadLength road scenario4&#10;longestRoadLength road scenario5&#10;longestRoadLength road scenario6&#10;longestRoadLength road scenario7&#10;longestRoadLength road scenario8&#10;longestRoadLength road scenario9&#10;longestRoadLength road scenario10" />
+        <item itemvalue="ScalaTest.CatanBoardSpec.longestRoadLength road scenario10" />
+        <item itemvalue="ScalaTest.CatanBoardSpec.longestRoadLength road scenario8" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SbtLocalSettings">
+    <option name="availableProjects">
+      <map>
+        <entry>
+          <key>
+            <ExternalProjectPojo>
+              <option name="name" value="SettlersOfCatan" />
+              <option name="path" value="$PROJECT_DIR$" />
+            </ExternalProjectPojo>
+          </key>
+          <value>
+            <list>
+              <ExternalProjectPojo>
+                <option name="name" value="settlersofcatan [file:/Users/gregoryherman/SOC/SettlersOfCatan/]" />
+                <option name="path" value="$PROJECT_DIR$" />
+              </ExternalProjectPojo>
+              <ExternalProjectPojo>
+                <option name="name" value="SettlersOfCatan-build" />
+                <option name="path" value="$PROJECT_DIR$/project" />
+              </ExternalProjectPojo>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="modificationStamps">
+      <map>
+        <entry key="$PROJECT_DIR$" value="3118712337000" />
+        <entry key="$PROJECT_DIR$/build.sbt" value="1478487637" />
+        <entry key="$PROJECT_DIR$/project/build.properties" value="2567920773" />
+      </map>
+    </option>
+    <option name="projectSyncType">
+      <map>
+        <entry key="$USER_HOME$/ND/analytxbook" value="PREVIEW" />
+        <entry key="$USER_HOME$/ND/nd-cluster" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../JSettlers2" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e9bad142-6a61-41ad-8cf8-be2b5b463ebf" name="Default Changelist" comment="" />
+      <created>1556543914220</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1556543914220</updated>
+      <workItem from="1556543919797" duration="812000" />
+      <workItem from="1556559866336" duration="4563000" />
+      <workItem from="1556649281021" duration="1196000" />
+      <workItem from="1556655167307" duration="506000" />
+      <workItem from="1556738072135" duration="1196000" />
+      <workItem from="1557067495550" duration="1547000" />
+      <workItem from="1557150045931" duration="6096000" />
+      <workItem from="1557518832116" duration="3098000" />
+      <workItem from="1557757491953" duration="4448000" />
+      <workItem from="1557779043499" duration="2213000" />
+      <workItem from="1558103316493" duration="10744000" />
+      <workItem from="1558119312252" duration="1995000" />
+      <workItem from="1558375653777" duration="3875000" />
+      <workItem from="1558381723642" duration="6722000" />
+      <workItem from="1558462281517" duration="17000" />
+      <workItem from="1558555159771" duration="608000" />
+      <workItem from="1559067373618" duration="1325000" />
+      <workItem from="1559069721656" duration="1619000" />
+      <workItem from="1559313965745" duration="121000" />
+      <workItem from="1559329806368" duration="2031000" />
+      <workItem from="1559578083069" duration="645000" />
+      <workItem from="1559786492157" duration="3581000" />
+      <workItem from="1559844627079" duration="598000" />
+      <workItem from="1559858423155" duration="672000" />
+      <workItem from="1559943730913" duration="1248000" />
+      <workItem from="1560117960822" duration="5237000" />
+      <workItem from="1560172502116" duration="27880000" />
+      <workItem from="1560469540590" duration="80638000" />
+      <workItem from="1561393491416" duration="743000" />
+      <workItem from="1561563600111" duration="68855000" />
+      <workItem from="1562767417984" duration="2158000" />
+      <workItem from="1562790388738" duration="23298000" />
+      <workItem from="1562878370264" duration="5307000" />
+      <workItem from="1563049924794" duration="2000" />
+      <workItem from="1563132205089" duration="40177000" />
+      <workItem from="1563298829449" duration="11868000" />
+      <workItem from="1563398223883" duration="6432000" />
+      <workItem from="1563460664511" duration="834000" />
+      <workItem from="1563464291874" duration="14879000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 18m 25s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 20m 23s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 23m 42s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 26m 01s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 27m 17s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 33m 32s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 34m 23s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 36m 27s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 47m 03s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="CatanBoardSpec_longestRoadLength_road_scenario10 - 2019.07.18 at 14h 47m 22s.xml">
+      <configuration name="CatanBoardSpec.longestRoadLength road scenario10" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="349784000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="4" y="23" width="1440" height="813" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14735337" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="UI Designer" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.40974212" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.36819485" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Build" order="7" weight="0.17191978" />
+      <window_info anchor="bottom" id="SBT Console" order="8" />
+      <window_info anchor="bottom" id="sbt-shell-toolwindow" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" order="13" />
+      <window_info anchor="bottom" id="Version Control" order="14" />
+      <window_info anchor="bottom" id="Messages" order="15" weight="0.24498567" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="3" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="sbt" order="5" weight="0.32960597" />
+      <window_info anchor="right" id="Capture Analysis" order="6" />
+      <window_info anchor="right" id="Database" order="7" weight="0.3297568" />
+      <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Theme Preview" order="9" />
+      <window_info anchor="right" id="Coverage" order="10" side_tool="true" weight="0.32960597" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13733906" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="UI Designer" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.34383956" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39971346" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Build" order="7" weight="0.17191978" />
+      <window_info anchor="bottom" id="SBT Console" order="8" />
+      <window_info anchor="bottom" id="sbt-shell-toolwindow" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" order="13" />
+      <window_info anchor="bottom" id="Version Control" order="14" />
+      <window_info anchor="bottom" id="Messages" order="15" weight="0.11318052" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="3" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="sbt" order="5" weight="0.3297568" />
+      <window_info anchor="right" id="Capture Analysis" order="6" />
+      <window_info anchor="right" id="Database" order="7" />
+      <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Theme Preview" order="9" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/src/test/scala/soc/player/PerfectInfoPlayerStateSpec.scala</url>
+          <line>20</line>
+          <properties />
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/src/test/scala/soc/player/PerfectInfoPlayerStateSpec.scala</url>
+          <line>24</line>
+          <properties />
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/SettlersOfCatan$Main__1_.ic" NAME="Main (1) Coverage Results" MODIFIED="1563226425200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>soc.main.*</FILTER>
+    </SUITE>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/GenIterableLike.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/Seq.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/Iterable.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="51" column="70" selection-start-line="51" selection-start-column="70" selection-end-line="51" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/Iterable.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="45" column="6" selection-start-line="45" selection-start-column="6" selection-end-line="45" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/Iterator.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19035">
+          <caret line="1282" column="6" selection-start-line="1282" selection-start-column="6" selection-end-line="1282" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/TraversableOnce.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1395">
+          <caret line="107" column="6" selection-start-line="107" selection-start-column="6" selection-end-line="107" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/SOCPossibleMove.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="57" column="17" selection-start-line="57" selection-start-column="17" selection-end-line="57" selection-end-column="17" />
+          <folding>
+            <element signature="e#18#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor-typed_2.12/srcs/akka-actor-typed_2.12-2.5.23-sources.jar!/akka/actor/typed/ActorRef.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="24" column="33" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/StateMessage.scala" />
+    <entry file="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor-typed_2.12/srcs/akka-actor-typed_2.12-2.5.23-sources.jar!/akka/actor/typed/scaladsl/Behaviors.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="29" column="6" selection-start-line="29" selection-start-column="6" selection-end-line="29" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/lang/Terminator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="39" column="6" selection-start-line="39" selection-start-column="6" selection-end-line="39" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/concurrent/ExecutionContext.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2100">
+          <caret line="151" column="22" selection-start-line="151" selection-start-column="22" selection-end-line="151" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor-typed_2.12/srcs/akka-actor-typed_2.12-2.5.23-sources.jar!/akka/actor/typed/ActorSystem.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1485">
+          <caret line="120" column="6" selection-start-line="120" selection-start-column="6" selection-end-line="120" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/MapLike.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="84" column="6" selection-start-line="84" selection-start-column="6" selection-end-line="84" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/Map.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="62" column="15" selection-start-line="62" selection-start-column="15" selection-end-line="62" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/DefaultMap.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="37" column="6" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/GenMapLike.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="30" column="6" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/HashMap.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="38" column="13" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/Map.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="74" column="6" selection-start-line="74" selection-start-column="6" selection-end-line="74" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/application.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="180" column="75" selection-start-line="180" selection-start-column="75" selection-end-line="180" selection-end-column="75" />
+          <folding>
+            <element signature="e#18#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/dictionaries/gregoryherman.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/log/Log.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/log/SystemLog.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/Main.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/actors/GameActor.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/actors/PlayerActor.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/behaviors/Main.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
+          <folding>
+            <element signature="e#23#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/behaviors/PlayerBehavior.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+          <folding>
+            <element signature="e#23#70#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/board/BaseCatanBoard.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/board/CatanBoard.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3600">
+          <caret line="242" selection-start-line="242" selection-end-line="242" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/dice/Dice.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/dice/NormalDice.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/CatanMessage.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/RequestMessage.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/Response.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/UpdateMessage.scala">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/MoveSelector.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/PossibleMoveSelector.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="e#38#105#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/behaviors/GameBehavior.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="77" column="31" selection-start-line="77" selection-start-column="31" selection-end-line="77" selection-end-column="31" />
+          <folding>
+            <element signature="e#23#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/board/CatanBoardSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="201" column="19" selection-start-line="201" selection-start-column="19" selection-end-line="201" selection-end-column="19" />
+          <folding>
+            <element signature="e#24#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/CatanPossibleMoves.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+          <folding>
+            <element signature="e#25#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/NoInfoPlayerState.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+          <folding>
+            <element signature="e#25#94#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/PerfectInfoPlayerState.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+          <folding>
+            <element signature="e#25#94#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/PlayerState.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1110">
+          <caret line="74" column="87" selection-start-line="74" selection-start-column="87" selection-end-line="74" selection-end-column="87" />
+          <folding>
+            <element signature="e#25#94#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/CatanResourceSet.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/DiscardedCardsMapBuilder.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/ProbableResourceSet.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/SOCPossibleHands.scala">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanGameGenerator.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-9">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanGame.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>SettlersOfCatan</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
