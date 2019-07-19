@@ -21,7 +21,7 @@ object Main extends App {
 
   val dice = NormalDice()
 
-  def randSelector: Iterator[CatanMove] => CatanMove = (moves: Iterator[CatanMove]) => {
+  val randSelector = PossibleMoveSelector { case (_, moves: Iterator[CatanMove]) =>
     val (a, b) = moves.duplicate
     b.drop(random.nextInt(a.length)).next()
   }
@@ -36,10 +36,10 @@ object Main extends App {
 
 
   val players = Map(
-    ("player0", 0) -> ActorSystem(PlayerBehavior.playerBehavior(PossibleMoveSelector(randSelector)), "player0"),
-    ("player1", 1) -> ActorSystem(PlayerBehavior.playerBehavior(PossibleMoveSelector(randSelector)), "player1"),
-    ("player2", 2) -> ActorSystem(PlayerBehavior.playerBehavior(PossibleMoveSelector(randSelector)), "player2"),
-    ("player3", 3) -> ActorSystem(PlayerBehavior.playerBehavior(PossibleMoveSelector(randSelector)), "player3")
+    ("player0", 0) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player0"),
+    ("player1", 1) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player1"),
+    ("player2", 2) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player2"),
+    ("player3", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player3")
   )
 
   val numGames = 100

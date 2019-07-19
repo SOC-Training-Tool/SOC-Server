@@ -5,15 +5,16 @@ import soc.game.resources.CatanResourceSet
 import soc.game.resources.CatanResourceSet.Resources
 
 sealed trait CatanMove
-sealed trait ImperfectInformation
 trait CatanBuildMove extends CatanMove
 trait CatanTradeMove extends CatanMove
 sealed trait CatanPlayCardMove extends CatanMove
 trait TradeResponse extends CatanTradeMove
 
+sealed trait ImperfectInformation
+
 object CatanMove {
   case object RollDiceMove extends CatanMove with ImperfectInformation
-  case object EndTurnMove extends CatanMove with ImperfectInformation
+  case object EndTurnMove extends CatanMove
 
   case class InitialPlacementMove(first: Boolean, settlement: Vertex, road: Edge) extends CatanMove
 
@@ -35,7 +36,7 @@ object CatanMove {
 
   case class KnightMove(robber: MoveRobberAndStealMove) extends CatanPlayCardMove with ImperfectInformation
   case class YearOfPlentyMove(res1: Resource, res2: Resource) extends CatanPlayCardMove
-  case class MonopolyMove(res: Resource) extends CatanPlayCardMove
+  case class MonopolyMove(res: Resource) extends CatanPlayCardMove with ImperfectInformation
   case class RoadBuilderMove(road1: Edge, road2: Option[Edge]) extends CatanPlayCardMove
   case object PointMove extends CatanPlayCardMove
 }
