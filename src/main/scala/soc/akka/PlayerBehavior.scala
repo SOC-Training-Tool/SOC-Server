@@ -1,9 +1,10 @@
-package soc.behaviors
+package soc.akka
 
 import akka.actor.typed.SupervisorStrategy.Stop
 import akka.actor.typed.scaladsl.Behaviors
-import soc.game.messages.RequestMessage._
-import soc.game.messages.{GameMessage, Response, Terminate, UpdateMessage}
+import soc.akka.messages.RequestMessage._
+import soc.akka.messages.{GameMessage, Response, Terminate, UpdateMessage}
+import soc.akka.messages.{GameMessage, Response, Terminate}
 import soc.game.player.moveSelector.MoveSelector
 
 object PlayerBehavior {

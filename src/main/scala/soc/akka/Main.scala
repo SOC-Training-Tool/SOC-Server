@@ -1,12 +1,12 @@
-package soc.behaviors
+package soc.akka
 
 import akka.actor.PoisonPill
 import akka.actor.typed.{ActorRef, ActorSystem}
+import soc.akka.messages.Terminate
 import soc.game.dice.NormalDice
 import soc.game.player.moveSelector.PossibleMoveSelector
 import soc.game._
 import soc.game.board.BaseCatanBoard
-import soc.game.messages.Terminate
 
 import scala.concurrent.{Await, Future}
 import scala.util.Random

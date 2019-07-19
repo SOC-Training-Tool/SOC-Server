@@ -1,6 +1,14 @@
-[0m[[0m[33mwarn[0m] [0m[0m/Users/gregoryherman/SOC/SettlersOfCatan/src/main/scala/soc/behaviors/GameBehavior.scala:121:30: match may not be exhaustive.[0m
-[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following input: StateMessage(_, (x: soc.game.messages.CatanMessage forSome x not in (soc.game.messages.ErrorMessage, soc.game.messages.Response)))[0m
-[0m[[0m[33mwarn[0m] [0m[0m    Behaviors.receiveMessage {[0m
-[0m[[0m[33mwarn[0m] [0m[0m                             ^[0m
-[0m[[0m[33mwarn[0m] [0m[0mthere was one unchecked warning; re-run with -unchecked for details[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/gregoryherman/SOC/SettlersOfCatan/src/main/scala/soc/akka/GameBehavior.scala:13:17: object messages is not a member of package soc.game[0m
+[0m[[0m[31merror[0m] [0m[0mimport soc.game.messages.{ErrorMessage, GameMessage, Response, StateMessage, UpdateMessage}[0m
+[0m[[0m[31merror[0m] [0m[0m                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/gregoryherman/SOC/SettlersOfCatan/src/main/scala/soc/akka/PlayerBehavior.scala:7:17: object messages is not a member of package soc.game[0m
+[0m[[0m[31merror[0m] [0m[0mimport soc.game.messages.{GameMessage, Response, Terminate}[0m
+[0m[[0m[31merror[0m] [0m[0m                ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/Users/gregoryherman/SOC/SettlersOfCatan/src/main/scala/soc/game/CatanSet.scala:26:67: abstract type pattern A is unchecked since it is eliminated by erasure[0m
+[0m[[0m[33mwarn[0m] [0m[0m    set.getTypes.foldLeft(this){ case (newSet: CatanSet[A, T], a: A) => newSet.add(set(a), a) }[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                                  ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/Users/gregoryherman/SOC/SettlersOfCatan/src/main/scala/soc/game/CatanSet.scala:38:67: abstract type pattern A is unchecked since it is eliminated by erasure[0m
+[0m[[0m[33mwarn[0m] [0m[0m    set.getTypes.foldLeft(this){ case (newSet: CatanSet[A, T], a: A) => newSet.subtract(set(a), a) }[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                                  ^[0m
 [0m[[0m[33mwarn[0m] [0m[0mtwo warnings found[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m

@@ -1,4 +1,4 @@
-package soc.game.messages
+package soc.akka.messages
 
 import soc.game.CatanMove
 

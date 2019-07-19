@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e9bad142-6a61-41ad-8cf8-be2b5b463ebf" name="Default Changelist" comment="" />
+    <list default="true" id="e9bad142-6a61-41ad-8cf8-be2b5b463ebf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/GameBehavior.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/GameBehavior.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/Main.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/PlayerBehavior.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/PlayerBehavior.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/CatanMessage.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/CatanMessage.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/RequestMessage.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/RequestMessage.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/Response.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/Response.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/UpdateMessage.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/UpdateMessage.scala" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/project/project/target/" />
@@ -63,92 +72,99 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/PlayerState.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1110">
-              <caret line="74" column="87" selection-start-line="74" selection-start-column="87" selection-end-line="74" selection-end-column="87" />
-              <folding>
-                <element signature="e#25#94#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/CatanResourceSet.scala">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/resources/SOCPossibleHandsSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="45">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
+              <caret line="4" selection-start-line="4" selection-end-line="4" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/PerfectInfoPlayerState.scala">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/CatanPossibleMovesSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+            <state relative-caret-position="60">
+              <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/NoInfoPlayerStateSpec.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/PerfectInfoPlayerStateSpec.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
               <folding>
-                <element signature="e#25#94#0" expanded="true" />
+                <element signature="e#19#47#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/CatanPossibleMoves.scala">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/PlayerStateSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
-              <folding>
-                <element signature="e#25#42#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="45">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/SOCPossibleHands.scala">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/CatanFixtures.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanGame.scala">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/GameStateSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+            <state relative-caret-position="195">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/NoInfoPlayerState.scala">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/actors/GameActorSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+            <state relative-caret-position="240">
+              <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/board/CatanBoardSpec.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
               <folding>
-                <element signature="e#25#94#0" expanded="true" />
+                <element signature="e#24#64#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/DiscardedCardsMapBuilder.scala">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/dcard/PossibleDevelopmentCardsSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/ProbableResourceSet.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+            <state relative-caret-position="45">
+              <caret line="4" selection-start-line="4" selection-end-line="4" />
             </state>
           </provider>
         </entry>
@@ -206,17 +222,15 @@
       <replace>debug</replace>
     </replaceStrings>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/build.sbt" />
-        <option value="$PROJECT_DIR$/src/main/scala/soc/actors/GameSystem.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanPlayer.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanGame.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/MoveMessage.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/ResponseMessage.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/actors/PlayerActor.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/soc/actors/GameActorSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanMove.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/Response.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/behaviors/sampleAskBehavior.scala" />
@@ -227,13 +241,9 @@
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/DevelopmentCardDeckBuilder.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/soc/main/Main.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/resources/ProbableResourceSet.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/soc/game/resources/SOCPossibleHandsSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/soc/player/NoInfoPlayerStateSpec.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/soc/player/PlayerStateSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/resources/SOCPossibleHands.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/soc/player/PerfectInfoPlayerStateSpec.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/soc/GameStateSpec.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanSet.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/soc/player/CatanPossibleMovesSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/SOCPossibleMove.scala" />
         <option value="$PROJECT_DIR$/src/main/resources/applications.conf" />
@@ -241,7 +251,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/StateMessage.scala" />
         <option value="$PROJECT_DIR$/src/main/resources/application.conf" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/PlayerState.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/soc/game/board/CatanBoardSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/board/CatanBoard.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/behaviors/GameBehavior.scala" />
@@ -260,20 +269,32 @@
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/PerfectInfoPlayerState.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/resources/CatanResourceSet.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanGameGenerator.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanPlayer.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/DevelopmentCardManager.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanSet.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/actors/GameActorSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/game/board/CatanBoardSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/game/dcard/PossibleDevelopmentCardsSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/game/resources/SOCPossibleHandsSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/player/PlayerStateSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/CatanFixtures.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/soc/GameStateSpec.scala" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="4" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="813" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -312,7 +333,37 @@
               <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
               <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="soc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="soc" type="462c0819:PsiDirectoryNode" />
+              <item name="actors" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="scala" type="462c0819:PsiDirectoryNode" />
               <item name="soc" type="462c0819:PsiDirectoryNode" />
               <item name="game" type="462c0819:PsiDirectoryNode" />
@@ -321,21 +372,50 @@
               <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
               <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="soc" type="462c0819:PsiDirectoryNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="board" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="soc" type="462c0819:PsiDirectoryNode" />
+              <item name="game" type="462c0819:PsiDirectoryNode" />
+              <item name="dcard" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="scala" type="462c0819:PsiDirectoryNode" />
               <item name="soc" type="462c0819:PsiDirectoryNode" />
               <item name="game" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="soc" type="462c0819:PsiDirectoryNode" />
+              <item name="player" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="sqlite" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -366,11 +446,11 @@
   </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="soc.behaviors.Main" />
+      <option name="MAIN_CLASS_NAME" value="soc.akka.Main" />
       <module name="SettlersOfCatan" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="soc.behaviors.*" />
+          <option name="PATTERN" value="soc.akka.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -552,7 +632,8 @@
       <workItem from="1563298829449" duration="11868000" />
       <workItem from="1563398223883" duration="6432000" />
       <workItem from="1563460664511" duration="834000" />
-      <workItem from="1563464291874" duration="14879000" />
+      <workItem from="1563464291874" duration="15853000" />
+      <workItem from="1563548018626" duration="172000" />
     </task>
     <servers />
   </component>
@@ -589,13 +670,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="349784000" />
+    <option name="totallyTimeSpent" value="350930000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="23" width="1440" height="813" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="813" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14735337" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14949928" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -603,8 +684,8 @@
       <window_info id="UI Designer" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.40974212" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3295129" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.40974212" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.36819485" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -616,7 +697,7 @@
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="13" />
-      <window_info anchor="bottom" id="Version Control" order="14" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="14" visible="true" weight="0.3295129" />
       <window_info anchor="bottom" id="Messages" order="15" weight="0.24498567" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -693,150 +774,10 @@
     </SUITE>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/GenIterableLike.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/Seq.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/Iterable.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="51" column="70" selection-start-line="51" selection-start-column="70" selection-end-line="51" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/Iterable.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="45" column="6" selection-start-line="45" selection-start-column="6" selection-end-line="45" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/Iterator.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19035">
-          <caret line="1282" column="6" selection-start-line="1282" selection-start-column="6" selection-end-line="1282" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/TraversableOnce.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1395">
-          <caret line="107" column="6" selection-start-line="107" selection-start-column="6" selection-end-line="107" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/SOCPossibleMove.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="57" column="17" selection-start-line="57" selection-start-column="17" selection-end-line="57" selection-end-column="17" />
-          <folding>
-            <element signature="e#18#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor-typed_2.12/srcs/akka-actor-typed_2.12-2.5.23-sources.jar!/akka/actor/typed/ActorRef.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="24" column="33" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/StateMessage.scala" />
-    <entry file="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor-typed_2.12/srcs/akka-actor-typed_2.12-2.5.23-sources.jar!/akka/actor/typed/scaladsl/Behaviors.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="29" column="6" selection-start-line="29" selection-start-column="6" selection-end-line="29" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/lang/Terminator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="39" column="6" selection-start-line="39" selection-start-column="6" selection-end-line="39" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/concurrent/ExecutionContext.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2100">
-          <caret line="151" column="22" selection-start-line="151" selection-start-column="22" selection-end-line="151" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor-typed_2.12/srcs/akka-actor-typed_2.12-2.5.23-sources.jar!/akka/actor/typed/ActorSystem.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1485">
-          <caret line="120" column="6" selection-start-line="120" selection-start-column="6" selection-end-line="120" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/MapLike.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="84" column="6" selection-start-line="84" selection-start-column="6" selection-end-line="84" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/Map.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="62" column="15" selection-start-line="62" selection-start-column="15" selection-end-line="62" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/DefaultMap.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="37" column="6" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/GenMapLike.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="30" column="6" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/HashMap.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="38" column="13" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.8-sources.jar!/scala/collection/immutable/Map.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="74" column="6" selection-start-line="74" selection-start-column="6" selection-end-line="74" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/application.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="180" column="75" selection-start-line="180" selection-start-column="75" selection-end-line="180" selection-end-column="75" />
-          <folding>
-            <element signature="e#18#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -857,21 +798,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/Main.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/Main.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/soc/actors/GameActor.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/soc/actors/PlayerActor.scala">
       <provider selected="true" editor-type-id="text-editor">
@@ -882,7 +811,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/behaviors/Main.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/Main.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
@@ -892,7 +821,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/behaviors/PlayerBehavior.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/PlayerBehavior.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
@@ -930,28 +859,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/CatanMessage.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/messages/CatanMessage.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="4" selection-start-line="4" selection-end-line="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/RequestMessage.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/messages/RequestMessage.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/Response.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/messages/Response.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/messages/UpdateMessage.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/messages/UpdateMessage.scala">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/MoveSelector.scala">
@@ -971,22 +900,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/behaviors/GameBehavior.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/GameBehavior.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="98">
           <caret line="77" column="31" selection-start-line="77" selection-start-column="31" selection-end-line="77" selection-end-column="31" />
           <folding>
             <element signature="e#23#67#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/board/CatanBoardSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="201" column="19" selection-start-line="201" selection-start-column="19" selection-end-line="201" selection-end-column="19" />
-          <folding>
-            <element signature="e#24#64#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1021,16 +940,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/PlayerState.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1110">
-          <caret line="74" column="87" selection-start-line="74" selection-start-column="87" selection-end-line="74" selection-end-column="87" />
-          <folding>
-            <element signature="e#25#94#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/CatanResourceSet.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -1052,20 +961,161 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanGameGenerator.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanGame.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/resources/SOCPossibleHands.scala">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanGameGenerator.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanPlayer.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanState.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/PlayerState.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9">
+        <state relative-caret-position="1110">
+          <caret line="74" column="87" selection-start-line="74" selection-start-column="87" selection-end-line="74" selection-end-column="87" />
+          <folding>
+            <element signature="e#25#94#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/DevelopmentCardManager.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
           <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanGame.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/DevelopmentCardDeckBuilder.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanSet.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanMove.scala">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2700">
+          <caret line="180" column="75" selection-start-line="180" selection-start-column="75" selection-end-line="180" selection-end-column="75" />
+          <folding>
+            <element signature="e#18#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/SOCPossibleMove.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="57" column="17" selection-start-line="57" selection-start-column="17" selection-end-line="57" selection-end-column="17" />
+          <folding>
+            <element signature="e#18#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/robot/RobotBrainML.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/robot/RobotClientML.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/robot/TurnPredictors.sc">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/resources/SOCPossibleHandsSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/CatanPossibleMovesSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
-          <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+          <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/NoInfoPlayerStateSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/PerfectInfoPlayerStateSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding>
+            <element signature="e#19#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/PlayerStateSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/CatanFixtures.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/actors/GameActorSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/board/CatanBoardSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="e#24#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/dcard/PossibleDevelopmentCardsSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/soc/GameStateSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
         </state>
       </provider>
     </entry>

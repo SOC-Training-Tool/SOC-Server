@@ -1,6 +1,6 @@
-package soc.game.messages
+package soc.akka.messages
 
-import soc.behaviors.GameStateHolder
+import soc.akka.GameStateHolder
 import soc.game.GameState
 
 trait CatanMessage

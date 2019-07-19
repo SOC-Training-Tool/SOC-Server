@@ -1,15 +1,16 @@
-package soc.behaviors
+package soc.akka
 
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.actor.typed.scaladsl.Behaviors
 import akka.util.Timeout
+import soc.akka.messages.{ErrorMessage, GameMessage, RequestMessage, Response, StateMessage, UpdateMessage}
 import soc.game.CatanMove._
 import soc.game.{CatanMove, CatanPlayCardMove, DevelopmentCard, GameState, Resource, Roll}
 import soc.game.board.{CatanBoard, Edge, Vertex}
 import soc.game.dice.Dice
-import soc.game.messages.RequestMessage._
-import soc.game.messages.UpdateMessage._
-import soc.game.messages.{ErrorMessage, GameMessage, RequestMessage, Response, StateMessage, UpdateMessage}
+import soc.akka.messages.RequestMessage._
+import soc.akka.messages.UpdateMessage._
+import soc.akka.messages.{ErrorMessage, GameMessage, Response, StateMessage, UpdateMessage}
 import soc.game.player.{NoInfoPlayerState, PerfectInfoPlayerState}
 import soc.game.resources.{CatanResourceSet, DiscardedCardsMapBuilder, Steal}
 
