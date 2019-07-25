@@ -2,14 +2,153 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e9bad142-6a61-41ad-8cf8-be2b5b463ebf" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/soc/data/DataController.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/GameBehavior.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/GameBehavior.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/Main.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/PlayerBehavior.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/PlayerBehavior.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/CatanMessage.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/CatanMessage.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/RequestMessage.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/RequestMessage.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/Response.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/Response.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/UpdateMessage.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/soc/akka/messages/UpdateMessage.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/soc/controller/GameController.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/META-INF/SettlersOfCatan.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/log/SystemLog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/log/SystemLog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/behaviors/GameBehavior$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/behaviors/GameBehavior.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/behaviors/GameStateHolder$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/behaviors/GameStateHolder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/behaviors/Main$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/behaviors/Main$delayedInit$body.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/behaviors/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/behaviors/PlayerBehavior$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/behaviors/PlayerBehavior.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanGame$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanGame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanGameGenerator$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanGameGenerator$PlayerDetails$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanGameGenerator$PlayerDetails.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanGameGenerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$AcceptTrade$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$AcceptTrade$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildCity$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildCity$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildCity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildCity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildRoad$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildRoad$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildRoad.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildRoad.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildSettlement$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildSettlement$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildSettlement.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuildSettlement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuyDevelopmentCardMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$BuyDevelopmentCardMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$CounterTrade$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$CounterTrade$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$CounterTrade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$CounterTrade.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$DiscardResourcesMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$DiscardResourcesMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$DiscardResourcesMove.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$DiscardResourcesMove.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$EndTurnMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$EndTurnMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$InitialPlacementMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$InitialPlacementMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$InitialPlacementMove.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$InitialPlacementMove.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$KnightMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$KnightMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$KnightMove.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$KnightMove.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$MonopolyMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$MonopolyMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$MonopolyMove.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$MonopolyMove.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$MoveRobberAndStealMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$MoveRobberAndStealMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$MoveRobberAndStealMove.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$MoveRobberAndStealMove.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$PointMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$PointMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$PortTrade$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$PortTrade$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$PortTrade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$PortTrade.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$RejectTrade$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$RejectTrade$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$RoadBuilderMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$RoadBuilderMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$RoadBuilderMove.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$RoadBuilderMove.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$RollDiceMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$RollDiceMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$TradeMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$TradeMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$TradeMove.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$TradeMove.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$YearOfPlentyMove$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$YearOfPlentyMove$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$YearOfPlentyMove.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove$YearOfPlentyMove.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanMove.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanPlayer$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanPlayer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanSet$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanSet$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanSet$NumericWrapper$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanSet$NumericWrapper$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanSet$NumericWrapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanSet$NumericWrapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanSet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/CatanSet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/DevCardInventory$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/DevCardInventory$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/DevCardInventory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/DevCardInventory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/DevelopmentCardManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/DevelopmentCardManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/GameState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/GameState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/ImperfectInformation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/ImperfectInformation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/board/BaseCatanBoard$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/board/BaseCatanBoard$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/dice/NormalDice$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/dice/NormalDice$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/dice/NormalDice.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/dice/NormalDice.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/CatanMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/DevelopmentCardUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/ErrorMessage$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/ErrorMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/GameMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/PlayerMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage$DiscardCardRequest$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage$DiscardCardRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage$InitialPlacementRequest$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage$InitialPlacementRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage$MoveRequest$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage$MoveRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage$MoveRobberRequest$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage$MoveRobberRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/RequestMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/Response$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/Response.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/StateMessage$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/StateMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/Terminate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/Terminate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$BuildCityUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$BuildCityUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$BuildRoadUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$BuildRoadUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$BuildSettlementUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$BuildSettlementUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$BuyDevelopmentCardUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$BuyDevelopmentCardUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$DiscardCardsUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$DiscardCardsUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$EndTurnUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$EndTurnUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$InitialPlacementUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$InitialPlacementUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$KnightUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$KnightUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$LargestArmyUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$LargestArmyUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$LongestRoadUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$LongestRoadUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$MonopolyUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$MonopolyUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$MoveRobberUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$MoveRobberUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$PointUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$PointUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$PortTradeUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$PortTradeUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$RoadBuilderUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$RoadBuilderUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$RollDiceUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$RollDiceUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$TurnUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$TurnUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$YearOfPlentyUpdate$.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage$YearOfPlentyUpdate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/messages/UpdateMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/CatanPossibleMoves$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/CatanPossibleMoves$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/CatanPossibleMoves.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/CatanPossibleMoves.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/NoInfoPlayerState$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/NoInfoPlayerState$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/NoInfoPlayerState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/NoInfoPlayerState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/PerfectInfoPlayerState$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/PerfectInfoPlayerState$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/PerfectInfoPlayerState.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/PerfectInfoPlayerState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/moveSelector/PossibleMoveSelector$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/moveSelector/PossibleMoveSelector$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/moveSelector/PossibleMoveSelector.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/player/moveSelector/PossibleMoveSelector.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/resources/CatanResourceSet$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/resources/CatanResourceSet$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/resources/CatanResourceSet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/soc/game/resources/CatanResourceSet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/test-classes/META-INF/SettlersOfCatan.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/CatanFixtures$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/CatanFixtures$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/GameStateSpec$$anon$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/GameStateSpec$$anon$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/GameStateSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/GameStateSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/game/board/CatanBoardSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/game/board/CatanBoardSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/game/dcard/PossibleDevelopmentCardsSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/game/dcard/PossibleDevelopmentCardsSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/game/resources/SOCPossibleHandsSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/game/resources/SOCPossibleHandsSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/player/PlayerStateSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/test-classes/soc/player/PlayerStateSpec.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -74,97 +213,106 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/resources/SOCPossibleHandsSpec.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/Main.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="435">
+              <caret line="40" column="20" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/CatanPossibleMovesSpec.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
+            <state relative-caret-position="5130">
+              <caret line="346" column="3" selection-start-line="346" selection-start-column="3" selection-end-line="346" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/NoInfoPlayerStateSpec.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanMove.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/PerfectInfoPlayerStateSpec.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+            <state relative-caret-position="615">
+              <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
               <folding>
-                <element signature="e#19#47#0" expanded="true" />
+                <element signature="e#18#54#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/player/PlayerStateSpec.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/CatanPossibleMoves.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="195">
+              <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
+              <folding>
+                <element signature="e#25#42#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/CatanFixtures.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/sql/MoveEntry.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="135">
+              <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/MoveSaverBehavior.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
+              <folding>
+                <element signature="e#18#60#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/GameStateSpec.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/data/DataController.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="105">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/actors/GameActorSpec.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/storage/MoveSaver.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
+            <state relative-caret-position="60">
+              <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/board/CatanBoardSpec.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/PlayerBehavior.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="165">
+              <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
               <folding>
-                <element signature="e#24#64#0" expanded="true" />
+                <element signature="e#18#65#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/soc/game/dcard/PossibleDevelopmentCardsSpec.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/GameBehavior.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="-219">
+              <caret line="213" column="11" selection-start-line="213" selection-start-column="11" selection-end-line="213" selection-end-column="11" />
+              <folding>
+                <element signature="e#18#62#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -224,11 +372,15 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/MoveMessage.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/ResponseMessage.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/actors/PlayerActor.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/CatanMove.scala" />
@@ -251,7 +403,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/StateMessage.scala" />
         <option value="$PROJECT_DIR$/src/main/resources/application.conf" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/PlayerState.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/board/CatanBoard.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/behaviors/GameBehavior.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/log/Log.scala" />
@@ -263,7 +414,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/dice/NormalDice.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/messages/CatanMessage.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/MoveSelector.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/PossibleMoveSelector.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/CatanPossibleMoves.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/NoInfoPlayerState.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/PerfectInfoPlayerState.scala" />
@@ -279,14 +429,16 @@
         <option value="$PROJECT_DIR$/src/test/scala/soc/player/PlayerStateSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/soc/CatanFixtures.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/soc/GameStateSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/PossibleMoveSelector.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/soc/data/DataController.scala" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="4" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="813" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -294,7 +446,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -319,6 +470,13 @@
               <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="scala" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -333,37 +491,25 @@
               <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
               <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="scala" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="scala" type="462c0819:PsiDirectoryNode" />
               <item name="soc" type="462c0819:PsiDirectoryNode" />
+              <item name="akka" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
               <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="scala" type="462c0819:PsiDirectoryNode" />
               <item name="soc" type="462c0819:PsiDirectoryNode" />
-              <item name="actors" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
               <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="scala" type="462c0819:PsiDirectoryNode" />
               <item name="soc" type="462c0819:PsiDirectoryNode" />
               <item name="game" type="462c0819:PsiDirectoryNode" />
@@ -372,45 +518,26 @@
               <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
               <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="scala" type="462c0819:PsiDirectoryNode" />
               <item name="soc" type="462c0819:PsiDirectoryNode" />
               <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="board" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="scala" type="462c0819:PsiDirectoryNode" />
-              <item name="soc" type="462c0819:PsiDirectoryNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="dcard" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="scala" type="462c0819:PsiDirectoryNode" />
-              <item name="soc" type="462c0819:PsiDirectoryNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="scala" type="462c0819:PsiDirectoryNode" />
-              <item name="soc" type="462c0819:PsiDirectoryNode" />
               <item name="player" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SettlersOfCatan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SettlersOfCatan" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="soc" type="462c0819:PsiDirectoryNode" />
+              <item name="storage" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -536,11 +663,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="ScalaTest.CatanBoardSpec.longestRoadLength without settlements road scenario1&#10;longestRoadLength without settlements road scenario2&#10;longestRoadLength without settlements road scenario3&#10;longestRoadLength without settlements road scenario4&#10;longestRoadLength without settlements road scenario5&#10;longestRoadLength without settlements road scenario6&#10;longestRoadLength without settlements road scenario7&#10;longestRoadLength without settlements road scenario8&#10;longestRoadLength without settlements road scenario9&#10;longestRoadLength without settlements road scenario10" />
-        <item itemvalue="ScalaTest.CatanBoardSpec.longestRoadLength road scenario1&#10;longestRoadLength road scenario2&#10;longestRoadLength road scenario3&#10;longestRoadLength road scenario4&#10;longestRoadLength road scenario5&#10;longestRoadLength road scenario6&#10;longestRoadLength road scenario7&#10;longestRoadLength road scenario8&#10;longestRoadLength road scenario9&#10;longestRoadLength road scenario10" />
         <item itemvalue="ScalaTest.CatanBoardSpec.longestRoadLength road scenario10" />
         <item itemvalue="ScalaTest.CatanBoardSpec.longestRoadLength road scenario8" />
+        <item itemvalue="ScalaTest.CatanBoardSpec.longestRoadLength road scenario1&#10;longestRoadLength road scenario2&#10;longestRoadLength road scenario3&#10;longestRoadLength road scenario4&#10;longestRoadLength road scenario5&#10;longestRoadLength road scenario6&#10;longestRoadLength road scenario7&#10;longestRoadLength road scenario8&#10;longestRoadLength road scenario9&#10;longestRoadLength road scenario10" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -571,9 +698,10 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="3118712337000" />
+        <entry key="$PROJECT_DIR$" value="4692174804000" />
         <entry key="$PROJECT_DIR$/build.sbt" value="1478487637" />
         <entry key="$PROJECT_DIR$/project/build.properties" value="2567920773" />
+        <entry key="$PROJECT_DIR$/project/plugins.sbt" value="572983518" />
       </map>
     </option>
     <option name="projectSyncType">
@@ -634,7 +762,16 @@
       <workItem from="1563460664511" duration="834000" />
       <workItem from="1563464291874" duration="15853000" />
       <workItem from="1563548018626" duration="172000" />
+      <workItem from="1564085744649" duration="247000" />
     </task>
+    <task id="LOCAL-00001" summary="removed commented out code">
+      <created>1564085824241</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1564085824241</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -670,13 +807,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="350930000" />
+    <option name="totallyTimeSpent" value="351826000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="813" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14949928" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16452074" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -697,8 +834,8 @@
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="13" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="14" visible="true" weight="0.3295129" />
-      <window_info anchor="bottom" id="Messages" order="15" weight="0.24498567" />
+      <window_info anchor="bottom" id="Version Control" order="14" weight="0.3295129" />
+      <window_info anchor="bottom" id="Messages" order="15" visible="true" weight="0.24498567" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -750,6 +887,10 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="removed commented out code" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed commented out code" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
@@ -774,63 +915,7 @@
     </SUITE>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/application.conf">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/dictionaries/gregoryherman.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/log/Log.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/log/SystemLog.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/Main.scala" />
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/actors/GameActor.scala">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/actors/PlayerActor.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/Main.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
-          <folding>
-            <element signature="e#23#51#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/PlayerBehavior.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
-          <folding>
-            <element signature="e#23#70#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/actors/PlayerActor.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/board/BaseCatanBoard.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -887,36 +972,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/PossibleMoveSelector.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-          <folding>
-            <element signature="e#38#105#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/GameBehavior.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="77" column="31" selection-start-line="77" selection-start-column="31" selection-end-line="77" selection-end-column="31" />
-          <folding>
-            <element signature="e#23#67#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/CatanPossibleMoves.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
-          <folding>
-            <element signature="e#25#42#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -996,19 +1051,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanMove.scala">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2700">
-          <caret line="180" column="75" selection-start-line="180" selection-start-column="75" selection-end-line="180" selection-end-column="75" />
-          <folding>
-            <element signature="e#18#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1116,6 +1158,115 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/moveSelector/PossibleMoveSelector.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
+          <folding>
+            <element signature="e#38#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/application.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/CatanMove.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
+          <folding>
+            <element signature="e#18#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/player/CatanPossibleMoves.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
+          <folding>
+            <element signature="e#25#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/sql/MoveEntry.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/controller/GameController.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/PlayerBehavior.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+          <folding>
+            <element signature="e#18#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/Main.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="40" column="20" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/GameBehavior.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-219">
+          <caret line="213" column="11" selection-start-line="213" selection-start-column="11" selection-end-line="213" selection-end-column="11" />
+          <folding>
+            <element signature="e#18#62#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/game/GameState.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5130">
+          <caret line="346" column="3" selection-start-line="346" selection-start-column="3" selection-end-line="346" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/akka/MoveSaverBehavior.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
+          <folding>
+            <element signature="e#18#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/storage/MoveSaver.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/soc/data/DataController.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>
