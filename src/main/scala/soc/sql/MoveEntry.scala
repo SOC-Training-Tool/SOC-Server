@@ -8,8 +8,8 @@ case class MoveEntry (
   playerId: Int,
   playerOrderNumber: Int,
   move: MoveResult[_],
-) {
+)
 
-}
+
 
 

@@ -3,22 +3,23 @@ package soc.akka
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.actor.typed.scaladsl.Behaviors
 import akka.util.Timeout
-import soc.akka.messages.{ErrorMessage, GameMessage, RequestMessage, Response, StateMessage, UpdateMessage}
+import soc.akka.messages.{ErrorMessage, GameMessage, MoveEntryMessage, RequestMessage, Response, StateMessage, UpdateMessage}
 import soc.game.CatanMove._
-import soc.game.{CatanMove, CatanPlayCardMove, DevelopmentCard, GameState, Resource, Roll}
+import soc.game.{CatanMove, CatanPlayCardMove, DevelopmentCard, GameState, MoveResult, Resource, Roll}
 import soc.game.board.{CatanBoard, Edge, Vertex}
 import soc.game.dice.Dice
 import soc.akka.messages.RequestMessage._
 import soc.akka.messages.UpdateMessage._
-import soc.akka.messages.{ErrorMessage, GameMessage, Response, StateMessage, UpdateMessage}
 import soc.game.player.{NoInfoPlayerState, PerfectInfoPlayerState}
 import soc.game.resources.{CatanResourceSet, DiscardedCardsMapBuilder, Steal}
 import soc.sql.MoveEntry
 
 import scala.concurrent.duration._
 import scala.util.{Failure, Random, Success}
-
-import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
+import io.circe._
+import io.circe.generic.auto._
+import io.circe.parser._
+import io.circe.syntax._
 
 case class GameStateHolder(gameState: GameState, playerStates: Map[Int, GameState]) {
   def update(stateUpdater: GameState => GameState): GameStateHolder = GameStateHolder (
@@ -29,7 +30,14 @@ case class GameStateHolder(gameState: GameState, playerStates: Map[Int, GameStat
 
 object GameBehavior {
 
-  def gameBehavior(gameId: Int, board: CatanBoard, dice: Dice, dcardDeck: List[DevelopmentCard], players: Map[(String, Int), ActorRef[GameMessage]])(implicit random: Random) = Behaviors.setup[StateMessage] { context =>
+  def gameBehavior(
+    gameId: Int,
+    board: CatanBoard,
+    dice: Dice,
+    dcardDeck: List[DevelopmentCard],
+    players: Map[(String, Int), ActorRef[GameMessage]],
+    moveRecorder: Option[ActorRef[GameMessage]]
+  )(implicit random: Random) = Behaviors.setup[StateMessage] { context =>
 
     implicit val timeout: Timeout = 60.seconds
 
@@ -37,6 +45,8 @@ object GameBehavior {
     val playerRefs: Map[Int, ActorRef[GameMessage]] = players.map {
       case ((_, id), ref) => (id, ref)
     }
+
+    val pIds: Map[Int, Int] = playerIds.map(p => p -> p).toMap
 
     val firstPlayerId = playerIds.min
     val lastPlayerId = playerIds.max
@@ -65,6 +75,8 @@ object GameBehavior {
 
       GameStateHolder(GameState(board, perfectInfoPlayers), playerIds.map(p => p -> GameState(board, imperfectInfoPlayers(p))).toMap)
     }
+
+    var moveNumber = 0
 
     // Send first request for first player's initial placement
     context.ask[RequestMessage, Response](playerRefs(firstPlayerId))(ref => InitialPlacementRequest(initStates.playerStates(firstPlayerId), firstPlayerId, true, ref)) {
@@ -98,11 +110,14 @@ object GameBehavior {
 
     def stealCards(states: GameStateHolder, id: Int, robberLocation: Int, victim: Option[Int])
                   (updateMessage: (Int, Int, Option[Steal]) => UpdateMessage)
+                  (moveResult: (Int, Option[Steal]) => MoveResult[_])
                   (stateUpdater: (GameState, Int, Int, Option[Steal]) => GameState): GameStateHolder = {
       val steal = victim.flatMap(player => states.gameState.getPlayer(player).getRandomCard.map((player, _))).map {
         case (victim, card) => Steal(id, victim, Some(CatanResourceSet(card)))
       }
       context.log.debug(s"${updateMessage(id, robberLocation, steal)}")
+
+      sendMove(id, moveResult(robberLocation, steal))
 
       states.copy(
         stateUpdater(states.gameState, id, robberLocation, steal),
@@ -122,6 +137,11 @@ object GameBehavior {
       )
     }
 
+    def sendMove(id: Int, moveResult: MoveResult[_]) : Unit = {
+      moveRecorder.map(_ ! MoveEntryMessage(MoveEntry(gameId, moveNumber, pIds(id), id, moveResult)))
+      moveNumber = moveNumber + 1
+    }
+
     Behaviors.receiveMessage {
 
       // Response from last player's first initial placement and request for last player's second placement
@@ -129,6 +149,8 @@ object GameBehavior {
         context.log.debug(s"${InitialPlacementUpdate(lastPlayerId, true, v, e)}")
         playerRefs.values.foreach(_ ! InitialPlacementUpdate(lastPlayerId, true, v, e))
         val newStates = states.update(_.apply(lastPlayerId, m))
+
+        sendMove(lastPlayerId, m)
 
         context.ask[RequestMessage, Response](playerRefs(lastPlayerId))(ref => InitialPlacementRequest(newStates.playerStates(lastPlayerId), lastPlayerId, false, ref)) {
           case Success(r @ Response(`lastPlayerId`, InitialPlacementMove(false, _, _))) => StateMessage(newStates, r)
@@ -143,6 +165,8 @@ object GameBehavior {
         playerRefs.values.foreach(_ ! InitialPlacementUpdate(firstPlayerId, false, v, e))
         val newStates = states.update(_.apply(firstPlayerId, m))
 
+        sendMove(firstPlayerId, m)
+
         context.ask[RequestMessage, Response](playerRefs(firstPlayerId))(ref => MoveRequest(newStates.playerStates(firstPlayerId), firstPlayerId, ref)) {
           case Success(r @ Response(`firstPlayerId`, RollDiceMove)) => StateMessage(newStates, r)
           case Success(_) => null
@@ -155,6 +179,8 @@ object GameBehavior {
         context.log.debug(s"${InitialPlacementUpdate(id, true, v, e)}")
         playerRefs.values.foreach(_ ! InitialPlacementUpdate(id, true, v, e))
         val newStates = states.update(_.apply(id, m))
+
+        sendMove(id, m)
 
         val nextId = nextPlayer(id)
 
@@ -171,6 +197,8 @@ object GameBehavior {
         playerRefs.values.foreach(_ ! InitialPlacementUpdate(id, false, v, e))
         val newStates = states.update(_.apply(id, m))
 
+        sendMove(id, m)
+
         val prevId = previousPlayer(id)
 
         context.ask[RequestMessage, Response](playerRefs(prevId))(ref => InitialPlacementRequest(newStates.playerStates(prevId), prevId, false, ref)) {
@@ -186,6 +214,9 @@ object GameBehavior {
       case StateMessage(states, Response(id, m @ RollDiceMove)) =>
         val (roll1, roll2) = dice.getRoll
         val roll = Roll(roll1 + roll2)
+
+        sendMove(id, RollResult(roll))
+
         val resourcesGained = states.gameState.board.getResourcesGainedOnRoll(roll.number)
         context.log.debug(s"${RollDiceUpdate(id, roll, resourcesGained)}")
         playerRefs.values.foreach(_ ! RollDiceUpdate(id, roll, resourcesGained))
@@ -213,7 +244,8 @@ object GameBehavior {
           Behaviors.same
         } else turnMove(id)(newStates)
 
-      case StateMessage(states, Response(id, DiscardResourcesMove(res))) =>
+      case StateMessage(states, Response(id, m@DiscardResourcesMove(res))) =>
+        sendMove(id, m)
         discarding = discarding.map(_.addDiscard(id, res))
         if (!discarding.get.expectingDiscard) {
           val cardsLost = discarding.get.cardsToDiscard
@@ -233,7 +265,7 @@ object GameBehavior {
       // Response from player after moving the robber and indicating who to steal from
       // then it requests a move
       case StateMessage(states, Response(id, MoveRobberAndStealMove(robberLocation, victim))) => turnMove(id) {
-        stealCards(states, id, robberLocation, victim)(MoveRobberUpdate){
+        stealCards(states, id, robberLocation, victim)(MoveRobberUpdate)(MoveRobberAndStealResult){
           case(state: GameState, playerId: Int, robloc: Int, steal: Option[Steal]) => state.apply(playerId, MoveRobberAndStealResult(robloc, steal))
         }
       }
@@ -252,6 +284,8 @@ object GameBehavior {
             playerId -> state.apply(id, BuyDevelopmentCardResult(None))
         }
 
+        sendMove(id, BuyDevelopmentCardResult(nextCard))
+
         GameStateHolder(newGameState, newPlayerStates)
       }
 
@@ -260,6 +294,8 @@ object GameBehavior {
         val hadLongest = longest(states.gameState)
 
         val newStates = states.update(_.apply(id, m))
+
+        sendMove(id, m)
 
         context.log.debug(s"${BuildRoadUpdate(id, edge)}")
         playerRefs.values.foreach(_ ! BuildRoadUpdate(id, edge))
@@ -274,18 +310,21 @@ object GameBehavior {
       case StateMessage(states, Response(id, m @ BuildSettlementMove(vertex))) => turnMove(id) {
         context.log.debug(s"${BuildSettlementUpdate(id, vertex)}")
         playerRefs.values.foreach(_ ! BuildSettlementUpdate(id, vertex))
+        sendMove(id, m)
         states.update(_.apply(id, m))
       }
 
       case StateMessage(states, Response(id, m @ BuildCityMove(vertex))) => turnMove(id) {
         context.log.debug(s"${BuildCityUpdate(id, vertex)}")
         playerRefs.values.foreach(_ ! BuildCityUpdate(id, vertex))
+        sendMove(id, m)
         states.update(_.apply(id, m))
       }
 
       case StateMessage(states, Response(id, m @ PortTradeMove(give, get))) => turnMove(id) {
         context.log.debug(s"${PortTradeUpdate(id, give, get)}")
         playerRefs.values.foreach(_ ! PortTradeUpdate(id, give, get))
+        sendMove(id, m)
         states.update(_.apply(id, m))
       }
 
@@ -294,7 +333,7 @@ object GameBehavior {
         def largest(gs: GameState) = gs.getPlayer(id).armyPoints >= 2
         val hadLargest = largest(states.gameState)
 
-        val newStates = stealCards(states, id, robberLocation, victim)(KnightUpdate){
+        val newStates = stealCards(states, id, robberLocation, victim)(KnightUpdate){ case (a, b) => KnightResult(MoveRobberAndStealResult(a, b))}{
           case(state: GameState, id: Int, robloc: Int, steal: Option[Steal]) => state.apply(id, KnightResult(MoveRobberAndStealResult(robloc, steal)))
         }
         if (!hadLargest && largest(newStates.gameState)) {
@@ -307,6 +346,7 @@ object GameBehavior {
       case StateMessage(states, Response(id, m @ YearOfPlentyMove(res1, res2))) => turnMove(id) {
         context.log.debug(s"${ YearOfPlentyUpdate(id, res1, res2)}")
         playerRefs.values.foreach(_ ! YearOfPlentyUpdate(id, res1, res2))
+        sendMove(id, m)
         states.update(_.apply(id, m))
       }
 
@@ -316,12 +356,15 @@ object GameBehavior {
         }.toMap
         context.log.debug(s"${MonopolyUpdate(id, cardsLost)}")
         playerRefs.values.foreach(_ ! MonopolyUpdate(id, cardsLost))
+        sendMove(id, MonopolyResult(cardsLost))
         states.update(_.apply(id, MonopolyResult(cardsLost)))
       }
 
       case StateMessage(states, Response(id, m @ RoadBuilderMove(road1, road2))) => turnMove(id) {
         def longest(gs: GameState) = gs.getPlayer(id).roadPoints >= 2
         val hadLongest = longest(states.gameState)
+
+        sendMove(id, m)
 
         val newStates = states.update(_.apply(id, m))
         context.log.debug(s"${RoadBuilderUpdate(id, road1, road2)}")
@@ -337,6 +380,9 @@ object GameBehavior {
       case StateMessage(states, Response(id, m @ EndTurnMove)) => turnMove(nextPlayer(id)) {
         context.log.debug(s"${EndTurnUpdate(id)}")
         context.log.debug(s"${TurnUpdate(nextPlayer(id))}")
+
+        sendMove(id, m)
+
         playerRefs.values.foreach { ref =>
           ref ! EndTurnUpdate(id)
           ref ! TurnUpdate(nextPlayer(id))

@@ -2,11 +2,13 @@ package soc.akka
 
 import akka.actor.PoisonPill
 import akka.actor.typed.{ActorRef, ActorSystem}
-import soc.akka.messages.Terminate
+import soc.akka.messages.{GameMessage, Terminate}
 import soc.game.dice.NormalDice
 import soc.game.player.moveSelector.PossibleMoveSelector
 import soc.game._
 import soc.game.board.BaseCatanBoard
+import soc.sql.MoveEntry
+import soc.storage.MoveSaver
 
 import scala.concurrent.{Await, Future}
 import scala.util.Random
@@ -30,6 +32,14 @@ object Main extends App {
       YearOfPlenty -> YearOfPlenty.initAmount)
   )
 
+  val inMemoryMoveSaver = new MoveSaver {
+
+    var moves: List[MoveEntry] = Nil
+    override def saveMove(move: MoveEntry): Unit = moves = move :: moves
+    override def toString = moves.mkString("\n")
+  }
+  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(inMemoryMoveSaver), "moveSaver")
+
 
   val players = Map(
     ("player0", 0) -> ActorSystem(PlayerBehavior.playerBehavior(PossibleMoveSelector.randSelector), "player0"),
@@ -43,13 +53,17 @@ object Main extends App {
 
   val games = for {
     i <- 1 to numGames
-  } yield ActorSystem(GameBehavior.gameBehavior(i, board, dice, dCardDeck, players), s"SettlersOfCatan$i").whenTerminated
+  } yield ActorSystem(GameBehavior.gameBehavior(i, board, dice, dCardDeck, players, Some(moveSaverActor)), s"SettlersOfCatan$i").whenTerminated
 
   Await.result(Future.sequence(games), (numGames * averageGameLengthSeconds).seconds)
 
   println("gamesAreOver")
 
+  println(inMemoryMoveSaver.moves.groupBy(_.gameId).map(_._2.length).sum.toDouble / 100.0)
+
+
   players.values.foreach(_ ! Terminate)
+  moveSaverActor ! Terminate
 
 
 
