@@ -5,23 +5,23 @@ import soc.game.player.{CatanPossibleMoves, PerfectInfoPlayerState}
 import soc.game.{CatanMove, GameState, Roll}
 import soc.game.CatanMove.RollDiceMove
 
-case class PossibleMoveSelector(select: (GameState, Iterator[CatanMove]) => CatanMove) extends MoveSelector {
+case class PossibleMoveSelector(select: (GameState, Iterator[CatanMove.Move]) => CatanMove.Move) extends MoveSelector {
 
-  override def initialPlacementMove(gameState: GameState, position: Int)(first: Boolean): CatanMove = {
+  override def initialPlacementMove(gameState: GameState, position: Int)(first: Boolean): CatanMove.Move = {
     val moves = CatanPossibleMoves(gameState, position).getPossibleInitialPlacements(first)
     select(gameState, moves.toIterator)
   }
 
-  override def discardCardsMove(gameState: GameState, position: Int): CatanMove = {
+  override def discardCardsMove(gameState: GameState, position: Int): CatanMove.Move = {
     val moves = CatanPossibleMoves(gameState, position).getPossibleDiscards()
     select(gameState, moves)
   }
 
-  override def moveRobberAndStealMove(gameState: GameState, position: Int): CatanMove = {
+  override def moveRobberAndStealMove(gameState: GameState, position: Int): CatanMove.Move = {
     select(gameState, CatanPossibleMoves(gameState, position).getPossibleRobberLocations.toIterator)
   }
 
-  override def turnMove(gameState: GameState, position: Int): CatanMove = {
+  override def turnMove(gameState: GameState, position: Int): CatanMove.Move = {
    val moves =  CatanPossibleMoves(gameState, position).getPossibleMovesForState.toIterator
     select(gameState, moves)
 
@@ -30,9 +30,9 @@ case class PossibleMoveSelector(select: (GameState, Iterator[CatanMove]) => Cata
 
 object PossibleMoveSelector {
 
-  val randSelector = PossibleMoveSelector { case (_, moves: Iterator[CatanMove]) =>
+  val randSelector = PossibleMoveSelector { case (_, moves: Iterator[CatanMove.Move]) =>
     val (a, b) = moves.duplicate
     b.drop(random.nextInt(a.length)).next()
   }
-  
+
 }

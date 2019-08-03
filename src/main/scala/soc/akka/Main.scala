@@ -2,11 +2,13 @@ package soc.akka
 
 import akka.actor.PoisonPill
 import akka.actor.typed.{ActorRef, ActorSystem}
-import soc.akka.messages.Terminate
+import soc.akka.messages.{GameMessage, Terminate}
 import soc.game.dice.NormalDice
 import soc.game.player.moveSelector.PossibleMoveSelector
 import soc.game._
 import soc.game.board.BaseCatanBoard
+import soc.sql.MoveEntry
+import soc.storage.MoveSaver
 
 import scala.concurrent.{Await, Future}
 import scala.util.Random
@@ -21,10 +23,6 @@ object Main extends App {
 
   val dice = NormalDice()
 
-  val randSelector = PossibleMoveSelector { case (_, moves: Iterator[CatanMove]) =>
-    val (a, b) = moves.duplicate
-    b.drop(random.nextInt(a.length)).next()
-  }
 
   val dCardDeck: List[DevelopmentCard] = DevelopmentCardDeckBuilder.buildDeckByCardTypeAndAmount(
     Map(Knight -> Knight.initAmount,
@@ -34,26 +32,38 @@ object Main extends App {
       YearOfPlenty -> YearOfPlenty.initAmount)
   )
 
+  val inMemoryMoveSaver = new MoveSaver {
+
+    var moves: List[MoveEntry] = Nil
+    override def saveMove(move: MoveEntry): Unit = moves = move :: moves
+    override def toString = moves.mkString("\n")
+  }
+  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(inMemoryMoveSaver), "moveSaver")
+
 
   val players = Map(
-    ("player0", 0) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player0"),
-    ("player1", 1) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player1"),
-    ("player2", 2) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player2"),
-    ("player3", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player3")
+    ("player0", 0) -> ActorSystem(PlayerBehavior.playerBehavior(PossibleMoveSelector.randSelector), "player0"),
+    ("player1", 1) -> ActorSystem(PlayerBehavior.playerBehavior(PossibleMoveSelector.randSelector), "player1"),
+    ("player2", 2) -> ActorSystem(PlayerBehavior.playerBehavior(PossibleMoveSelector.randSelector), "player2"),
+    ("player3", 3) -> ActorSystem(PlayerBehavior.playerBehavior(PossibleMoveSelector.randSelector), "player3")
   )
 
   val numGames = 100
-  val averageGameLengthSeconds = 10
+  val averageGameLengthSeconds = 20
 
   val games = for {
     i <- 1 to numGames
-  } yield ActorSystem(GameBehavior.gameBehavior(i, board, dice, dCardDeck, players), s"SettlersOfCatan$i").whenTerminated
+  } yield ActorSystem(GameBehavior.gameBehavior(i, board, dice, dCardDeck, players, Some(moveSaverActor)), s"SettlersOfCatan$i").whenTerminated
 
   Await.result(Future.sequence(games), (numGames * averageGameLengthSeconds).seconds)
 
   println("gamesAreOver")
 
+  println(inMemoryMoveSaver.moves.groupBy(_.gameId).map(_._2.length).sum.toDouble / 100.0)
+
+
   players.values.foreach(_ ! Terminate)
+  moveSaverActor ! Terminate
 
 
 

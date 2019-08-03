@@ -1,14 +1,10 @@
 package soc.game
 
-import log.Log
-import soc.game.CatanMove.{BuildCity, BuildRoad, BuildSettlement, DiscardResourcesMove, EndTurnMove, InitialPlacementMove, PortTrade, RoadBuilderMove, RollDiceMove, YearOfPlentyMove}
 import soc.game.DevCardInventory.PlayedInventory
 import soc.game.board.{CatanBoard, Edge, Vertex}
-import soc.game.player.{CatanPossibleMoves, PlayerState}
+import soc.game.player.PlayerState
 import soc.game.resources.CatanResourceSet._
-import soc.game.resources.{CatanResourceSet, Gain, Lose, PossibleHands, SOCPossibleHands, SOCTransactions, Steal}
-
-import scala.annotation.tailrec
+import soc.game.resources.{CatanResourceSet, Gain, Lose, SOCTransactions, Steal}
 
 case class GameState(board: CatanBoard,
                      players: List[PlayerState],
@@ -34,6 +30,8 @@ case class GameState(board: CatanBoard,
 
   val gameOver = players.exists(_.points >= 10)
   val revealedDevCards: PlayedInventory = players.map(_.playedDevCards).fold( DevCardInventory.empty) (_.add(_))
+
+  def apply(playerId: Int, moveResult: MoveResult[_]): GameState = moveResult.applyMove(playerId, this)
 
   /**
     * State Transition Functions

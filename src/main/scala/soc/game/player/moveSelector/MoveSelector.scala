@@ -5,12 +5,12 @@ import soc.game.CatanMove
 
 trait MoveSelector {
 
-  def initialPlacementMove(gameState: GameState, position: Int)(first: Boolean): CatanMove
+  def initialPlacementMove(gameState: GameState, position: Int)(first: Boolean): CatanMove.Move
 
-  def discardCardsMove(gameState: GameState, position: Int): CatanMove
+  def discardCardsMove(gameState: GameState, position: Int): CatanMove.Move
 
-  def moveRobberAndStealMove(gameState: GameState, position: Int): CatanMove
+  def moveRobberAndStealMove(gameState: GameState, position: Int): CatanMove.Move
 
-  def turnMove(gameState: GameState, position: Int): CatanMove
+  def turnMove(gameState: GameState, position: Int): CatanMove.Move
 
 }

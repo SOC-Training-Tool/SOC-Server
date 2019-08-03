@@ -17,7 +17,7 @@ case class CatanPossibleMoves (
   val turnState = state.turnState
   val devCardsDeck = state.devCardsDeck
 
-  def getPossibleMovesForState: List[CatanMove] = {
+  def getPossibleMovesForState: List[CatanMove.Move] = {
 
     val devCardMoves = if (turnState.canPlayDevCard) {
       getPossibleDevelopmentCard
@@ -43,27 +43,27 @@ case class CatanPossibleMoves (
     }
   }
 
-  def getPossibleBuilds: List[CatanBuildMove] = {
+  def getPossibleBuilds: List[CatanBuildMove[_]] = {
     //val player = getOurPlayerData
-    val buildPotentialSettlements: List[CatanBuildMove] = if (currPlayer.canBuildSettlement) {
-      board.getPossibleSettlements(currPlayer.position, false).toList.map(v => BuildSettlement(v))
+    val buildPotentialSettlements: List[CatanBuildMove[BuildSettlement]] = if (currPlayer.canBuildSettlement) {
+      board.getPossibleSettlements(currPlayer.position, false).toList.map(v => BuildSettlementMove(v))
     } else Nil
 
-    val buildPotentialCities: List[CatanBuildMove] = if (currPlayer.canBuildCity) {
-      board.getPossibleCities(currPlayer.position).toList.map(BuildCity)
+    val buildPotentialCities: List[CatanBuildMove[BuildCity]] = if (currPlayer.canBuildCity) {
+      board.getPossibleCities(currPlayer.position).toList.map(BuildCityMove)
     } else Nil
 
-    val buildPotentialRoads: List[CatanBuildMove] = if (currPlayer.canBuildRoad) {
-      board.getPossibleRoads(currPlayer.position).toList.map(BuildRoad)
+    val buildPotentialRoads: List[CatanBuildMove[BuildRoad]] = if (currPlayer.canBuildRoad) {
+      board.getPossibleRoads(currPlayer.position).toList.map(BuildRoadMove)
     } else Nil
 
-    val buildDevelopmentCard: List[CatanBuildMove] = if(currPlayer.canBuyDevCard && devCardsDeck > 0)  List(BuyDevelopmentCardMove)
+    val buildDevelopmentCard: List[CatanBuildMove[BuyDevelopmentCard]] = if(currPlayer.canBuyDevCard && devCardsDeck > 0)  List(BuyDevelopmentCardMove)
     else Nil
 
     buildPotentialSettlements ::: buildPotentialCities ::: buildPotentialRoads ::: buildDevelopmentCard
   }
 
-  def getPossiblePortTrades: List[PortTrade] = {
+  def getPossiblePortTrades: List[PortTradeMove] = {
     val resourceSet = currPlayer.resourceSet
 
     val _3to1 = currPlayer.ports.contains(Misc)
@@ -74,21 +74,21 @@ case class CatanPossibleMoves (
         val give = CatanResourceSet().add(2, res)
         otherRes.map{ r =>
           val get = CatanResourceSet().add(1, r)
-          PortTrade(give,  get)
+          PortTradeMove(give,  get)
         }
       }
       else if (_3to1 && num >= 3) {
         val give =  CatanResourceSet().add(3, res)
         otherRes.map{ r =>
           val get = CatanResourceSet().add(1, r)
-          PortTrade(give,  get)
+          PortTradeMove(give,  get)
         }
       }
       else if(num >= 4) {
         val give =  CatanResourceSet().add(4, res)
         otherRes.map{ r =>
           val get = CatanResourceSet().add(1, r)
-          PortTrade(give,  get)
+          PortTradeMove(give,  get)
         }
       }
       else Nil
@@ -125,17 +125,17 @@ case class CatanPossibleMoves (
 //    }
 //  }
 
-  def getPossibleDevelopmentCard: List[CatanPlayCardMove] = {
+  def getPossibleDevelopmentCard: List[CatanPlayCardMove[_]] = {
 
-    val knight: List[CatanPlayCardMove] = if (currPlayer.canPlayDevCards.contains(Knight)) {
+    val knight: List[CatanPlayCardMove[Knight]] = if (currPlayer.canPlayDevCards.contains(Knight)) {
       getPossibleRobberLocations.map(KnightMove)
     } else Nil
 
-    val monopoly: List[CatanPlayCardMove] = if (currPlayer.canPlayDevCards.contains(Monopoly)) {
+    val monopoly: List[CatanPlayCardMove[Monopoly]] = if (currPlayer.canPlayDevCards.contains(Monopoly)) {
       Resource.list.map(MonopolyMove)
     } else Nil
 
-    val yearOfPlenty: List[CatanPlayCardMove] = if (currPlayer.canPlayDevCards.contains(YearOfPlenty)) {
+    val yearOfPlenty: List[CatanPlayCardMove[YearOfPlenty]] = if (currPlayer.canPlayDevCards.contains(YearOfPlenty)) {
       Resource.list.flatMap { res1 =>
         Resource.list.map { res2 =>
           YearOfPlentyMove(res1, res2)
@@ -143,7 +143,7 @@ case class CatanPossibleMoves (
       }
     } else Nil
 
-    val roads: List[CatanPlayCardMove] = if (currPlayer.canPlayDevCards.contains(RoadBuilder) && currPlayer.roads.length < 15) {
+    val roads: List[CatanPlayCardMove[RoadBuilder]] = if (currPlayer.canPlayDevCards.contains(RoadBuilder) && currPlayer.roads.length < 15) {
       val firsRoadsAndBoards = board.getPossibleRoads(currPlayer.position).map { road1 =>
         (road1, board.buildRoad(road1, currPlayer.position))
       }
