@@ -12,7 +12,7 @@ trait CatanSet[A, T] {
 
   lazy val getTotal = amountMap.values.sum
   lazy val getTypes: Seq[A] = amountMap.keys.toSeq
-  lazy val getTypeCount = amountMap.values.filter(wrapped.toDouble(_) > 0).size
+  lazy val getTypeCount = amountMap.values.count(wrapped.toDouble(_) > 0)
   lazy val isEmpty: Boolean = getTotal == 0
 
   def add(amt: T, a: A): CatanSet[A, T] = {
@@ -29,7 +29,7 @@ trait CatanSet[A, T] {
   def subtract(amt: T, a: A): CatanSet[A, T] = {
     val curAmount = amountMap.get(a)
     val newMap = curAmount.fold(amountMap) { amount =>
-      (amountMap - a) + (a -> (wrapped.max(wrapped.zero, wrapped.minus(amount, amt))))
+      (amountMap - a) + (a -> wrapped.max(wrapped.zero, wrapped.minus(amount, amt)))
     }
     _copy(newMap)
   }
@@ -44,7 +44,7 @@ trait CatanSet[A, T] {
     set.getTypes.filter(set.contains).forall(res => contains(set.getAmount(res), res))
   }
 
-  def getAmount(a: A): T = amountMap.get(a).getOrElse(wrapped.zero)
+  def getAmount(a: A): T = amountMap.getOrElse(a, wrapped.zero)
 
   def apply(a: A): T = getAmount(a)
 }
