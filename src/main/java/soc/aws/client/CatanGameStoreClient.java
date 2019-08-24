@@ -1,4 +1,4 @@
-package soc.client;
+package soc.aws.client;
 
 import io.circe.Json;
 import soc.model.PlayerContext;
@@ -9,7 +9,7 @@ public interface CatanGameStoreClient
 {
     void save(List<PlayerContext> playerList, Json moveSet, Json board);
 
-    Json getMoveSetForPlayer(PlayerContext player);
+    List<Json> getMoveSetsForPlayer(String player);
 
-    Json getBoardForPlayer(PlayerContext player);
+    List<Json> getBoardsForPlayer(String player);
 }

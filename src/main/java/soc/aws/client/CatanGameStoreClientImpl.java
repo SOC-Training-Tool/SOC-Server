@@ -1,15 +1,20 @@
-package soc.client;
+package soc.aws.client;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.util.IOUtils;
 import io.circe.Json;
 import soc.aws.Constants;
 import soc.model.PlayerContext;
 import soc.model.PlayerIndexDAO;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -49,6 +54,7 @@ public class CatanGameStoreClientImpl implements CatanGameStoreClient
             dao.setPlayerName(player.getPlayerName());
             dao.setPosition(player.getPosition());
             dao.setVictoryPoints(player.getVictoryPoints());
+            dao.setTimeStamp(new Date().getTime());
 
             mDynamoDb.save(dao);
         }
@@ -62,15 +68,55 @@ public class CatanGameStoreClientImpl implements CatanGameStoreClient
     }
 
     @Override
-    public Json getMoveSetForPlayer(PlayerContext player)
+    public List<Json> getMoveSetsForPlayer(String player)
     {
-        return null;
+        return queryAndGet(player, MOVE_SET);
     }
 
     @Override
-    public Json getBoardForPlayer(PlayerContext player)
+    public List<Json> getBoardsForPlayer(String player)
     {
-        return null;
+        return queryAndGet(player, BOARD);
+    }
+
+    private List<Json> queryAndGet(String player, String type)
+    {
+        PlayerIndexDAO hashKeyValues = new PlayerIndexDAO();
+        hashKeyValues.setPlayerName(player);
+
+        String queryType = type.equals(MOVE_SET) ? Constants.MOVESET_S3KEY : Constants.BOARD_S3KEY;
+        String bucket = type.equals(MOVE_SET) ? Constants.MOVESET_BUCKET : Constants.BOARD_BUCKET;
+
+        List<PlayerIndexDAO> queryList =
+                mDynamoDb.query(PlayerIndexDAO.class, buildQueryExpression(hashKeyValues, queryType));
+
+        List<Json> jsonList = new ArrayList<>();
+
+        try
+        {
+            for (PlayerIndexDAO playerDao : queryList)
+            {
+                S3Object s3Object =
+                        type.equals(MOVE_SET)
+                                ? mS3Client.getObject(bucket, playerDao.getMoveSetKey())
+                                : mS3Client.getObject(bucket, playerDao.getBoardKey());
+
+                jsonList.add(Json.fromString(new String(IOUtils.toByteArray(s3Object.getObjectContent()))));
+            }
+        }
+        catch (IOException e)
+        {
+            System.err.println(e.getMessage());
+        }
+
+        return jsonList;
+    }
+
+    private <T extends PlayerIndexDAO> DynamoDBQueryExpression<T> buildQueryExpression(T hashKeyValues, String attribute)
+    {
+        return new DynamoDBQueryExpression<T>()
+                .withHashKeyValues(hashKeyValues)
+                .withProjectionExpression(attribute);
     }
 
     private String generateS3Key(String prefix)

@@ -1,13 +1,15 @@
 package soc.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import soc.aws.Constants;
 
 @DynamoDBTable(tableName = "Player-MoveSet-Board")
 public class PlayerIndexDAO
 {
-    @DynamoDBIndexHashKey(attributeName = "Player")
+    @DynamoDBHashKey(attributeName = "Player")
     public String getPlayerName()
     {
         return mPlayerName;
@@ -15,6 +17,17 @@ public class PlayerIndexDAO
 
     public void setPlayerName(String playerName) {
         this.mPlayerName = playerName;
+    }
+
+    @DynamoDBRangeKey(attributeName = "TimeStamp")
+    public Long getTimeStamp()
+    {
+        return mTimeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp)
+    {
+        this.mTimeStamp = timeStamp;
     }
 
     @DynamoDBAttribute(attributeName = "VictoryPoints")
@@ -35,7 +48,7 @@ public class PlayerIndexDAO
         this.mPosition = position;
     }
 
-    @DynamoDBAttribute(attributeName = "Board_S3Key")
+    @DynamoDBAttribute(attributeName = Constants.BOARD_S3KEY)
     public String getBoardKey() {
         return mBoardKey;
     }
@@ -44,7 +57,7 @@ public class PlayerIndexDAO
         this.mBoardKey = boardKey;
     }
 
-    @DynamoDBAttribute(attributeName = "MoveSet_S3Key")
+    @DynamoDBAttribute(attributeName = Constants.MOVESET_S3KEY)
     public String getMoveSetKey() {
         return mMoveSetKey;
     }
@@ -53,6 +66,7 @@ public class PlayerIndexDAO
         this.mMoveSetKey = moveSetKey;
     }
 
+    private Long mTimeStamp;
     private String mPlayerName;
     private Integer mVictoryPoints;
     private Integer mPosition;

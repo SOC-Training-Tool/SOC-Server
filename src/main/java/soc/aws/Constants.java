@@ -6,7 +6,10 @@ public class Constants
 
     public static final String BOARD_BUCKET = "catan-boards";
 
-    public static final String ACCESS_KEY = "AKIAT5IG2CSME3SNA63F";
-    public static final String SECRET_KEY = "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";
+    public static final String MOVESET_S3KEY = "MoveSet_S3Key";
+    public static final String BOARD_S3KEY = "Board_S3Key";
+
+    public static final String ACCESS_KEY = "HIDDEN-GET-FROM-IAM";
+    public static final String SECRET_KEY = "HIDDEN-GET-FROM-IAM";
 
 }

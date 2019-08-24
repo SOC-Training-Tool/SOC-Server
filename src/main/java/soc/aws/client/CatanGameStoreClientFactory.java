@@ -1,4 +1,4 @@
-package soc.client;
+package soc.aws.client;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -12,7 +12,7 @@ import soc.aws.Constants;
 
 public class CatanGameStoreClientFactory
 {
-    public CatanGameStoreClient createClient()
+    public static CatanGameStoreClient createClient()
     {
         BasicAWSCredentials creds = new BasicAWSCredentials(Constants.ACCESS_KEY, Constants.SECRET_KEY);
 
