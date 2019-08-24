@@ -11,6 +11,7 @@ val akkatest = "com.typesafe.akka" %% "akka-testkit" % "2.5.23" % "test"
 val akka = "com.typesafe.akka" %% "akka-actor" % "2.5.23"
 val akkatyped = "com.typesafe.akka" %% "akka-actor-typed" % "2.5.23"
 val s3 = "com.amazonaws" % "aws-java-sdk-s3" % "1.11.311"
+val ddb = "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.311"
 
 val circe = Seq(
   "io.circe" %% "circe-core",
@@ -19,5 +20,5 @@ val circe = Seq(
 ).map(_ % circeVersion)
 
 
-libraryDependencies ++= Seq(scalatest, akka, akkatyped, akkatest, s3) ++ circe
+libraryDependencies ++= Seq(scalatest, akka, akkatyped, akkatest, s3, ddb) ++ circe
  
