@@ -7,5 +7,9 @@ import java.util.List;
 
 public interface CatanGameStoreClient
 {
-    String save(List<PlayerContext> playerList, Json moveSet, Json board);
+    void save(List<PlayerContext> playerList, Json moveSet, Json board);
+
+    Json getMoveSetForPlayer(PlayerContext player);
+
+    Json getBoardForPlayer(PlayerContext player);
 }
