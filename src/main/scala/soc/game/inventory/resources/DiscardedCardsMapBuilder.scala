@@ -1,8 +1,8 @@
-package soc.game.resources
+package soc.game.inventory.resources
 
-import soc.game.resources.CatanResourceSet.Resources
+import CatanResourceSet.Resources
 
-case class DiscardedCardsMapBuilder private(playersToDiscard: List[Int], cardsToDiscard: Map[Int, Resources] = Map.empty) {
+case class DiscardedCardsMapBuilder private(playersToDiscard: Seq[Int], cardsToDiscard: Map[Int, Resources] = Map.empty) {
 
   val waitingFor = playersToDiscard.filterNot(cardsToDiscard.contains)
   val expectingDiscard = !waitingFor.isEmpty

@@ -1,5 +1,7 @@
 package soc.game
 
+import soc.game.inventory.DevelopmentCard
+
 import scala.util.Random
 
 

@@ -1,6 +1,6 @@
-package soc.game
+package soc.game.inventory
 
-trait CatanSet[A, T] {
+trait CatanSet[A <: InventoryItem, T] {
 
   protected case class NumericWrapper(implicit val wrapped: Numeric[T])
   protected val implWrap: NumericWrapper
@@ -51,6 +51,6 @@ trait CatanSet[A, T] {
 
 object CatanSet {
 
-  def toList[A](set: CatanSet[A, Int]): List[A] = set.amountMap.flatMap { case (a, amt) => (1 to amt).map(_ => a)}.toList
+  def toList[A <: InventoryItem](set: CatanSet[A, Int]): List[A] = set.amountMap.flatMap { case (a, amt) => (1 to amt).map(_ => a)}.toList
 
 }

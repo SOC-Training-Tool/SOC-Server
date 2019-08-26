@@ -1,7 +1,7 @@
-package soc.game.resources
+package soc.game.inventory.resources
 
-import soc.game.Resource
-import soc.game.resources.CatanResourceSet.ResourceSet
+import CatanResourceSet.{ResourceSet, Resources}
+import soc.game.inventory.Resource
 
 case class ProbableResourceSet(known: ResourceSet[Int], unknown: ResourceSet[Double]) {
 
@@ -69,9 +69,9 @@ case class ProbableResourceSet(known: ResourceSet[Int], unknown: ResourceSet[Dou
     * @param other the sub set, can be { @code null} for an empty resource subset
     * @see #contains(int)
     */
-  def contains(other: CatanResourceSet[Int]): Boolean = known.contains(other)
+  def contains(other: Resources): Boolean = known.contains(other)
 
-  def mightContain(other: CatanResourceSet[Int]): Boolean =  Resource.list.forall { res => getTotalProbableAmount(res).ceil >= other.getAmount(res) }
+  def mightContain(other: Resources): Boolean =  Resource.list.forall { res => getTotalProbableAmount(res).ceil >= other.getAmount(res) }
 
   override val toString: String =  Resource.list.filter(getTotalProbableAmount(_) > 0).map { res: Resource =>
     s"${res.name}= ${known.getAmount(res)}:${unknown.getAmount(res)}"

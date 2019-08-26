@@ -1,8 +1,9 @@
 package soc.game.board
 
 import org.scalatest.{FunSpec, Matchers}
+import soc.game.Roll
 import soc.game.board._
-import soc.game.{Misc, Port, ResourceHex, Roll, Wood}
+import soc.game.inventory._
 
 class CatanBoardSpec extends FunSpec with Matchers {
 
