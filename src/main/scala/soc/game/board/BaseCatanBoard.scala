@@ -1,12 +1,17 @@
 package soc.game.board
 
 import soc.game._
+import soc.game.inventory._
 
 import scala.annotation.tailrec
 import scala.util.Random
 
+case class BaseBoardConfiguration(hexes: List[Hex], ports: List[Port]) extends BoardConfiguration
 
-object BaseCatanBoard {
+
+object BaseCatanBoard extends BoardGenerator[BaseBoardConfiguration] {
+
+  implicit val generator: BoardGenerator[BaseBoardConfiguration] = this
 
   val vertexMap: Map[Int, List[Int]] = Map (
     0 -> List(0, 1, 2, 31, 30, 29),
@@ -77,7 +82,7 @@ object BaseCatanBoard {
   }
 
   @tailrec
-  def randomBoard(implicit rand: Random): CatanBoard = {
+  override def randomBoard(implicit rand: Random): BaseBoardConfiguration = {
     val resources = resourceCounts.flatMap {
       case (resource: Resource, amt) => (1 to amt).map(_ => resource)
     }
@@ -93,9 +98,9 @@ object BaseCatanBoard {
         case (port: Port, amt) => (1 to amt).map(_ => port)
       }.toList
     }
-    val randBoard = BaseCatanBoard(hexes, ports)
 
-    if (CatanBoard.checkValid(randBoard)) randBoard
+    val config = BaseBoardConfiguration(hexes, ports)
+    if (CatanBoard.checkValid(this.apply(config))) config
     else randomBoard
   }
 
@@ -222,4 +227,5 @@ object BaseCatanBoard {
 //        }
 //    }
 //  }
+  implicit override def apply(config: BaseBoardConfiguration): CatanBoard = apply(config.hexes, config.ports)
 }

@@ -1,7 +1,8 @@
 package soc
 
-import soc.game.{Brick, Desert, Misc, Ore, Port, ResourceHex, Roll, Sheep, Wheat, Wood}
-import soc.game.board.{BaseCatanBoard, CatanBoard}
+import soc.game.Roll
+import soc.game.board.{BaseCatanBoard, CatanBoard, Desert, ResourceHex}
+import soc.game.inventory._
 
 object CatanFixtures {
 

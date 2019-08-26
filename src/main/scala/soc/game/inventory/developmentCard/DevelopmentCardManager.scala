@@ -1,6 +1,7 @@
-package soc.game
+package soc.game.inventory.developmentCard
 
-import soc.game.DevCardInventory.{DevelopmentCardSet, PlayedInventory, UnplayedInventory}
+import soc.game.inventory._
+import soc.game.inventory.developmentCard.DevCardInventory.DevelopmentCardSet
 
 import scala.util.Random
 
@@ -24,7 +25,12 @@ object DevCardInventory {
 
   type PlayedInventory = DevelopmentCardSet[Int]
   type UnplayedInventory = DevelopmentCardSet[Double]
-  def empty: PlayedInventory = DevCardInventory[Int]()
+
+
+  def empty[T: Numeric]: DevelopmentCardSet[T] = {
+    val num = implicitly[Numeric[T]]
+    DevCardInventory(num.zero, num.zero, num.zero, num.zero, num.zero)
+  }
 
   implicit def toInventory[T](map: Map[DevelopmentCard, T])(implicit num: Numeric[T]): DevelopmentCardSet[T] = {
     DevCardInventory[T](
@@ -47,3 +53,8 @@ class DevelopmentCardManager(kn: Int, po: Int, mp: Int, rb: Int, yp: Int)(implic
       (1 to yp).map(_ => YearOfPlenty).toList
   }
 }
+
+sealed trait DevCardTransaction
+
+case class BuyDevelopmentCard(playerId: Int, card: Option[DevelopmentCard]) extends DevCardTransaction
+case class PlayDevelopmentCard(playerId: Int, card: DevelopmentCard) extends DevCardTransaction

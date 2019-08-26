@@ -1,25 +1,25 @@
-package soc.game.resources
+package soc.game.inventory.resources
 
-import soc.game.{CatanSet, Resource}
-import soc.game.resources.CatanResourceSet._
+import CatanResourceSet._
+import soc.game.inventory.Resource
 
 import scala.annotation.tailrec
 
-case class PossibleHands(hands: Seq[Map[Int, Resources]]) {
+case class PossibleHands(hands: Seq[Map[Int, (Resources, Int)]]) {
 
-  lazy val handsForPlayers: Map[Int, Seq[Resources]] = hands.flatMap(_.keys).distinct.map {
+  lazy val handsForPlayers: Map[Int, Seq[(Resources, Int)]] = hands.flatMap(_.keys).distinct.map {
     playerId => playerId -> hands.map(_ (playerId))
   }.toMap
 
   lazy val probableHands: Map[Int, ProbableResourceSet] = handsForPlayers.map { case (playerId, allResSets) =>
-    val numHands = allResSets.length
+    val numHands = allResSets.map(_._2).sum
 //    val knownAmounts: Map[Resource, Int] = Resource.list.map (res => res -> allResSets.map(_.getAmount(res)).min).toMap
 //    val knownSet: Resources = CatanResourceSet(knownAmounts)
 //    val unkownSets: Seq[Resources] = allResSets.map(_.subtract(knownSet))
     val resMap: Map[Resource, (Int, Double)] = Resource.list.map { res =>
-      val knownAmount = allResSets.map(_.getAmount(res)).min
-      val unknownAmount = allResSets.map { set =>
-        set.getAmount(res) - knownAmount
+      val knownAmount = allResSets.map(_._1.getAmount(res)).min
+      val unknownAmount = allResSets.map { case (set, mult) =>
+        (set.getAmount(res) - knownAmount) * mult
       }.sum.toDouble / numHands
       res -> (knownAmount, unknownAmount)
     }.toMap
@@ -31,21 +31,21 @@ case class PossibleHands(hands: Seq[Map[Int, Resources]]) {
   }
 
   def playerGainCards(player: Int, set: Resources): PossibleHands = copy {
-    hands.headOption.fold(copy(Seq(Map(player -> CatanResourceSet.empty)))) {
-      case hand if !hand.contains(player) => copy(hands.map(_ + (player -> CatanResourceSet.empty)))
+    hands.headOption.fold(copy(Seq(Map(player -> (CatanResourceSet.empty, 1))))) {
+      case hand if !hand.contains(player) => copy(hands.map(_ + (player -> (CatanResourceSet.empty[Int], 1))))
       case _ => copy()
     }.hands.map { hand =>
       hand.map {
-        case (`player`, resources) => player -> resources.add(set)
+        case (`player`, (resources, mult)) => player -> (resources.add(set), mult)
         case (p, rm) => p -> rm
       }
     }
   }
 
   def playerLoseCards(player: Int, set: Resources): PossibleHands = copy {
-    hands.filter(_.get(player).fold(false)(_.contains(set))).map {
+    hands.filter(_.get(player).fold(false)(_._1.contains(set))).map {
       _.map {
-        case (`player`, resources) => player -> resources.subtract(set)
+        case (`player`, (resources, mult)) => player -> (resources.subtract(set), mult)
         case (p, rm) => p -> rm
       }
     }
@@ -53,26 +53,23 @@ case class PossibleHands(hands: Seq[Map[Int, Resources]]) {
 
   def stealUnknownCards(robber: Int, victim: Int): PossibleHands = copy {
     hands.flatMap { hand =>
-      Resource.list.filter(set => hand.get(victim).fold(false)(_.contains(set))).flatMap { res =>
+      Resource.list.filter(set => hand.get(victim).fold(false)(_._1.contains(set))).flatMap { res =>
         val set = CatanResourceSet(res)
-        (1 to hand(victim).getAmount(res)).flatMap { _ =>
-          PossibleHands(Seq(hand)).playerLoseCards(victim, set).playerGainCards(robber, set).hands
+        val amount = hand(victim)._1.getAmount(res)
+        PossibleHands(Seq(hand)).playerLoseCards(victim, set).playerGainCards(robber, set).hands.map {
+          _.map {
+            case (`robber`, (resources, mult)) => robber -> (resources, mult * amount)
+            case (`victim`, (resources, mult)) => victim -> (resources, mult * amount)
+            case (p, rm) => p -> rm
+          }
         }
       }
-    }
+    }.groupBy(f => f).mapValues(_.length).map {
+      case (m, 1) => m
+      case (m, l) => m.mapValues { case (set, mult) => (set, mult * l)
+      }
+    }.toSeq
   }
-
-//  def playerMonopoly(player: Int, res: Resource): PossibleHands = copy {
-//    hands.map { hand =>
-//      val totalRes = hand.values.map(_.cards.getAmount(res)).sum
-//      hand.map {
-//        case (`player`, Hand(_, mult)) =>
-//          player -> Hand(CatanResourceSet().add(totalRes, res), mult)
-//        case (p, Hand(resources, mult)) =>
-//          p -> Hand(resources.subtract(resources.getAmount(res), res), mult)
-//      }
-//    }
-//  }
 
   @tailrec
   final def calculateHands(transactions: List[SOCTransactions]): PossibleHands = {
@@ -85,9 +82,7 @@ case class PossibleHands(hands: Seq[Map[Int, Resources]]) {
     case Lose(player, set) => playerLoseCards(player, set)
     case Steal(robber, victim, Some(set)) => playerLoseCards(victim, set).playerGainCards(robber, set)
     case Steal(robber, victim, None) => stealUnknownCards(robber, victim)
-   // case MonopolyTransaction(player, resourceType) => playerMonopoly(player, resourceType)
   }
-
 }
 
 object SOCPossibleHands {
@@ -100,7 +95,3 @@ sealed trait SOCTransactions
 case class Gain(playerId: Int, resourceSet: Resources) extends SOCTransactions
 case class Lose(playerId: Int, resourceSet: Resources) extends SOCTransactions
 case class Steal(robber: Int, victim: Int, resourceSet: Option[Resources]) extends SOCTransactions
-case class MonopolyTransaction(player: Int, resourceType: Resource) extends SOCTransactions
-
-
-

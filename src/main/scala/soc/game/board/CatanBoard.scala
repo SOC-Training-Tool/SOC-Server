@@ -1,8 +1,28 @@
 package soc.game.board
 
 import soc.game._
-import soc.game.resources.CatanResourceSet
-import soc.game.resources.CatanResourceSet.Resources
+import soc.game.inventory._
+import soc.game.inventory.resources.CatanResourceSet
+import soc.game.inventory.resources.CatanResourceSet.Resources
+
+import scala.util.Random
+
+sealed trait Hex {
+  val getResourceAndNumber: Option[(Resource, Roll)]
+  val getResource: Option[Resource]
+  val getNumber: Option[Roll]
+}
+case class ResourceHex(resource: Resource, number: Roll) extends Hex {
+  override val getResourceAndNumber: Option[(Resource, Roll)] = Some((resource, number))
+  override val getResource: Option[Resource] = Some(resource)
+  override val getNumber: Option[Roll] = Some(number)
+}
+case object Desert extends Hex {
+  override val getResourceAndNumber: Option[(Resource, Roll)] = None
+  override val getResource: Option[Resource] = None
+  override val getNumber: Option[Roll] = None
+}
+
 
 case class BoardHex(
   node: Int,
@@ -16,9 +36,9 @@ case class Edge(v1: Vertex, v2: Vertex) {
   override def canEqual(a: Any) = a.isInstanceOf[Edge]
 
   override def equals(that: Any): Boolean = that match {
-    case e: Edge =>
+    case e @ Edge(ev1, ev2) =>
       e.canEqual(this) &&
-        (e.v1 == v1 && e.v2 == v2) || (e.v2 == v1 && e.v1 == v2)
+        (ev1 == v1 && ev2 == v2) || (ev2 == v1 && ev1 == v2)
     case _ => false
   }
 
@@ -132,7 +152,7 @@ case class CatanBoard private (
           case _ => Nil
         }
       }
-    }.groupBy(_._1).mapValues (_.map(_._2).foldLeft(CatanResourceSet.empty)(_.add(1, _)))
+    }.groupBy(_._1).mapValues (_.map(_._2).foldLeft(CatanResourceSet.empty[Int])(_.add(1, _)))
   }
 
   def calcLongestRoadLength(playerId: Int): Int = {
@@ -281,4 +301,14 @@ object CatanBoard {
         }
     }
   }
+}
+
+trait BoardConfiguration
+
+trait BoardGenerator[T <: BoardConfiguration] {
+
+  def apply(config: T): CatanBoard
+
+  def randomBoard(implicit rand: Random): T
+
 }

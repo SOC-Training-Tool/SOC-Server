@@ -2,15 +2,20 @@ package soc.game.player.moveSelector
 
 import soc.game.GameState
 import soc.game.CatanMove
+import soc.game.inventory.Inventory
+import soc.game.inventory.Inventory.PerfectInfo
+import soc.game.player.PlayerStateManager
 
-trait MoveSelector {
+import scala.concurrent.Future
 
-  def initialPlacementMove(gameState: GameState, position: Int)(first: Boolean): CatanMove.Move
+trait MoveSelector[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]] {
 
-  def discardCardsMove(gameState: GameState, position: Int): CatanMove.Move
+  def initialPlacementMove(gameState: GameState[PLAYER], inventory: GAME, position: Int)(first: Boolean): Future[CatanMove.Move]
 
-  def moveRobberAndStealMove(gameState: GameState, position: Int): CatanMove.Move
+  def discardCardsMove(gameState: GameState[PLAYER],inventory: GAME, position: Int): Future[CatanMove.Move]
 
-  def turnMove(gameState: GameState, position: Int): CatanMove.Move
+  def moveRobberAndStealMove(gameState: GameState[PLAYER],inventory: GAME, position: Int): Future[CatanMove.Move]
+
+  def turnMove(gameState: GameState[PLAYER],inventory: GAME, position: Int): Future[CatanMove.Move]
 
 }

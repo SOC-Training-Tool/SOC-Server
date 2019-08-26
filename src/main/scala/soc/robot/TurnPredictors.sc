@@ -1,7 +1,7 @@
 import soc.game._
 import soc.game.board.{BaseCatanBoard, CatanBoard, Vertex}
+import soc.game.inventory.resources.CatanResourceSet
 import soc.game.player.PlayerState
-import soc.game.resources.CatanResourceSet
 
 val hexes = List(
   ResourceHex(Wheat, Roll(6)),

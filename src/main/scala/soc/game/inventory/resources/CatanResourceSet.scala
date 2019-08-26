@@ -1,6 +1,6 @@
-package soc.game.resources
+package soc.game.inventory.resources
 
-import soc.game.{CatanSet, _}
+import soc.game.inventory._
 
 case class CatanResourceSet[T: Numeric](br: T = 0, or: T = 0, sh: T = 0, wh: T = 0, wo: T = 0) extends CatanSet[Resource, T] {
 
@@ -23,7 +23,11 @@ object CatanResourceSet {
   type ResourceSet[S] = CatanResourceSet[S]
   type Resources = ResourceSet[Int]
 
-  val empty: Resources = CatanResourceSet[Int]()
+  def empty[T: Numeric]: CatanResourceSet[T] = {
+    val num = implicitly[Numeric[T]]
+    CatanResourceSet(num.zero, num.zero, num.zero, num.zero, num.zero)
+
+  }
   val fullBank = CatanResourceSet(19, 19, 19, 19, 19)
 
 
@@ -36,7 +40,7 @@ object CatanResourceSet {
       resMap.get(Wood).getOrElse(num.zero))
 
   def apply(resources: Resource*): Resources = {
-    resources.foldLeft(empty) { case (set, res) => set.add(CatanResourceSet(Map(res -> 1)))}
+    resources.foldLeft(empty[Int]) { case (set, res) => set.add(CatanResourceSet(Map(res -> 1)))}
   }
 
 
