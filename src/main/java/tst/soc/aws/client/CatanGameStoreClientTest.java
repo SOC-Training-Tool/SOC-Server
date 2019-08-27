@@ -1,7 +1,6 @@
 package tst.soc.aws.client;
 
 import io.circe.Json;
-import log.SystemLog;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
