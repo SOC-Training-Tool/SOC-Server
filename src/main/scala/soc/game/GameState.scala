@@ -1,6 +1,6 @@
 package soc.game
 
-import soc.game.CatanMove._
+import soc.game._
 import soc.game.board.{CatanBoard, Edge, Vertex}
 import soc.game.inventory.Inventory
 import soc.game.inventory._
@@ -292,7 +292,7 @@ case class GameState[T <: Inventory[T]](
     turnState = TurnState()
   )
 
-  def apply(playerId: Int, moveResult: MoveResult[_]): GameState[T] = moveResult match {
+  def apply(playerId: Int, moveResult: MoveResult): GameState[T] = moveResult match {
     case r: RollResult => rollDice(playerId, r)
     case EndTurnMove => endTurn(playerId)
     case r: InitialPlacementMove => initialPlacement(playerId, r)

@@ -1,6 +1,8 @@
 package soc.game.board
 
+import io.circe.Encoder
 import org.scalatest.{FunSpec, Matchers}
+import soc.CatanFixtures
 import soc.game.Roll
 import soc.game.board._
 import soc.game.inventory._
@@ -278,5 +280,25 @@ class CatanBoardSpec extends FunSpec with Matchers {
           .longestRoadLength(0) shouldBe 3
       }
     }
+  }
+
+  def e[BOARD <: BoardConfiguration](board: BOARD)(implicit encoder: Encoder[BOARD]) : Unit = {
+    import io.circe.syntax._
+    println(board.asJson)
+  }
+
+
+  describe("json encoder") {
+
+    val bConfig = CatanFixtures.baseBoardConfig
+
+    it("should result in an encoded json board config") {
+
+
+      import io.circe.generic.auto._
+      e (bConfig)
+
+    }
+
   }
 }

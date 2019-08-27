@@ -1,5 +1,6 @@
 package soc.game.board
 
+import io.circe._, io.circe.generic.semiauto._
 import soc.game._
 import soc.game.inventory._
 
@@ -7,7 +8,6 @@ import scala.annotation.tailrec
 import scala.util.Random
 
 case class BaseBoardConfiguration(hexes: List[Hex], ports: List[Port]) extends BoardConfiguration
-
 
 object BaseCatanBoard extends BoardGenerator[BaseBoardConfiguration] {
 

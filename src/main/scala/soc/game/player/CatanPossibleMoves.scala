@@ -1,7 +1,6 @@
 package soc.game.player
 
 import soc.game._
-import soc.game.CatanMove._
 import soc.game.inventory.Inventory.PerfectInfo
 import soc.game.inventory._
 import soc.game.inventory.resources.CatanResourceSet
@@ -13,7 +12,7 @@ case class CatanPossibleMoves[PLAYER <: Inventory[PLAYER]] (state: GameState[PLA
   val turnState = state.turnState
   val devCardsDeck = state.devCardsDeck
 
-  def getPossibleMovesForState: List[CatanMove.Move] = {
+  def getPossibleMovesForState: List[CatanMove] = {
 
     val devCardMoves = if (turnState.canPlayDevCard) {
       getPossibleDevelopmentCard
@@ -39,15 +38,15 @@ case class CatanPossibleMoves[PLAYER <: Inventory[PLAYER]] (state: GameState[PLA
     }
   }
 
-  lazy val getPossibleSettlements: List[CatanBuildMove[BuildSettlement]] = if (currPlayer.canBuildSettlement && inventory.canBuild(Settlement.cost)) {
+  lazy val getPossibleSettlements: List[BuildSettlementMove] = if (currPlayer.canBuildSettlement && inventory.canBuild(Settlement.cost)) {
     board.getPossibleSettlements(currPlayer.position, false).toList.map(v => BuildSettlementMove(v))
   } else Nil
 
-  lazy val getPossibleCities: List[CatanBuildMove[BuildCity]] = if (currPlayer.canBuildCity && inventory.canBuild(City.cost)) {
+  lazy val getPossibleCities: List[BuildCityMove] = if (currPlayer.canBuildCity && inventory.canBuild(City.cost)) {
     board.getPossibleCities(currPlayer.position).toList.map(BuildCityMove)
   } else Nil
 
-  lazy val getPossibleRoads: List[CatanBuildMove[BuildRoad]] = if (currPlayer.canBuildRoad && inventory.canBuild(Road.cost)) {
+  lazy val getPossibleRoads: List[BuildRoadMove] = if (currPlayer.canBuildRoad && inventory.canBuild(Road.cost)) {
     board.getPossibleRoads(currPlayer.position).toList.map(BuildRoadMove)
   } else Nil
 
@@ -56,7 +55,7 @@ case class CatanPossibleMoves[PLAYER <: Inventory[PLAYER]] (state: GameState[PLA
   } else Nil
 
 
-  def getPossibleBuilds: List[CatanBuildMove[_]] = {
+  def getPossibleBuilds: List[CatanBuildMove] = {
    getPossibleSettlements ::: getPossibleCities ::: getPossibleRoads ::: getPossibleDevelopmentCards
   }
 
@@ -108,17 +107,17 @@ case class CatanPossibleMoves[PLAYER <: Inventory[PLAYER]] (state: GameState[PLA
     }
   }
 
-  def getPossibleDevelopmentCard: List[CatanPlayCardMove[_]] = {
+  def getPossibleDevelopmentCard: List[CatanPlayCardMove] = {
 
-    val knight: List[CatanPlayCardMove[Knight]] = if (inventory.canPlayDevCards.contains(Knight)) {
+    val knight: List[KnightMove] = if (inventory.canPlayDevCards.contains(Knight)) {
       getPossibleRobberLocations.map(KnightMove)
     } else Nil
 
-    val monopoly: List[CatanPlayCardMove[Monopoly]] = if (inventory.canPlayDevCards.contains(Monopoly)) {
+    val monopoly: List[MonopolyMove] = if (inventory.canPlayDevCards.contains(Monopoly)) {
       Resource.list.map(MonopolyMove)
     } else Nil
 
-    val yearOfPlenty: List[CatanPlayCardMove[YearOfPlenty]] = if (inventory.canPlayDevCards.contains(YearOfPlenty)) {
+    val yearOfPlenty: List[YearOfPlentyMove] = if (inventory.canPlayDevCards.contains(YearOfPlenty)) {
       Resource.list.flatMap { res1 =>
         Resource.list.map { res2 =>
           YearOfPlentyMove(res1, res2)
@@ -126,7 +125,7 @@ case class CatanPossibleMoves[PLAYER <: Inventory[PLAYER]] (state: GameState[PLA
       }
     } else Nil
 
-    val roads: List[CatanPlayCardMove[RoadBuilder]] = if (inventory.canPlayDevCards.contains(RoadBuilder) && currPlayer.roads.length < 15) {
+    val roads: List[RoadBuilderMove] = if (inventory.canPlayDevCards.contains(RoadBuilder) && currPlayer.roads.length < 15) {
       val firsRoadsAndBoards = board.getPossibleRoads(currPlayer.position).map { road1 =>
         (road1, board.buildRoad(road1, currPlayer.position))
       }

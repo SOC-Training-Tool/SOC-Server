@@ -8,14 +8,14 @@ import soc.game.player.moveSelector.PossibleMoveSelector
 import soc.game._
 import soc.game.board.{BaseBoardConfiguration, BaseCatanBoard}
 import soc.game.inventory.Inventory.{NoInfo, PerfectInfo}
-import soc.sql.MoveEntry
-import soc.storage.MoveSaver
 import soc.game.inventory._
+import soc.storage.aws.AWSMoveSaver
 
 import scala.concurrent.{Await, Future}
 import scala.util.Random
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import soc.aws.client.CatanGameStoreClientFactory
 
 object Main extends App {
 
@@ -24,10 +24,6 @@ object Main extends App {
   val boardConfig = BaseCatanBoard.randomBoard
 
   val dice = NormalDice()
-
-  type GAME = PerfectInfo
-  type PLAYER = NoInfo
-  type T = NoInfo
 
   import InventoryManager._
   import BaseCatanBoard._
@@ -41,13 +37,9 @@ object Main extends App {
       YearOfPlenty -> YearOfPlenty.initAmount)
   )
 
-  val inMemoryMoveSaver = new MoveSaver {
-
-    var moves: List[MoveEntry] = Nil
-    override def saveMove(move: MoveEntry): Unit = moves = move :: moves
-    override def toString = moves.mkString("\n")
-  }
-  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(inMemoryMoveSaver), "moveSaver")
+  import io.circe.generic.auto._
+  val awsGameSaver = new AWSMoveSaver[BaseBoardConfiguration](CatanGameStoreClientFactory.createClient())
+  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver")
 
   val randSelector = PossibleMoveSelector.randSelector[NoInfo]
 
@@ -60,28 +52,20 @@ object Main extends App {
 
   val randomMoveResultProvider = new RandomMoveResultProvider(dice, dCardDeck)
 
-  val numGames = 200
+  val numGames = 1
   val averageGameLengthSeconds = 20
 
   val games = for {
     i <- 1 to numGames
-    config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](i, boardConfig, players, randomMoveResultProvider, None, gameRules)
+    config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](i, boardConfig, players, randomMoveResultProvider, Some(moveSaverActor), gameRules)
   } yield ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan$i").whenTerminated
 
   Await.result(Future.sequence(games), (numGames * averageGameLengthSeconds).seconds)
 
   println("gamesAreOver")
 
-  println(inMemoryMoveSaver.moves.groupBy(_.gameId).map(_._2.length).sum.toDouble / 100.0)
-
+  //println(inMemoryGameSaver.moves.groupBy(_.gameId).map(_._2.length).sum.toDouble / 100.0)
 
   players.values.foreach(_ ! Terminate)
   moveSaverActor ! Terminate
-
-
-
-
-
-
-
 }

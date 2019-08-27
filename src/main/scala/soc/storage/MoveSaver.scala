@@ -1,9 +1,11 @@
 package soc.storage
 
-import soc.sql.MoveEntry
+import soc.game.board.BoardConfiguration
 
-trait MoveSaver {
+trait MoveSaver[BOARD <: BoardConfiguration] {
 
   def saveMove(move: MoveEntry): Unit
+
+  def saveGame(gameId: Int, initBoard: BOARD, players: Map[(String, Int), Int]): Unit
 
 }

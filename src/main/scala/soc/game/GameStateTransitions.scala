@@ -1,6 +1,5 @@
 package soc.game
 
-import soc.game.CatanMove.{BuildCity, BuildRoad, BuildSettlement, EndTurnMove, InitialPlacementMove, PortTrade, RoadBuilderMove, RollDiceMove, YearOfPlentyMove}
 
 object GameStateTransitions {
 

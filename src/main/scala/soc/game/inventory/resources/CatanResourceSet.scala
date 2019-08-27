@@ -1,5 +1,8 @@
 package soc.game.inventory.resources
 
+import io.circe.Encoder
+import io.circe.generic.semiauto._
+import io.circe._
 import soc.game.inventory._
 
 case class CatanResourceSet[T: Numeric](br: T = 0, or: T = 0, sh: T = 0, wh: T = 0, wo: T = 0) extends CatanSet[Resource, T] {
@@ -47,5 +50,8 @@ object CatanResourceSet {
   def describe(set: Resources): String = {
     set.amountMap.filter(_._2 > 0).map { case (res, amt) => s"$amt ${res.name}s"}.mkString(", ")
   }
+
+  implicit def encoderInt(implicit n: Numeric[Int]): Encoder[ResourceSet[Int]] = Encoder.forProduct5("Brick", "Ore", "Sheep", "Wheat", "Wood")(rs => (rs.getAmount(Brick), rs.getAmount(Ore), rs.getAmount(Sheep), rs.getAmount(Wheat), rs.getAmount(Wood)))
+  implicit def encoderDouble(implicit n: Numeric[Double]): Encoder[ResourceSet[Double]] = Encoder.forProduct5("Brick", "Ore", "Sheep", "Wheat", "Wood")(rs => (rs.getAmount(Brick), rs.getAmount(Ore), rs.getAmount(Sheep), rs.getAmount(Wheat), rs.getAmount(Wood)))
 }
 

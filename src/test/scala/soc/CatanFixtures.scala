@@ -1,7 +1,7 @@
 package soc
 
 import soc.game.Roll
-import soc.game.board.{BaseCatanBoard, CatanBoard, Desert, ResourceHex}
+import soc.game.board.{BaseBoardConfiguration, BaseCatanBoard, CatanBoard, Desert, ResourceHex}
 import soc.game.inventory._
 
 object CatanFixtures {
@@ -14,7 +14,7 @@ object CatanFixtures {
     CatanBoard(vertexMap, portMapFunc, hexes, ports)
   }
 
-  val baseBoard = {
+  val baseBoardConfig = {
     val hexes = List(
       ResourceHex(Wheat, Roll(6)),
       ResourceHex(Ore, Roll(2)),
@@ -38,7 +38,9 @@ object CatanFixtures {
     )
 
     val ports: List[Port] = List(Misc, Ore, Misc, Wheat, Misc, Brick, Wood, Sheep, Misc)
-    BaseCatanBoard(hexes, ports)
+    BaseBoardConfiguration(hexes, ports)
   }
+
+  val baseBoard = BaseCatanBoard(baseBoardConfig)
 
 }

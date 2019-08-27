@@ -3,19 +3,20 @@ package soc.akka
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.actor.typed.scaladsl.Behaviors
 import akka.util.Timeout
-import soc.akka.messages.{ErrorMessage, MoveEntryMessage, ReceivedDiscard, RequestMessage, Response, StateMessage, UpdateMessage}
+import soc.akka.messages.{ErrorMessage, MoveEntryMessage, ReceivedDiscard, RequestMessage, Response, SaveGameMessage, StateMessage, UpdateMessage}
 import soc.akka.messages.RequestMessage._
 import soc.game.{CatanMove, CatanPlayCardMove, GameConfiguration, GameRules, GameState, MoveResult, Roll}
 import soc.akka.messages.UpdateMessage._
-import soc.sql.MoveEntry
-import soc.game.CatanMove._
+import soc.game._
+import soc.game.board.BoardConfiguration
 import soc.game.inventory.Inventory
 import soc.game.inventory.resources.CatanResourceSet.Resources
 import soc.game.inventory.resources.{CatanResourceSet, DiscardedCardsMapBuilder, Steal}
+import soc.storage
+import soc.storage.MoveEntry
 
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
-
 import scala.concurrent.ExecutionContextExecutor
 
 case class GameStateHolder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS]](
@@ -32,7 +33,7 @@ case class GameStateHolder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS
 
 object GameBehavior {
 
-  def gameBehavior[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS]](config: GameConfiguration[GAME, PLAYERS, _]) = Behaviors.setup[StateMessage[GAME, PLAYERS]] { context =>
+  def gameBehavior[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BOARD <: BoardConfiguration](config: GameConfiguration[GAME, PLAYERS, BOARD]) = Behaviors.setup[StateMessage[GAME, PLAYERS]] { context =>
 
     implicit val timeout: Timeout = 60.seconds
     implicit val ec: ExecutionContextExecutor = context.executionContext
@@ -62,9 +63,9 @@ object GameBehavior {
     def turnMove(id: Int)(updateState: => GameStateHolder[GAME, PLAYERS]): Behavior[StateMessage[GAME, PLAYERS]] = {
       val states = updateState
 
-
       val winner = states.gameState.players.getPlayers.find(_.points >= 10)
       if (winner.isDefined) {
+        config.moveRecorder.map(_ ! SaveGameMessage(config.gameId, config.boardConfig, states.gameState.players.getPlayers.map(p => (p.name, p.position) -> p.points).toMap))
         context.log.info(s"Player ${winner.get.position} has won with ${winner.get.points} points and ${states.gameState.diceRolls} rolls ${states.gameState.players.getPlayers.map(p => (p.position, p.points))}")
         context.log.debug(s"${winner.get}")
         Behaviors.stopped
@@ -72,10 +73,10 @@ object GameBehavior {
       else {
         context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(id))(ref => MoveRequest(config.gameId, states.playerStates(id), states.gameState.players.getPlayer(id).inventory, id, ref)) {
           case Success(Response(`id`, RollDiceMove)) if !states.gameState.turnState.canRollDice => null
-          case Success(Response(`id`, _: CatanPlayCardMove[_])) if !states.gameState.turnState.canPlayDevCard => null
+          case Success(Response(`id`, _: CatanPlayCardMove)) if !states.gameState.turnState.canPlayDevCard => null
           case Success(Response(`id`, EndTurnMove)) if states.gameState.turnState.canRollDice => null
 
-          case Success(r@Response(`id`, _: CatanMove[_])) => StateMessage(states, r)
+          case Success(r@Response(`id`, _: CatanMove)) => StateMessage(states, r)
 
           case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
         }
@@ -85,7 +86,7 @@ object GameBehavior {
 
     def stealCards(states: GameStateHolder[GAME, PLAYERS], id: Int, robberLocation: Int, victim: Option[Int])
       (updateMessage: (Int, Int, Int, Option[Steal]) => UpdateMessage)
-      (moveResult: (Int, Option[Steal]) => MoveResult[_])
+      (moveResult: (Int, Option[Steal]) => MoveResult)
       (stateUpdater: (GameState[PLAYERS], Int, Int, Option[Steal]) => GameState[PLAYERS]): GameStateHolder[GAME, PLAYERS] = {
       val stolenRes: Option[Resources] = config.resultProvider.stealCardMoveResult(states.gameState, victim).value.map(_.get).get.map(CatanResourceSet.empty[Int].add(1, _))
       val steal = victim.map(v => Steal(id, v, stolenRes))
@@ -112,8 +113,8 @@ object GameBehavior {
       )
     }
 
-    def sendMove(id: Int, moveResult: MoveResult[_]): Unit = {
-      config.moveRecorder.map(_ ! MoveEntryMessage(MoveEntry(config.gameId, moveNumber, config.playerIds(id), id, moveResult)))
+    def sendMove(id: Int, moveResult: MoveResult): Unit = {
+      config.moveRecorder.map(_ ! MoveEntryMessage(storage.MoveEntry(config.gameId, moveNumber, config.playerIds(id), id, moveResult)))
       moveNumber = moveNumber + 1
     }
 
