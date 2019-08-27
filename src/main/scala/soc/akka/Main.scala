@@ -54,7 +54,7 @@ object Main extends App {
 
   val randomMoveResultProvider = new RandomMoveResultProvider(dice, dCardDeck)
 
-  val numGames = 1
+  val numGames = 100
   val averageGameLengthSeconds = 20
 
   val games = for {
