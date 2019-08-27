@@ -38,9 +38,10 @@ object Main extends App {
       YearOfPlenty -> YearOfPlenty.initAmount)
   )
 
+  import CatanResourceSet._
   import io.circe.generic.auto._
   val awsGameSaver = new AWSMoveSaver[BaseBoardConfiguration](CatanGameStoreClientFactory.createClient())
-  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver", )
+  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver")
 
   val randSelector = PossibleMoveSelector.randSelector[NoInfo]
 
