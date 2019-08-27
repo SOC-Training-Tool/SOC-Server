@@ -7,8 +7,7 @@ import soc.storage.{MoveEntry, MoveSaver}
 
 import scala.collection.JavaConverters._
 import io.circe.syntax._
-import io.circe.Encoder
-import soc.game.CatanMove._
+import io.circe.{Encoder, Json}
 
 class AWSMoveSaver[BOARD <: BoardConfiguration](gameStoreClient: CatanGameStoreClient)(implicit moveEncoder: Encoder[List[MoveEntry]], boardEncoder: Encoder[BOARD]) extends MoveSaver[BOARD] {
 
@@ -22,8 +21,7 @@ class AWSMoveSaver[BOARD <: BoardConfiguration](gameStoreClient: CatanGameStoreC
 
   override def saveGame(gameId: Int, initBoard: BOARD, players: Map[(String, Int), Int]): Unit = {
     val playerList = players.map { case ((name, id), points) => new PlayerContext(name, id, points)}.toList
-    val moves = moveMap(gameId)
-    gameStoreClient.save(playerList.asJava, moves.asJson, initBoard.asJson)
+    gameStoreClient.save(playerList.asJava, moveMap(gameId).asJson, initBoard.asJson)
     moveMap = moveMap - gameId
   }
 }

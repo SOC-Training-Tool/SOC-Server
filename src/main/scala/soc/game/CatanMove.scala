@@ -8,7 +8,7 @@ import soc.game.inventory.resources.CatanResourceSet.Resources
 
 
 sealed trait CatanMove
-trait MoveResult
+sealed trait MoveResult
 
 trait CatanBuildMove extends CatanMove
 trait CatanTradeMove extends CatanMove
@@ -51,34 +51,3 @@ sealed trait ImperfectInformation
   case class MonopolyResult(cardsLost: Map[Int, Resources]) extends MoveResult
   case class RoadBuilderMove(road1: Edge, road2: Option[Edge]) extends CatanPlayCardMove with MoveResult
   //case object PointMove extends CatanPlayCardMove[]
-
-
-object CatanMove {
-
-  import io.circe.syntax._
-  import io.circe.generic.auto._
-  import CatanResourceSet._
-
-  implicit val resultEncoder: Encoder[MoveResult] = Encoder.instance {
-    case r: RollResult => r.asJson
-    case EndTurnMove =>EndTurnMove.asJson
-    case r: InitialPlacementMove => r.asJson
-    case r: MoveRobberAndStealResult => r.asJson
-    case r: BuyDevelopmentCardResult => r.asJson
-    case r: BuildRoadMove => r.asJson
-    case r: BuildSettlementMove => r.asJson
-    case r: BuildCityMove => r.asJson
-    case r: PortTradeMove => r.asJson
-    case r: KnightResult => r.asJson
-    case r: YearOfPlentyMove => r.asJson
-    case r: MonopolyResult => r.asJson
-    case r: RoadBuilderMove => r.asJson
-    case r: DiscardResourcesMove => r.asJson
-  }
-
-
-}
-
-
-
-

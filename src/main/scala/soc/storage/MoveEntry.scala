@@ -13,13 +13,3 @@ case class MoveEntry (
   move: MoveResult,
 )
 
-object MoveEntry {
-
-  import soc.game.CatanMove._
-  import soc.game.inventory.resources.CatanResourceSet._
-
-
-  implicit val moveEntryEncoder: Encoder[MoveEntry] = deriveEncoder
-
-}
-

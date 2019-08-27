@@ -1,5 +1,6 @@
 package soc.storage
 
+import io.circe.Encoder
 import org.scalatest.{FunSpec, Matchers}
 import soc.game._
 import soc.game.Roll
@@ -17,15 +18,17 @@ class MoveEntrySpec extends FunSpec with Matchers {
 
     val l: List[MoveEntry] = List(moveEntryA, moveEntryB, moveEntryC)
 
-    val moveResult: MoveResult = RollResult(Roll(6))
+    val moveResult = RollResult(Roll(6))
 
     it("should be a json") {
       import io.circe.syntax._
-      import CatanMove._
-      import MoveEntry._
-      //import io.circe.generic.auto._
 
-      println(l.asJson)
+//
+//      implicit val encoderMoveEntry: Encoder[MoveEntry] = Encoder.forProduct5("gameId", "moveNumber", "playerId", "playerOrderNumber", "move"){ me =>
+//        (me.gameId, me.moveNumber, me.playerId, me.playerOrderNumber, me.move)
+//      }
+
+      //println(moveEntryB.asJson)
 
     }
 

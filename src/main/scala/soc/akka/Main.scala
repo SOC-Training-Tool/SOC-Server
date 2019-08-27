@@ -16,6 +16,7 @@ import scala.util.Random
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import soc.aws.client.CatanGameStoreClientFactory
+import soc.game.inventory.resources.CatanResourceSet
 
 object Main extends App {
 
@@ -39,15 +40,15 @@ object Main extends App {
 
   import io.circe.generic.auto._
   val awsGameSaver = new AWSMoveSaver[BaseBoardConfiguration](CatanGameStoreClientFactory.createClient())
-  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver")
+  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver", )
 
   val randSelector = PossibleMoveSelector.randSelector[NoInfo]
 
   val players = Map(
-    ("player0", 0) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player0"),
-    ("player1", 1) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player1"),
-    ("player2", 2) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player2"),
-    ("player3", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player3")
+    ("randomPlayer", 0) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player0"),
+    ("randomPlayer", 1) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player1"),
+    ("randomPlayer", 2) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player2"),
+    ("randomPlayer", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player3")
   )
 
   val randomMoveResultProvider = new RandomMoveResultProvider(dice, dCardDeck)

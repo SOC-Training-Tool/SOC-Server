@@ -131,7 +131,7 @@ public class CatanGameStoreClientImpl implements CatanGameStoreClient
      */
     private ByteArrayInputStream convertJsonToBytes(Json json)
     {
-        return new ByteArrayInputStream(json.asString().get().getBytes());
+        return new ByteArrayInputStream(json.toString().getBytes());
     }
 
     private AmazonS3 mS3Client;
