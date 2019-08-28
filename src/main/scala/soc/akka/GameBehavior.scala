@@ -4,7 +4,7 @@ import akka.actor.typed.{ActorRef, Behavior}
 import akka.actor.typed.scaladsl.Behaviors
 import akka.util.Timeout
 import soc.akka.messages.{ErrorMessage, MoveEntryMessage, ReceivedDiscard, RequestMessage, Response, SaveGameMessage, StateMessage, UpdateMessage}
-import soc.akka.messages.RequestMessage._
+import soc.akka.messages.RequestMessage.{InitialPlacementRequest, _}
 import soc.game.{CatanMove, CatanPlayCardMove, GameConfiguration, GameRules, GameState, MoveResult, Roll}
 import soc.akka.messages.UpdateMessage._
 import soc.game._
@@ -48,6 +48,8 @@ object GameBehavior {
 
     config.playerRefs.values.foreach(ref => ref ! StartGame(config.gameId, config.initBoard, config.players.keys.toSeq))
 
+    context.log.info(s"Starting Game ${config.gameId}")
+
     context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(firstPlayerId)) { ref =>
       InitialPlacementRequest(config.gameId,
         config.initStates.playerStates(firstPlayerId),
@@ -78,6 +80,7 @@ object GameBehavior {
 
           case Success(r@Response(`id`, _: CatanMove)) => StateMessage(states, r)
 
+          case Success(_) => null
           case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
         }
         Behaviors.same

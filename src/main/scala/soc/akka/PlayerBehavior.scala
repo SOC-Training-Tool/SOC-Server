@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext
 
 object PlayerBehavior {
 
-  def playerBehavior[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER], T <: Inventory[T]](moveSelector: MoveSelector[GAME, T])(implicit ec: ExecutionContext, factory: InventoryManagerFactory[T], gameRules: GameRules): Behavior[GameMessage] = Behaviors.setup[GameMessage] { _ =>
+  def playerBehavior[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER], T <: Inventory[T]](moveSelector: MoveSelector[GAME, T])(implicit ec: ExecutionContext, factory: InventoryManagerFactory[T], gameRules: GameRules): Behavior[GameMessage] = Behaviors.setup[GameMessage] { context =>
 
     var gameStates: Map[Int, GameState[T]] = Map.empty
 
@@ -109,7 +109,10 @@ object PlayerBehavior {
         Behaviors.same
 
       case Terminate =>
+        context.log.info("Terminating Player Actor")
         Behaviors.stopped
+
+      case _ => Behaviors.stopped
     }
   }
 }

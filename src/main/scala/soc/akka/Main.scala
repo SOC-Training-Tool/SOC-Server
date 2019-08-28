@@ -17,6 +17,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import soc.aws.client.CatanGameStoreClientFactory
 import soc.game.inventory.resources.CatanResourceSet
+import soc.game.inventory.InventoryManager._
+import soc.simulation.SimulationQueue
 
 object Main extends App {
 
@@ -26,7 +28,6 @@ object Main extends App {
 
   val dice = NormalDice()
 
-  import InventoryManager._
   import BaseCatanBoard._
   implicit val gameRules = GameRules()
 
@@ -54,20 +55,5 @@ object Main extends App {
 
   val randomMoveResultProvider = new RandomMoveResultProvider(dice, dCardDeck)
 
-  val numGames = 100
-  val averageGameLengthSeconds = 20
-
-  val games = for {
-    i <- 1 to numGames
-    config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](i, boardConfig, players, randomMoveResultProvider, Some(moveSaverActor), gameRules)
-  } yield ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan$i").whenTerminated
-
-  Await.result(Future.sequence(games), (numGames * averageGameLengthSeconds).seconds)
-
-  println("gamesAreOver")
-
-  //println(inMemoryGameSaver.moves.groupBy(_.gameId).map(_._2.length).sum.toDouble / 100.0)
-
-  players.values.foreach(_ ! Terminate)
-  moveSaverActor ! Terminate
+ SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, Some(moveSaverActor), gameRules, 10, 100, 50).startGames
 }
