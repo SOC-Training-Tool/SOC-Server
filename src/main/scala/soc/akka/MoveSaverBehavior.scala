@@ -18,7 +18,7 @@ object MoveSaverBehavior {
     var gamesToSave: List[GameToSave[BOARD]] = Nil
     var toTerminate: Boolean = false
 
-    scheduler.startPeriodicTimer("timer", SendGame, 3 second )
+    scheduler.startPeriodicTimer("timer", SendGame, 1500 millis )
 
     Behaviors.setup { context =>
       Behaviors.receiveMessage[GameMessage] {
@@ -32,8 +32,7 @@ object MoveSaverBehavior {
           Behaviors.same
 
         case SendGame =>
-          val game = gamesToSave.headOption
-          game.fold {
+          gamesToSave.headOption.fold {
             if (toTerminate) Behaviors.stopped[GameMessage]
             else Behaviors.same[GameMessage]
           } { g =>
