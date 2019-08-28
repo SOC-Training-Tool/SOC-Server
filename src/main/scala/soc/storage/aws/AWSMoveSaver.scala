@@ -21,7 +21,7 @@ class AWSMoveSaver[BOARD <: BoardConfiguration](gameStoreClient: CatanGameStoreC
 
   override def saveGame(gameId: Int, initBoard: BOARD, players: Map[(String, Int), Int]): Unit = {
     val playerList = players.map { case ((name, id), points) => new PlayerContext(name, id, points)}.toList
-    //gameStoreClient.save(playerList.asJava, moveMap(gameId).asJson, initBoard.asJson)
+    gameStoreClient.save(playerList.asJava, moveMap(gameId).asJson, initBoard.asJson)
     moveMap = moveMap - gameId
   }
 }
