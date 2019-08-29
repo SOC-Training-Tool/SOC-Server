@@ -11,7 +11,8 @@ case class GameRules(
   initDevCardAmounts: PlayedInventory = GameRules.INITIAL_DEV_AMOUNTS,
   numSettlements: Int = GameRules.NUM_SETTLEMENTS,
   numCities: Int = GameRules.NUM_CITIES,
-  numRoads: Int = GameRules.NUM_ROADS
+  numRoads: Int = GameRules.NUM_ROADS,
+  discardCards: Int = GameRules.DEFAULT_DISCARD_LIMIT
 )
 
 object GameRules {
@@ -22,4 +23,5 @@ object GameRules {
   val NUM_SETTLEMENTS = 5
   val NUM_CITIES = 4
   val NUM_ROADS = 15
+  val DEFAULT_DISCARD_LIMIT = 7
 }

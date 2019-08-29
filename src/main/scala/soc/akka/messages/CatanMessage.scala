@@ -4,8 +4,9 @@ import akka.actor.typed.ActorRef
 import soc.akka.GameStateHolder
 import soc.game.board.BoardConfiguration
 import soc.game.inventory.Inventory
+import soc.game.moves.CatanMove
 import soc.game.player.PlayerStateManager
-import soc.game.{CatanMove, GameState}
+import soc.game.{GameState}
 import soc.storage.MoveEntry
 
 trait CatanMessage

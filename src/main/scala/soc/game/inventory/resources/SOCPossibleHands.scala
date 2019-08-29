@@ -13,9 +13,6 @@ case class PossibleHands(hands: Seq[Map[Int, (Resources, Int)]]) {
 
   lazy val probableHands: Map[Int, ProbableResourceSet] = handsForPlayers.map { case (playerId, allResSets) =>
     val numHands = allResSets.map(_._2).sum
-//    val knownAmounts: Map[Resource, Int] = Resource.list.map (res => res -> allResSets.map(_.getAmount(res)).min).toMap
-//    val knownSet: Resources = CatanResourceSet(knownAmounts)
-//    val unkownSets: Seq[Resources] = allResSets.map(_.subtract(knownSet))
     val resMap: Map[Resource, (Int, Double)] = Resource.list.map { res =>
       val knownAmount = allResSets.map(_._1.getAmount(res)).min
       val unknownAmount = allResSets.map { case (set, mult) =>
@@ -27,7 +24,7 @@ case class PossibleHands(hands: Seq[Map[Int, (Resources, Int)]]) {
     val unknownMap: Map[Resource, Double] = resMap.mapValues(_._2)
     val knownSet: Resources = CatanResourceSet(knownMap)
     val unknownSet: ResourceSet[Double] = CatanResourceSet(unknownMap)
-    playerId -> ProbableResourceSet(knownSet, unknownSet)
+    playerId -> new ProbableResourceSet(knownSet, unknownSet)
   }
 
   def playerGainCards(player: Int, set: Resources): PossibleHands = copy {

@@ -7,6 +7,7 @@ import soc.game.Roll
 import soc.game.board.Vertex
 import soc.game.inventory.Brick
 import soc.game.inventory.resources.CatanResourceSet
+import soc.game.moves.{BuildCityMove, DiscardResourcesMove, RollResult}
 
 class MoveEntrySpec extends FunSpec with Matchers {
 

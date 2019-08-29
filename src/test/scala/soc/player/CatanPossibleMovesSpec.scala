@@ -5,7 +5,7 @@
 //import soc.CatanFixtures
 //import soc.game.board.{Edge, Vertex}
 //import soc.game.player.{CatanPossibleMoves, PlayerState, PlayerStateManager}
-//import soc.game.CatanMove._
+//import soc.game.moves.CatanMove._
 //import soc.game.GameState
 //import soc.game.inventory.CatanSet
 //import soc.game.inventory.Inventory.{PerfectInfo}

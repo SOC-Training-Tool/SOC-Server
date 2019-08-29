@@ -1,7 +1,6 @@
 package soc.simulation
 
 import akka.actor.typed.{ActorRef, ActorSystem}
-import soc.akka.Main.{moveSaverActor, players}
 import soc.akka.{GameBehavior, MoveResultProvider}
 import soc.akka.messages.{GameMessage, Terminate}
 import soc.game.{GameConfiguration, GameRules}
@@ -40,7 +39,7 @@ class SimulationQueue[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BO
       playNextNSimulations(gamesAtATime - currentSimulations.length)
     }
     players.values.foreach(_ ! Terminate)
-    moveSaverActor ! Terminate
+    moveRecorder.map(_ ! Terminate)
   }
 
   private def playNextNSimulations(n: Int): Unit = {

@@ -1,10 +1,10 @@
-package soc.game
+package soc.game.moves
 
-import io.circe.Encoder
+import soc.game.Roll
 import soc.game.board.{Edge, Vertex}
 import soc.game.inventory._
-import soc.game.inventory.resources.{CatanResourceSet, Steal}
 import soc.game.inventory.resources.CatanResourceSet.Resources
+import soc.game.inventory.resources.{CatanResourceSet, Steal}
 
 
 sealed trait CatanMove

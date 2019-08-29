@@ -5,13 +5,14 @@ import akka.actor.typed.scaladsl.Behaviors
 import akka.util.Timeout
 import soc.akka.messages.{ErrorMessage, MoveEntryMessage, ReceivedDiscard, RequestMessage, Response, SaveGameMessage, StateMessage, UpdateMessage}
 import soc.akka.messages.RequestMessage.{InitialPlacementRequest, _}
-import soc.game.{CatanMove, CatanPlayCardMove, GameConfiguration, GameRules, GameState, MoveResult, Roll}
+import soc.game.{GameConfiguration, GameRules, GameState, Roll}
 import soc.akka.messages.UpdateMessage._
 import soc.game._
 import soc.game.board.BoardConfiguration
 import soc.game.inventory.Inventory
 import soc.game.inventory.resources.CatanResourceSet.Resources
 import soc.game.inventory.resources.{CatanResourceSet, DiscardedCardsMapBuilder, Steal}
+import soc.game.moves.{BuildCityMove, BuildRoadMove, BuildSettlementMove, BuyDevelopmentCardMove, BuyDevelopmentCardResult, CatanMove, CatanPlayCardMove, DiscardResourcesMove, EndTurnMove, InitialPlacementMove, KnightMove, KnightResult, MonopolyMove, MonopolyResult, MoveResult, MoveRobberAndStealMove, MoveRobberAndStealResult, PortTradeMove, RoadBuilderMove, RollDiceMove, RollResult, YearOfPlentyMove}
 import soc.storage
 import soc.storage.MoveEntry
 
@@ -200,11 +201,11 @@ object GameBehavior {
         val newStates = states.update(_.apply(id, RollResult(roll)))
 
         if (roll.number == 7) {
-          val toDiscard = newStates.gameState.players.getPlayers.filter(_.numCards > 7).map(_.position)
+          val toDiscard = newStates.gameState.players.getPlayers.filter(_.numCards > config.rules.discardCards).map(_.position)
           if (!toDiscard.isEmpty) {
             discarding = Some(DiscardedCardsMapBuilder(toDiscard))
             toDiscard.foreach { _id =>
-              context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(_id))(ref => DiscardCardRequest(config.gameId, newStates.playerStates(_id), newStates.gameState.players.getPlayer(_id).inventory, _id, ref)) {
+              context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(_id))(ref => DiscardCardRequest(config.gameId, newStates.playerStates(_id), newStates.gameState.players.getPlayer(_id).inventory, _id, id, ref)) {
                 case Success(r @ Response(`_id`, DiscardResourcesMove(res))) => StateMessage(newStates, r)
                 case Success(_) => null
                 case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))

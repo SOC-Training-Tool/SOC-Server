@@ -7,6 +7,7 @@ import soc.game.inventory._
 import soc.game.player.{PlayerState, PlayerStateManager}
 import soc.game.inventory.resources.CatanResourceSet._
 import soc.game.inventory.resources.{CatanResourceSet, Gain, Lose, SOCTransactions, Steal}
+import soc.game.moves.{BuildCityMove, BuildRoadMove, BuildSettlementMove, BuyDevelopmentCardResult, DiscardResourcesMove, EndTurnMove, InitialPlacementMove, KnightResult, MonopolyResult, MoveResult, MoveRobberAndStealResult, PortTradeMove, RoadBuilderMove, RollResult, YearOfPlentyMove}
 
 case class GameState[T <: Inventory[T]](
   board: CatanBoard,

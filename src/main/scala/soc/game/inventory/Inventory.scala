@@ -125,10 +125,10 @@ case class NoInfoInventory(
 
 case class ProbableInfoInventory(
   position: Int,
-  playedDevCards: PlayedInventory = DevCardInventory.empty,
-  probableResourceSet: ProbableResourceSet = ProbableResourceSet.empty,
-  knownUnplayedDevCards: PlayedInventory=  DevCardInventory.empty,
-  probableDevCards: DevelopmentCardSet[Double] = DevCardInventory.empty
+  playedDevCards: PlayedInventory,
+  probableResourceSet: ProbableResourceSet,
+  knownUnplayedDevCards: PlayedInventory,
+  probableDevCards: DevelopmentCardSet[Double]
 ) extends Inventory[ProbableInfo]  {
 
   type UpdateRes = ProbableResourceSet

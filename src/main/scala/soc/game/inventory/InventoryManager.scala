@@ -2,8 +2,8 @@ package soc.game.inventory
 
 import soc.game.GameRules
 import soc.game.inventory.Inventory._
-import soc.game.inventory.developmentCard.{BuyDevelopmentCard, PlayDevelopmentCard, PossibleDevelopmentCards}
-import soc.game.inventory.resources.{PossibleHands, SOCPossibleHands, SOCTransactions}
+import soc.game.inventory.developmentCard.{BuyDevelopmentCard, DevCardInventory, PlayDevelopmentCard, PossibleDevelopmentCards}
+import soc.game.inventory.resources.{PossibleHands, ProbableResourceSet, SOCPossibleHands, SOCTransactions}
 import soc.game.player.PlayerState
 
 trait InventoryManager[T <: Inventory[T]] {
@@ -48,7 +48,7 @@ case class ProbableInfoInventoryManager(
     val newPossibleHands = possibleHands.calculateHands(transactions)
     val update = copy(possibleHands = newPossibleHands)
     (players.map{ case (i, ps) =>
-        i -> ps.updateResources(newPossibleHands.probableHands(i))
+        i -> ps.updateResources(newPossibleHands.probableHands.get(i).getOrElse(ProbableResourceSet.empty))
       }, update)
   }
 
@@ -79,7 +79,13 @@ case class ProbableInfoInventoryManager(
       }, update)
   }
 
-  override def createInventory(position: Int): ProbableInfo = new ProbableInfoInventory(position)
+  override def createInventory(position: Int): ProbableInfo = new ProbableInfoInventory(
+    position,
+    DevCardInventory.empty,
+    ProbableResourceSet.empty,
+    DevCardInventory.empty,
+    DevCardInventory.empty
+  )
 }
 
 case class NoInfoInventoryManager(implicit val gameRules: GameRules) extends InventoryManager[NoInfo] {

@@ -3,7 +3,7 @@ package soc.game.inventory.resources
 import CatanResourceSet.{ResourceSet, Resources}
 import soc.game.inventory.Resource
 
-case class ProbableResourceSet(known: ResourceSet[Int], unknown: ResourceSet[Double]) {
+class ProbableResourceSet(known: ResourceSet[Int], unknown: ResourceSet[Double]) {
 
   def getTotalProbableAmount(resourceType: Resource): Double = getAmount(resourceType) + getProbableAmount(resourceType)
 
@@ -73,6 +73,11 @@ case class ProbableResourceSet(known: ResourceSet[Int], unknown: ResourceSet[Dou
 
   def mightContain(other: Resources): Boolean =  Resource.list.forall { res => getTotalProbableAmount(res).ceil >= other.getAmount(res) }
 
+  lazy val toUnknown: ProbableResourceSet = ProbableResourceSet.unknown(
+    known.amountMap.foldLeft(unknown){ case (unknown, (res, amt)) => unknown.add(amt.toDouble, res)}
+  )
+
+
   override val toString: String =  Resource.list.filter(getTotalProbableAmount(_) > 0).map { res: Resource =>
     s"${res.name}= ${known.getAmount(res)}:${unknown.getAmount(res)}"
   }.mkString(", ")
@@ -82,13 +87,16 @@ case class ProbableResourceSet(known: ResourceSet[Int], unknown: ResourceSet[Dou
   }.mkString(", ")
 
   def copy(known: ResourceSet[Int] = known, unknown: ResourceSet[Double] = unknown): ProbableResourceSet = {
-    ProbableResourceSet(known.asInstanceOf[CatanResourceSet[Int]].copy(), unknown.asInstanceOf[CatanResourceSet[Double]].copy())
+    new ProbableResourceSet(known.asInstanceOf[CatanResourceSet[Int]].copy(), unknown.asInstanceOf[CatanResourceSet[Double]].copy())
   }
 }
 
 object ProbableResourceSet {
 
-  val empty = ProbableResourceSet(CatanResourceSet(), CatanResourceSet())
+  def empty = new ProbableResourceSet(CatanResourceSet.empty[Int], CatanResourceSet.empty[Double])
+
+  def known(known: ResourceSet[Int]): ProbableResourceSet = new ProbableResourceSet(known, CatanResourceSet.empty[Double])
+  def unknown(unknown: ResourceSet[Double]): ProbableResourceSet = new ProbableResourceSet(CatanResourceSet.empty[Int], unknown)
 }
 
 

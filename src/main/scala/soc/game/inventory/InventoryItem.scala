@@ -58,5 +58,6 @@ object Road {
   val cost = CatanResourceSet(1, 0, 0, 0, 1)
 }
 object DevelopmentCard {
+  val list: List[DevelopmentCard] = List(Knight, CatanPoint, RoadBuilder, Monopoly, YearOfPlenty)
   val cost = CatanResourceSet(0, 1, 1, 1, 0)
 }

@@ -3,7 +3,6 @@ package soc.akka
 import akka.actor.typed.scaladsl.Behaviors
 import akka.pattern.pipe
 import soc.akka.messages.{GameMessage, MoveResultProviderMessage, Terminate}
-import soc.game.CatanMove._
 import soc.game.{GameState, Roll}
 import soc.game.dice.Dice
 import soc.game.inventory.Inventory.PerfectInfo

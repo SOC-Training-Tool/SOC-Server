@@ -9,7 +9,7 @@ import soc.akka.messages.{GameMessage, Response, Terminate}
 import soc.game.{GameRules, GameState}
 import soc.game.inventory.{Inventory, InventoryManagerFactory}
 import soc.game.player.PlayerStateManager
-import soc.game.player.moveSelector.MoveSelector
+import soc.game.moves.moveSelector.MoveSelector
 
 import scala.concurrent.ExecutionContext
 
@@ -91,7 +91,7 @@ object PlayerBehavior {
         Behaviors.same
 
       case request: DiscardCardRequest[GAME, PLAYER] =>
-        moveSelector.discardCardsMove(gameStates(request.gameId), request.inventory, request.playerId).map { move =>
+        moveSelector.discardCardsMove(gameStates(request.gameId), request.inventory, request.playerId, request.currentTurn).map { move =>
           request.respondTo ! Response(request.playerId, move)
         }
         Behaviors.same
