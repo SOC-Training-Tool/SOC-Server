@@ -7,11 +7,12 @@ scala:
   - 2.12.8
 
 script:
-  - sbt clean compile assembly
+  - sbt clean compile
 
 
 deploy:
   script:
+    - sbt assembly 
     - docker build -t catan ./
     - docker push gherman27/catan-ml:catan
   on:
