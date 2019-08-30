@@ -10,12 +10,14 @@ script:
   - sbt clean compile
 
 
+deploy:
+  provider: script 
   script:
     - sbt assembly
     - docker build -t catan ./
     - docker push gherman27/catan-ml:catan
-    on:
-      branch: master
+  on:
+    branch: master
 
 
 
