@@ -1,8 +1,5 @@
 language: scala
 
-services:
-  - docker
-
 scala:
   - 2.12.8
 
@@ -15,7 +12,3 @@ after_success:
   - docker push gherman27/catan-ml:catan
   on:
     branch: master
-
-    
-
-
