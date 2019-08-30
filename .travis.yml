@@ -7,10 +7,8 @@ script:
   - sbt clean compile
 
 after_success:
-  script:
-    - sbt assembly
-    - docker build -t catan ./
-    - docker push gherman27/catan-ml:catan
+  provider: script 
+  script: bash push_docker.sh
   on:
     branch: master
 
