@@ -4,7 +4,7 @@ scala:
   - 2.12.8
 
 script:
-  - sbt clean compile 
+  - sbt clean compile assembly 
 
 
 
