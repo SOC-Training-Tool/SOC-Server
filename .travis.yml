@@ -17,11 +17,3 @@ after_success:
     branch: master
 
 
-deploy:
-  provider: script
-  script:
-
-
-
-
-
