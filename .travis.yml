@@ -5,9 +5,14 @@ scala:
 
 script:
   - sbt clean compile assembly
-  - docker build -t catan ./
-  - docker push gherman27/catan-ml:catan
 
+
+deploy:
+  script:
+    - docker build -t catan ./
+    - docker push gherman27/catan-ml:catan
+  on:
+    branch: master
 
 
 
