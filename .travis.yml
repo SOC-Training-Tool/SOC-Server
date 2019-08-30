@@ -4,7 +4,7 @@ scala:
   - 2.12.8
 
 services:
-  - docker 
+  - docker
 
 script:
   - sbt clean compile
