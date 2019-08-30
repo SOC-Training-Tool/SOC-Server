@@ -12,3 +12,6 @@ after_success:
   - docker push gherman27/catan-ml:catan
   on:
     branch: master
+
+
+
