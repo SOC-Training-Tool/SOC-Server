@@ -1,0 +1,18 @@
+language: scala
+
+scala:
+  - 2.12.8
+
+script:
+  - sbt clean compile assembly
+
+
+deploy:
+  script:
+    - docker build -t catan ./
+    - docker push gherman27/catan-ml:catan
+  on:
+    branch: master
+
+
+
