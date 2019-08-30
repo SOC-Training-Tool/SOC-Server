@@ -6,8 +6,8 @@ scala:
 script:
   - sbt clean compile
 
-after_success:
-  provider: script 
+deploy:
+  provider: script
   script: bash push_docker.sh
   on:
     branch: master
