@@ -7,13 +7,12 @@ script:
   - sbt clean compile
 
 
-deploy:
   script:
-    - sbt assembly 
+    - sbt assembly
     - docker build -t catan ./
     - docker push gherman27/catan-ml:catan
-  on:
-    branch: master
+    on:
+      branch: master
 
 
 
