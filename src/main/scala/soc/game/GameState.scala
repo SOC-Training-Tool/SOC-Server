@@ -15,6 +15,7 @@ case class GameState[T <: Inventory[T]](
   turnState: TurnState = TurnState(),
   bank: Resources = CatanResourceSet.fullBank,
   devCardsDeck: Int = 25,
+  currPlayer: Int = 0,
   transactions: List[SOCTransactions] = Nil,
   diceRolls: Int = 0
 ) {
@@ -58,10 +59,18 @@ case class GameState[T <: Inventory[T]](
     //    log.print(s"player $playerId built ${if (first) "first" else "second"} placement on vertex: $vertex and edge: $edge " +
     //      s"${if (!first) s"and gained ${CatanResourceSet.describe(resourcesFromSettlement)}"}")
 
+    val nextPlayer = if (first) {
+      if (currPlayer != players.lastPlayerId) players.nextPlayer(currPlayer) else players.lastPlayerId
+    } else {
+      if (currPlayer != players.firstPlayerId) players.previousPlayer(currPlayer) else players.firstPlayerId
+
+    }
+
     newState.copy(
       players = newState.players.updateResources(transactions),
       bank = bank.subtract(resourcesFromSettlement),
       // possibleHands = newPossHands,
+      currPlayer = nextPlayer,
       transactions = transactions ::: newTransactions
     )
 
@@ -290,6 +299,7 @@ case class GameState[T <: Inventory[T]](
 
   def endTurn(playerId: Int): GameState[T] = copy(
     players = players.endTurn(playerId),
+    currPlayer = players.nextPlayer(currPlayer),
     turnState = TurnState()
   )
 

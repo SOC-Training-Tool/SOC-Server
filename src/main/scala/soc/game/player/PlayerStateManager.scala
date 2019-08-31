@@ -10,6 +10,21 @@ case class PlayerStateManager [T <: Inventory[T]] protected (val players: Map[In
   implicit val inventoryManager: InventoryManager[T],
   implicit val gameRules: GameRules)  {
 
+  val playerIds = players.keys.toSeq.sorted
+  val firstPlayerId = playerIds.min
+  val lastPlayerId = playerIds.max
+
+  def nextPlayer(playerId: Int): Int = {
+    val indexOf = playerIds.indexOf(playerId)
+    playerIds.drop(indexOf + 1).headOption.getOrElse(firstPlayerId)
+  }
+
+  def previousPlayer(playerId: Int): Int = {
+    val indexOf = playerIds.indexOf(playerId)
+    playerIds.dropRight(playerIds.length - indexOf).lastOption.getOrElse(lastPlayerId)
+  }
+
+
   def getPlayers: Seq[PlayerState[T]] = players.values.toList
   def getPlayer(id: Int): PlayerState[T] = players(id)
 

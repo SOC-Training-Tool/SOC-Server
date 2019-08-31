@@ -4,8 +4,8 @@ import soc.game.inventory.resources.CatanResourceSet
 
 sealed trait InventoryItem
 
-sealed trait Port
-sealed abstract class Resource(val res: Int, val name: String) extends InventoryItem
+sealed trait Port {val id: Int}
+sealed abstract class Resource(val id: Int, val name: String) extends InventoryItem
 
 object Resource {
   val list: List[Resource] = List(Wood, Sheep, Wheat, Brick, Ore)
@@ -17,7 +17,7 @@ case object Wheat extends Resource(3, "Wheat") with Port
 case object Brick extends Resource(4, "Brick") with Port
 case object Ore extends Resource(5, "Ore") with Port
 
-case object Misc extends Port
+case object Misc extends Port {val id = 0}
 
 sealed trait DevelopmentCard extends InventoryItem {
   val initAmount: Int
