@@ -11,10 +11,8 @@ import soc.game.inventory.Inventory.{NoInfo, PerfectInfo}
 import soc.game.inventory._
 import soc.storage.aws.AWSMoveSaver
 
-import scala.concurrent.{Await, Future}
 import scala.util.Random
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
 import soc.aws.client.CatanGameStoreClientFactory
 import soc.game.inventory.resources.CatanResourceSet
 import soc.game.inventory.InventoryManager._
@@ -53,7 +51,9 @@ object Main extends App {
     ("randomPlayer", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player3")
   )
 
-  val randomMoveResultProvider = new RandomMoveResultProvider(dice, dCardDeck)
+  val moveProvider = new RandomMoveResultProvider(dice, dCardDeck)
+  val randomMoveResultProvider = ActorSystem(MoveResultProvider.moveResultProvider(moveProvider), "resultProvider")
 
- SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, Some(moveSaverActor), gameRules, 10, 100, 50).startGames
+
+ SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, None, gameRules, 1, 60, 50).startGames
 }

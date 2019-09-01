@@ -1,39 +1,94 @@
 package soc.akka
 
+import akka.actor.typed.ActorRef
 import akka.actor.typed.scaladsl.Behaviors
-import akka.pattern.pipe
-import soc.akka.messages.{GameMessage, MoveResultProviderMessage, Terminate}
-import soc.game.{GameState, Roll}
+import soc.akka.MoveResultProviderMessage.{GetMoveResultProviderMessage, MoveResultProviderMessage, SendMoveResultProviderMessage, StopResultProvider}
+import soc.akka.messages.ResultResponse
+import soc.game.{BuyDevelopmentCardMove, BuyDevelopmentCardResult, CatanMove, GameState, KnightMove, KnightResult, MonopolyMove, MonopolyResult, MoveResult, MoveRobberAndStealMove, MoveRobberAndStealResult, Roll, RollDiceMove, RollResult}
 import soc.game.dice.Dice
 import soc.game.inventory.Inventory.PerfectInfo
-import soc.game.inventory.resources.CatanResourceSet
+import soc.game.inventory.resources.{CatanResourceSet, Steal}
 import soc.game.inventory.resources.CatanResourceSet.Resources
 import soc.game.inventory.{CatanSet, DevelopmentCard, Inventory, Resource}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Random
+import scala.util.{Failure, Random, Success}
 
-//object MoveResultProvider {
-//
-//  def moveResultProvider[GAME <: Inventory](provider: MoveResultProvider[GAME])(implicit ec: ExecutionContext) = Behaviors.receiveMessage[MoveResultProviderMessage[GAME]] {
-//
-//    case MoveResultProviderMessage(_, _, RollDiceMove, respondTo) =>
-//      provider.rollDiceMoveResult.map(respondTo ! _)
-//      Behaviors.same
-//
-//    case MoveResultProviderMessage(gs: GameState[GAME], _, move @ MoveRobberAndStealMove(_, playerStole), respondTo) =>
-//      provider.stealCardMoveResult(gs, playerStole).map(roll => respondTo ! )
-//      Behaviors.same
-//
-//    case MoveResultProviderMessage(gs: GameState[GAME], _, move @ BuyDevelopmentCardMove, respondTo) =>
-//      provider.buyDevelopmentCardMoveResult(gs).map(roll => respondTo ! )
-//      Behaviors.same
-//
-//    case MoveResultProviderMessage(gs:GameState[GAME], _, move @ MonopolyMove(res), respondTo) =>
-//      provider.playMonopolyMoveResult(gs, res).map(roll => respondTo ! )
-//      Behaviors.same
-//  }
-//}
+object MoveResultProvider {
+
+  def moveResultProvider[GAME <: Inventory[GAME]](provider: MoveResultProvider[GAME])(implicit ec: ExecutionContext) = Behaviors.setup[MoveResultProviderMessage[GAME]] { context =>
+
+    Behaviors.receiveMessage[MoveResultProviderMessage[GAME]] {
+
+      case GetMoveResultProviderMessage(_, id, RollDiceMove, respondTo) =>
+        context.pipeToSelf(provider.rollDiceMoveResult) {
+          case Success(roll) => SendMoveResultProviderMessage[GAME](id, RollResult(roll), respondTo)
+          case Failure(ex) => null
+        }
+        Behaviors.same
+
+      case GetMoveResultProviderMessage(gs: GameState[GAME], id, MoveRobberAndStealMove(loc, playerStole), respondTo) =>
+        context.pipeToSelf(provider.stealCardMoveResult(gs, playerStole)) {
+          case Success(steal) => SendMoveResultProviderMessage[GAME](
+            id,
+            MoveRobberAndStealResult(loc, steal.flatMap(r => playerStole.map(v => Steal(id, v, Some(CatanResourceSet.empty[Int].add(1, r)))))),
+            respondTo)
+          case Failure(ex) => null
+        }
+        Behaviors.same
+
+      case GetMoveResultProviderMessage(gs: GameState[GAME], id, KnightMove(MoveRobberAndStealMove(loc, playerStole)), respondTo) =>
+        context.pipeToSelf(provider.stealCardMoveResult(gs, playerStole)) {
+          case Success(steal) => SendMoveResultProviderMessage[GAME](
+            id,
+            KnightResult(MoveRobberAndStealResult(loc, steal.flatMap(r => playerStole.map(v => Steal(id, v, Some(CatanResourceSet.empty[Int].add(1, r))))))),
+            respondTo)
+          case Failure(ex) => null
+        }
+        Behaviors.same
+
+      case GetMoveResultProviderMessage(gs: GameState[GAME], id, BuyDevelopmentCardMove, respondTo) =>
+        context.pipeToSelf( provider.buyDevelopmentCardMoveResult(gs)) {
+          case Success(card) => SendMoveResultProviderMessage[GAME](id, BuyDevelopmentCardResult(card), respondTo)
+          case Failure(ex) => null
+        }
+        Behaviors.same
+
+      case GetMoveResultProviderMessage(gs: GameState[GAME], id, MonopolyMove(res), respondTo) =>
+        context.pipeToSelf( provider.playMonopolyMoveResult(gs, res)) {
+          case Success(cardsLost) => SendMoveResultProviderMessage[GAME](id,MonopolyResult(cardsLost), respondTo)
+          case Failure(ex) => null
+        }
+        Behaviors.same
+
+      case GetMoveResultProviderMessage(_, id, move: CatanMove with MoveResult, respondTo) =>
+        context.pipeToSelf(Future.successful(move)) {
+          case Success(result) => SendMoveResultProviderMessage[GAME](id, result, respondTo)
+          case Failure(ex) => null
+        }
+        Behaviors.same
+
+
+      case SendMoveResultProviderMessage(id, result, respondTo) =>
+        respondTo ! ResultResponse(id, result)
+        Behaviors.same
+
+      case StopResultProvider() =>
+        Behaviors.stopped
+    }
+  }
+}
+
+object MoveResultProviderMessage {
+
+  sealed trait MoveResultProviderMessage[GAME <: Inventory[GAME]]
+  case class GetMoveResultProviderMessage[GAME <: Inventory[GAME]](gameState: GameState[GAME], id: Int, move: CatanMove, respondTo: ActorRef[ResultResponse]) extends MoveResultProviderMessage[GAME]
+  case class SendMoveResultProviderMessage[GAME <: Inventory[GAME]](id: Int, move: MoveResult, respondTo: ActorRef[ResultResponse]) extends MoveResultProviderMessage[GAME]
+  case class StopResultProvider[T <: Inventory[T]]() extends MoveResultProviderMessage[T]
+
+
+
+}
 
 trait MoveResultProvider[GAME <: Inventory[GAME]] {
 

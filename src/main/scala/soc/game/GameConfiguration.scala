@@ -1,6 +1,7 @@
 package soc.game
 
 import akka.actor.typed.ActorRef
+import soc.akka.MoveResultProviderMessage.MoveResultProviderMessage
 import soc.akka.{GameStateHolder, MoveResultProvider}
 import soc.akka.messages.GameMessage
 import soc.game.board.{BoardConfiguration, BoardGenerator, CatanBoard}
@@ -12,7 +13,7 @@ case class GameConfiguration[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYE
   gameId: Int,
   boardConfig: BOARD,
   players: Map[(String, Int), ActorRef[GameMessage]],
-  resultProvider: MoveResultProvider[GAME],
+  resultProvider: ActorRef[MoveResultProviderMessage[GAME]],
   moveRecorder: Option[ActorRef[GameMessage]],
   rules: GameRules)
   (implicit gameInventoryManagerFactory: InventoryManagerFactory[GAME],

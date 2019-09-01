@@ -5,7 +5,7 @@ import akka.actor.typed.scaladsl.Behaviors
 import soc.akka.messages.RequestMessage._
 import soc.akka.messages.UpdateMessage
 import soc.akka.messages.UpdateMessage._
-import soc.akka.messages.{GameMessage, Response, Terminate}
+import soc.akka.messages.{GameMessage, MoveResponse, Terminate}
 import soc.game.{GameRules, GameState}
 import soc.game.inventory.{Inventory, InventoryManagerFactory}
 import soc.game.player.PlayerStateManager
@@ -86,25 +86,25 @@ object PlayerBehavior {
 
       case request: InitialPlacementRequest[GAME, PLAYER] =>
         moveSelector.initialPlacementMove(gameStates(request.gameId), request.inventory, request.playerId)(request.first).map { move =>
-          request.respondTo ! Response(request.playerId, move)
+          request.respondTo ! MoveResponse(request.playerId, move)
         }
         Behaviors.same
 
       case request: DiscardCardRequest[GAME, PLAYER] =>
         moveSelector.discardCardsMove(gameStates(request.gameId), request.inventory, request.playerId).map { move =>
-          request.respondTo ! Response(request.playerId, move)
+          request.respondTo ! MoveResponse(request.playerId, move)
         }
         Behaviors.same
 
       case request: MoveRobberRequest[GAME, PLAYER] =>
         moveSelector.moveRobberAndStealMove(gameStates(request.gameId), request.inventory, request.playerId).map { move =>
-          request.respondTo ! Response(request.playerId, move)
+          request.respondTo ! MoveResponse(request.playerId, move)
         }
         Behaviors.same
 
       case request: MoveRequest[GAME, PLAYER] =>
         moveSelector.turnMove(gameStates(request.gameId), request.inventory, request.playerId).map { move =>
-          request.respondTo ! Response(request.playerId, move)
+          request.respondTo ! MoveResponse(request.playerId, move)
         }
         Behaviors.same
 
