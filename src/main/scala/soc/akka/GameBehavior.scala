@@ -3,17 +3,16 @@ package soc.akka
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.actor.typed.scaladsl.Behaviors
 import akka.util.Timeout
-import soc.akka.messages.{ErrorMessage, MoveEntryMessage, ReceivedDiscard, RequestMessage, Response, SaveGameMessage, StateMessage, UpdateMessage}
+import soc.akka.MoveResultProviderMessage.GetMoveResultProviderMessage
+import soc.akka.messages.{ErrorMessage, MoveEntryMessage, MoveResponse, ReceivedDiscard, RequestMessage, ResultResponse, SaveGameMessage, StateMessage, UpdateMessage}
 import soc.akka.messages.RequestMessage.{InitialPlacementRequest, _}
 import soc.game.{CatanMove, CatanPlayCardMove, GameConfiguration, GameRules, GameState, MoveResult, Roll}
 import soc.akka.messages.UpdateMessage._
 import soc.game._
 import soc.game.board.BoardConfiguration
 import soc.game.inventory.Inventory
-import soc.game.inventory.resources.CatanResourceSet.Resources
-import soc.game.inventory.resources.{CatanResourceSet, DiscardedCardsMapBuilder, Steal}
+import soc.game.inventory.resources.{DiscardedCardsMapBuilder, Steal}
 import soc.storage
-import soc.storage.MoveEntry
 
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
@@ -50,14 +49,14 @@ object GameBehavior {
 
     context.log.info(s"Starting Game ${config.gameId}")
 
-    context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(firstPlayerId)) { ref =>
+    context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(firstPlayerId)) { ref =>
       InitialPlacementRequest(config.gameId,
         config.initStates.playerStates(firstPlayerId),
         config.initStates.gameState.players.getPlayer(firstPlayerId).inventory,
         firstPlayerId, true,
         ref)
     } {
-      case Success(r@Response(`firstPlayerId`, InitialPlacementMove(true, _, _))) => StateMessage[GAME, PLAYERS](config.initStates, r)
+      case Success(r@MoveResponse(`firstPlayerId`, InitialPlacementMove(true, _, _))) => StateMessage[GAME, PLAYERS](config.initStates, r)
       case Success(_) => null
       case Failure(ex) => StateMessage[GAME, PLAYERS](config.initStates, ErrorMessage(ex))
     }
@@ -73,47 +72,18 @@ object GameBehavior {
         Behaviors.stopped
       }
       else {
-        context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(id))(ref => MoveRequest(config.gameId, states.playerStates(id), states.gameState.players.getPlayer(id).inventory, id, ref)) {
-          case Success(Response(`id`, RollDiceMove)) if !states.gameState.turnState.canRollDice => null
-          case Success(Response(`id`, _: CatanPlayCardMove)) if !states.gameState.turnState.canPlayDevCard => null
-          case Success(Response(`id`, EndTurnMove)) if states.gameState.turnState.canRollDice => null
+        context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(id))(ref => MoveRequest(config.gameId, states.playerStates(id), states.gameState.players.getPlayer(id).inventory, id, ref)) {
+          case Success(MoveResponse(`id`, RollDiceMove)) if !states.gameState.turnState.canRollDice => null
+          case Success(MoveResponse(`id`, _: CatanPlayCardMove)) if !states.gameState.turnState.canPlayDevCard => null
+          case Success(MoveResponse(`id`, EndTurnMove)) if states.gameState.turnState.canRollDice => null
 
-          case Success(r@Response(`id`, _: CatanMove)) => StateMessage(states, r)
+          case Success(r@MoveResponse(`id`, _: CatanMove)) => StateMessage(states, r)
 
           case Success(_) => null
           case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
         }
         Behaviors.same
       }
-    }
-
-    def stealCards(states: GameStateHolder[GAME, PLAYERS], id: Int, robberLocation: Int, victim: Option[Int])
-      (updateMessage: (Int, Int, Int, Option[Steal]) => UpdateMessage)
-      (moveResult: (Int, Option[Steal]) => MoveResult)
-      (stateUpdater: (GameState[PLAYERS], Int, Int, Option[Steal]) => GameState[PLAYERS]): GameStateHolder[GAME, PLAYERS] = {
-      val stolenRes: Option[Resources] = config.resultProvider.stealCardMoveResult(states.gameState, victim).value.map(_.get).get.map(CatanResourceSet.empty[Int].add(1, _))
-      val steal = victim.map(v => Steal(id, v, stolenRes))
-
-      context.log.debug(s"${updateMessage(config.gameId, id, robberLocation, steal)}")
-      val result = moveResult(robberLocation, steal)
-      sendMove(id, result)
-
-      states.copy(
-        states.gameState(id, result),
-        states.playerStates.map { case (playerId, state) =>
-          steal match {
-            case Some(Steal(robber, victim, _)) if robber == playerId || victim == playerId =>
-              config.playerRefs(playerId) ! updateMessage(config.gameId, id, robberLocation, steal)
-              playerId -> stateUpdater(state, id, robberLocation, steal)
-            case Some(Steal(robber, victim, _)) =>
-              config.playerRefs(playerId) ! updateMessage(config.gameId, id, robberLocation, Some(Steal(robber, victim, None)))
-              playerId -> stateUpdater(state, id, robberLocation, Some(Steal(robber, victim, None)))
-            case None =>
-              config.playerRefs(playerId) ! updateMessage(config.gameId, id, robberLocation, None)
-              playerId -> stateUpdater(state, id, robberLocation, None)
-          }
-        }
-      )
     }
 
     def sendMove(id: Int, moveResult: MoveResult): Unit = {
@@ -123,38 +93,46 @@ object GameBehavior {
 
     Behaviors.receiveMessage {
 
+      case StateMessage(states, MoveResponse(player, move)) =>
+        context.ask[GetMoveResultProviderMessage[GAME], ResultResponse](config.resultProvider)(ref => GetMoveResultProviderMessage(states.gameState, player, move, ref)) {
+          case Success(r@ResultResponse(id, result)) => StateMessage(states, r)
+          case Success(_) => null
+          case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
+        }
+        Behaviors.same
+
       // Response from last player's first initial placement and request for last player's second placement
-      case StateMessage(states, Response(`lastPlayerId`, m@InitialPlacementMove(true, v, e))) =>
+      case StateMessage(states, ResultResponse(`lastPlayerId`, m@InitialPlacementMove(true, v, e))) =>
         context.log.debug(s"${InitialPlacementUpdate(config.gameId, lastPlayerId, true, v, e)}")
         config.playerRefs.values.foreach(_ ! InitialPlacementUpdate(config.gameId, lastPlayerId, true, v, e))
         val newStates = states.update(_.apply(lastPlayerId, m))
 
         sendMove(lastPlayerId, m)
 
-        context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(lastPlayerId))(ref => InitialPlacementRequest(config.gameId, newStates.playerStates(lastPlayerId), newStates.gameState.players.getPlayer(lastPlayerId).inventory, lastPlayerId, false, ref)) {
-          case Success(r@Response(`lastPlayerId`, InitialPlacementMove(false, _, _))) => StateMessage(newStates, r)
+        context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(lastPlayerId))(ref => InitialPlacementRequest(config.gameId, newStates.playerStates(lastPlayerId), newStates.gameState.players.getPlayer(lastPlayerId).inventory, lastPlayerId, false, ref)) {
+          case Success(r@MoveResponse(`lastPlayerId`, InitialPlacementMove(false, _, _))) => StateMessage(newStates, r)
           case Success(_) => null
           case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
         }
         Behaviors.same
 
       // Response from first player's second initial placement and request for first player's turn
-      case StateMessage(states, Response(`firstPlayerId`, m@InitialPlacementMove(false, v, e))) =>
+      case StateMessage(states, ResultResponse(`firstPlayerId`, m@InitialPlacementMove(false, v, e))) =>
         context.log.debug(s"${InitialPlacementUpdate(config.gameId, firstPlayerId, false, v, e)}")
         config.playerRefs.values.foreach(_ ! InitialPlacementUpdate(config.gameId, firstPlayerId, false, v, e))
         val newStates = states.update(_.apply(firstPlayerId, m))
 
         sendMove(firstPlayerId, m)
 
-        context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(firstPlayerId))(ref => MoveRequest(config.gameId, newStates.playerStates(firstPlayerId), newStates.gameState.players.getPlayer(firstPlayerId).inventory, firstPlayerId, ref)) {
-          case Success(r@Response(`firstPlayerId`, RollDiceMove)) => StateMessage(newStates, r)
+        context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(firstPlayerId))(ref => MoveRequest(config.gameId, newStates.playerStates(firstPlayerId), newStates.gameState.players.getPlayer(firstPlayerId).inventory, firstPlayerId, ref)) {
+          case Success(r@MoveResponse(`firstPlayerId`, RollDiceMove)) => StateMessage(newStates, r)
           case Success(_) => null
           case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
         }
         Behaviors.same
 
       // Response from player's first initial placement and request for next players first initial placement
-      case StateMessage(states, Response(id, m@InitialPlacementMove(true, v, e))) =>
+      case StateMessage(states, ResultResponse(id, m@InitialPlacementMove(true, v, e))) =>
         context.log.debug(s"${InitialPlacementUpdate(config.gameId, id, true, v, e)}")
         config.playerRefs.values.foreach(_ ! InitialPlacementUpdate(config.gameId, id, true, v, e))
         val newStates = states.update(_.apply(id, m))
@@ -163,15 +141,15 @@ object GameBehavior {
 
         val nextId = config.nextPlayer(id)
 
-        context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(nextId))(ref => InitialPlacementRequest(config.gameId, newStates.playerStates(nextId), newStates.gameState.players.getPlayer(nextId).inventory, nextId, true, ref)) {
-          case Success(r@Response(`nextId`, InitialPlacementMove(true, _, _))) => StateMessage(newStates, r)
+        context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(nextId))(ref => InitialPlacementRequest(config.gameId, newStates.playerStates(nextId), newStates.gameState.players.getPlayer(nextId).inventory, nextId, true, ref)) {
+          case Success(r@MoveResponse(`nextId`, InitialPlacementMove(true, _, _))) => StateMessage(newStates, r)
           case Success(_) => null
           case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
         }
         Behaviors.same
 
       // Response from player's second initial placement and request for next players second initial placement
-      case StateMessage(states, Response(id, m@InitialPlacementMove(false, v, e))) =>
+      case StateMessage(states, ResultResponse(id, m@InitialPlacementMove(false, v, e))) =>
         context.log.debug(s"${InitialPlacementUpdate(config.gameId, id, false, v, e)}")
         config.playerRefs.values.foreach(_ ! InitialPlacementUpdate(config.gameId, id, false, v, e))
         val newStates = states.update(_.apply(id, m))
@@ -180,8 +158,8 @@ object GameBehavior {
 
         val prevId = config.previousPlayer(id)
 
-        context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(prevId))(ref => InitialPlacementRequest(config.gameId, newStates.playerStates(prevId), newStates.gameState.players.getPlayer(prevId).inventory, prevId, false, ref)) {
-          case Success(r@Response(`prevId`, InitialPlacementMove(false, _, _))) => StateMessage(newStates, r)
+        context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(prevId))(ref => InitialPlacementRequest(config.gameId, newStates.playerStates(prevId), newStates.gameState.players.getPlayer(prevId).inventory, prevId, false, ref)) {
+          case Success(r@MoveResponse(`prevId`, InitialPlacementMove(false, _, _))) => StateMessage(newStates, r)
           case Success(_) => null
           case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
         }
@@ -190,9 +168,8 @@ object GameBehavior {
       // Response from player for rolling dice
       // If dice results are a 7 it will either ask for discards or ask to move robber
       // otherwise it will request a move
-      case StateMessage(states, Response(id, m@RollDiceMove)) =>
-        val roll = config.resultProvider.rollDiceMoveResult.value.map(_.get).get
-        sendMove(id, RollResult(roll))
+      case StateMessage(states, ResultResponse(id, m@RollResult(roll))) =>
+        sendMove(id, m)
 
         val resourcesGained = states.gameState.board.getResourcesGainedOnRoll(roll.number)
         context.log.debug(s"${RollDiceUpdate(config.gameId, id, roll, resourcesGained)}")
@@ -204,15 +181,15 @@ object GameBehavior {
           if (!toDiscard.isEmpty) {
             discarding = Some(DiscardedCardsMapBuilder(toDiscard))
             toDiscard.foreach { _id =>
-              context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(_id))(ref => DiscardCardRequest(config.gameId, newStates.playerStates(_id), newStates.gameState.players.getPlayer(_id).inventory, _id, ref)) {
-                case Success(r @ Response(`_id`, DiscardResourcesMove(res))) => StateMessage(newStates, r)
+              context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(_id))(ref => DiscardCardRequest(config.gameId, newStates.playerStates(_id), newStates.gameState.players.getPlayer(_id).inventory, _id, ref)) {
+                case Success(r @ MoveResponse(`_id`, DiscardResourcesMove(res))) => StateMessage(newStates, r)
                 case Success(_) => null
                 case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
               }
             }
           } else {
-            context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(id))(ref => MoveRobberRequest(config.gameId, newStates.playerStates(id), newStates.gameState.players.getPlayer(id).inventory, id, ref)) {
-              case Success(r@Response(`id`, MoveRobberAndStealMove(_, _))) => StateMessage(newStates, r)
+            context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(id))(ref => MoveRobberRequest(config.gameId, newStates.playerStates(id), newStates.gameState.players.getPlayer(id).inventory, id, ref)) {
+              case Success(r@MoveResponse(`id`, MoveRobberAndStealMove(_, _))) => StateMessage(newStates, r)
               case Success(_) => null
               case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
             }
@@ -220,7 +197,7 @@ object GameBehavior {
           Behaviors.same
         } else turnMove(id)(newStates)
 
-      case StateMessage(states, Response(id, m @ DiscardResourcesMove(res))) =>
+      case StateMessage(states, ResultResponse(id, m @ DiscardResourcesMove(res))) =>
         sendMove(id, m)
         discarding = discarding.map(_.addDiscard(id, res(id)))
         if (!discarding.get.expectingDiscard) {
@@ -230,8 +207,8 @@ object GameBehavior {
           config.playerRefs.values.foreach(_ ! DiscardCardsUpdate(config.gameId, cardsLost))
           context.log.debug(s"${DiscardCardsUpdate(config.gameId, cardsLost)}")
 
-          context.ask[RequestMessage[GAME, PLAYERS], Response](config.playerRefs(id))(ref => MoveRobberRequest(config.gameId, newStates.playerStates(id), newStates.gameState.players.getPlayer(id).inventory, id, ref)) {
-            case Success(r@Response(`id`, MoveRobberAndStealMove(_, _))) => StateMessage(newStates, r)
+          context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(id))(ref => MoveRobberRequest(config.gameId, newStates.playerStates(id), newStates.gameState.players.getPlayer(id).inventory, id, ref)) {
+            case Success(r@MoveResponse(`id`, MoveRobberAndStealMove(_, _))) => StateMessage(newStates, r)
             case Success(_) => null
             case Failure(ex) => StateMessage(config.initStates, ErrorMessage(ex))
           }
@@ -240,14 +217,35 @@ object GameBehavior {
 
       // Response from player after moving the robber and indicating who to steal from
       // then it requests a move
-      case StateMessage(states, Response(id, MoveRobberAndStealMove(robberLocation, victim))) => turnMove(id) {
-        stealCards(states, id, robberLocation, victim)(MoveRobberUpdate)(MoveRobberAndStealResult) {
-          case (state: GameState[PLAYERS], playerId: Int, robloc: Int, steal: Option[Steal]) => state.apply(playerId, MoveRobberAndStealResult(robloc, steal))
-        }
+      case StateMessage(states, ResultResponse(id, result@MoveRobberAndStealResult(robberLocation, steal))) => turnMove(id) {
+//        stealCards(states, id, robberLocation, victim)(MoveRobberUpdate)(MoveRobberAndStealResult) {
+//          case (state: GameState[PLAYERS], playerId: Int, robloc: Int, steal: Option[Steal]) => state.apply(playerId, MoveRobberAndStealResult(robloc, steal))
+//        }
+
+        context.log.debug(s"${MoveRobberUpdate(config.gameId, id, robberLocation, steal)}")
+        sendMove(id, result)
+
+        states.copy(
+          states.gameState(id, result),
+          states.playerStates.map { case (playerId, state) =>
+            steal match {
+              case Some(Steal(robber, victim, _)) if robber == playerId || victim == playerId =>
+                config.playerRefs(playerId) ! MoveRobberUpdate(config.gameId, id, robberLocation, steal)
+                playerId -> state.moveRobberAndSteal(id, robberLocation, steal)
+              case Some(Steal(robber, victim, _)) =>
+                config.playerRefs(playerId) ! MoveRobberUpdate(config.gameId, id, robberLocation, Some(Steal(robber, victim, None)))
+                playerId -> state.moveRobberAndSteal(id, robberLocation, Some(Steal(robber, victim, None)))
+              case None =>
+                config.playerRefs(playerId) ! MoveRobberUpdate(config.gameId, id, robberLocation, None)
+                playerId -> state.moveRobberAndSteal(id, robberLocation, None)
+            }
+          }
+        )
+
+
       }
 
-      case StateMessage(states, Response(id, BuyDevelopmentCardMove)) => turnMove(id) {
-        val nextCard = config.resultProvider.buyDevelopmentCardMoveResult(states.gameState).value.map(_.get).get
+      case StateMessage(states, ResultResponse(id, BuyDevelopmentCardResult(nextCard))) => turnMove(id) {
         context.log.debug(s"${BuyDevelopmentCardUpdate(config.gameId, id, nextCard)}")
 
         val newGameState = states.gameState.apply(id, BuyDevelopmentCardResult(nextCard))
@@ -265,7 +263,7 @@ object GameBehavior {
         GameStateHolder(newGameState, newPlayerStates)
       }
 
-      case StateMessage(states, Response(id, m@BuildRoadMove(edge))) => turnMove(id) {
+      case StateMessage(states, ResultResponse(id, m@BuildRoadMove(edge))) => turnMove(id) {
         def longest(gs: GameState[_]) = gs.players.getPlayer(id).roadPoints >= 2
 
         val hadLongest = longest(states.gameState)
@@ -284,7 +282,7 @@ object GameBehavior {
         newStates
       }
 
-      case StateMessage(states, Response(id, m
+      case StateMessage(states, ResultResponse(id, m
         @BuildSettlementMove(vertex)
       )) => turnMove(id) {
         context.log.debug(s"${BuildSettlementUpdate(config.gameId, id, vertex)}")
@@ -293,7 +291,7 @@ object GameBehavior {
         states.update(_.apply(id, m))
       }
 
-      case StateMessage(states, Response(id, m
+      case StateMessage(states, ResultResponse(id, m
         @BuildCityMove(vertex)
       )) => turnMove(id) {
         context.log.debug(s"${BuildCityUpdate(config.gameId, id, vertex)}")
@@ -302,7 +300,7 @@ object GameBehavior {
         states.update(_.apply(id, m))
       }
 
-      case StateMessage(states, Response(id, m
+      case StateMessage(states, ResultResponse(id, m
         @PortTradeMove(give, get)
       )) => turnMove(id) {
         context.log.debug(s"${PortTradeUpdate(config.gameId, id, give, get)}")
@@ -311,12 +309,30 @@ object GameBehavior {
         states.update(_.apply(id, m))
       }
 
-      case StateMessage(states, Response(id, KnightMove(MoveRobberAndStealMove(robberLocation, victim)))) => turnMove(id) {
+      case StateMessage(states, ResultResponse(id, result@KnightResult(MoveRobberAndStealResult(robberLocation, steal)))) => turnMove(id) {
         def largest(gs: GameState[_]) = gs.players.getPlayer(id).armyPoints >= 2
         val hadLargest = largest(states.gameState)
 
-        val newStates = stealCards(states, id, robberLocation, victim)(KnightUpdate) { case (a, b) => KnightResult(MoveRobberAndStealResult(a, b)) } {
-          case (state: GameState[PLAYERS], id: Int, robloc: Int, steal: Option[Steal]) => state.apply(id, KnightResult(MoveRobberAndStealResult(robloc, steal)))
+        val newStates = {
+          context.log.debug(s"${KnightUpdate(config.gameId, id, robberLocation, steal)}")
+          sendMove(id, result)
+
+          states.copy(
+            states.gameState(id, result),
+            states.playerStates.map { case (playerId, state) =>
+              steal match {
+                case Some(Steal(robber, victim, _)) if robber == playerId || victim == playerId =>
+                  config.playerRefs(playerId) ! KnightUpdate(config.gameId, id, robberLocation, steal)
+                  playerId -> state.playKnight(id, robberLocation, steal)
+                case Some(Steal(robber, victim, _)) =>
+                  config.playerRefs(playerId) ! KnightUpdate(config.gameId, id, robberLocation, Some(Steal(robber, victim, None)))
+                  playerId -> state.playKnight(id, robberLocation, Some(Steal(robber, victim, None)))
+                case None =>
+                  config.playerRefs(playerId) ! KnightUpdate(config.gameId, id, robberLocation, None)
+                  playerId ->  state.playKnight(id, robberLocation, None)
+              }
+            }
+          )
         }
         if (!hadLargest && largest(newStates.gameState)) {
           context.log.debug(s"${LargestArmyUpdate(config.gameId, id)}")
@@ -325,7 +341,7 @@ object GameBehavior {
         newStates
       }
 
-      case StateMessage(states, Response(id, m
+      case StateMessage(states, ResultResponse(id, m
         @YearOfPlentyMove(res1, res2)
       )) => turnMove(id) {
         context.log.debug(s"${YearOfPlentyUpdate(config.gameId, id, res1, res2)}")
@@ -334,15 +350,14 @@ object GameBehavior {
         states.update(_.apply(id, m))
       }
 
-      case StateMessage(states, Response(id, MonopolyMove(res))) => turnMove(id) {
-        val cardsLost = config.resultProvider.playMonopolyMoveResult(states.gameState, res).value.map(_.get).get
+      case StateMessage(states, ResultResponse(id, MonopolyResult(cardsLost))) => turnMove(id) {
         context.log.debug(s"${MonopolyUpdate(config.gameId, id, cardsLost)}")
         config.playerRefs.values.foreach(_ ! MonopolyUpdate(config.gameId, id, cardsLost))
         sendMove(id, MonopolyResult(cardsLost))
         states.update(_.apply(id, MonopolyResult(cardsLost)))
       }
 
-      case StateMessage(states, Response(id, m@RoadBuilderMove(road1, road2))) => turnMove(id) {
+      case StateMessage(states, ResultResponse(id, m@RoadBuilderMove(road1, road2))) => turnMove(id) {
         def longest(gs: GameState[_]) = gs.players.getPlayer(id).roadPoints >= 2
 
         val hadLongest = longest(states.gameState)
@@ -360,7 +375,7 @@ object GameBehavior {
         newStates
       }
 
-      case StateMessage(states, Response(id, m
+      case StateMessage(states, ResultResponse(id, m
         @EndTurnMove
       )) => turnMove(config.nextPlayer(id)) {
         context.log.debug(s"${EndTurnUpdate(config.gameId, id)}")

@@ -1,8 +1,8 @@
 package soc.simulation
 
 import akka.actor.typed.{ActorRef, ActorSystem}
-import soc.akka.Main.{moveSaverActor, players}
-import soc.akka.{GameBehavior, MoveResultProvider}
+import soc.akka.MoveResultProviderMessage.{MoveResultProviderMessage, StopResultProvider}
+import soc.akka.GameBehavior
 import soc.akka.messages.{GameMessage, Terminate}
 import soc.game.{GameConfiguration, GameRules}
 import soc.game.board.{BoardConfiguration, BoardGenerator}
@@ -13,7 +13,7 @@ import scala.util.Random
 
 class SimulationQueue[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BOARD <: BoardConfiguration](
   players: Map[(String, Int), ActorRef[GameMessage]],
-  resultProvider: MoveResultProvider[GAME],
+  resultProvider: ActorRef[MoveResultProviderMessage[GAME]],
   moveRecorder: Option[ActorRef[GameMessage]],
   rules: GameRules,
   boardConfigurations: List[BOARD],
@@ -40,7 +40,9 @@ class SimulationQueue[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BO
       playNextNSimulations(gamesAtATime - currentSimulations.length)
     }
     players.values.foreach(_ ! Terminate)
-    moveSaverActor ! Terminate
+    moveRecorder.map(_ ! Terminate)
+    resultProvider ! StopResultProvider()
+
   }
 
   private def playNextNSimulations(n: Int): Unit = {
@@ -57,7 +59,7 @@ object SimulationQueue {
 
   def apply[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BOARD <: BoardConfiguration](
     players: Map[(String, Int), ActorRef[GameMessage]],
-    resultProvider: MoveResultProvider[GAME],
+    resultProvider: ActorRef[MoveResultProviderMessage[GAME]],
     moveRecorder: Option[ActorRef[GameMessage]],
     rules: GameRules,
     numBoard: Int,
@@ -69,7 +71,6 @@ object SimulationQueue {
     boardGenerator: BoardGenerator[BOARD],
     random: Random
   ): SimulationQueue[GAME, PLAYERS, BOARD] = {
-
     val boards = (1 to numBoard).map(_ => boardGenerator.randomBoard).toList
     new SimulationQueue[GAME, PLAYERS, BOARD](players, resultProvider, moveRecorder, rules, boards, gamesPerBoard, gamesAtATime)
   }
