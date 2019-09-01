@@ -1,0 +1,28 @@
+language: scala
+
+scala:
+  - 2.12.8
+
+services:
+  - docker
+
+script:
+  - sbt clean compile
+
+deploy:
+  provider: script
+  script: bash push_docker.sh
+  on:
+    branch: master
+
+
+
+
+
+
+
+
+
+
+
+
