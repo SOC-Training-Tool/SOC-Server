@@ -8,8 +8,9 @@ script:
 
 after_success:
   - sbt assembly
-  - docker build -t catan ./
-  - docker push gherman27/catan-ml:catan
+  - docker build -t catan-ml ./
+  - - docker login --username "$DOCKER_USERNAME" --password "$DOCKER_SECRET"
+  - docker push gherman27/catan-ml:catan-ml
   on:
     branch: master
 
