@@ -3,16 +3,23 @@ language: scala
 scala:
   - 2.12.8
 
+services:
+  - docker
+
 script:
   - sbt clean compile
 
-after_success:
-  - sbt assembly
-  - docker build -t catan-ml ./
-  - - docker login --username "$DOCKER_USERNAME" --password "$DOCKER_SECRET"
-  - docker push gherman27/catan-ml:catan-ml
+deploy:
+  provider: script
+  script: bash push_docker.sh
   on:
     branch: master
+
+
+
+
+
+
 
 
 
