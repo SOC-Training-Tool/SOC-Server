@@ -3,15 +3,24 @@ language: scala
 scala:
   - 2.12.8
 
+services:
+  - docker
+
 script:
   - sbt clean compile
 
-after_success:
-  - sbt assembly
-  - docker build -t catan ./
-  - docker push gherman27/catan-ml:catan
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: bash push_docker.sh
   on:
     branch: master
+
+
+
+
+
+
 
 
 
