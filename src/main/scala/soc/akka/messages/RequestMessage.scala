@@ -2,7 +2,7 @@ package soc.akka.messages
 
 import akka.actor.typed.ActorRef
 import soc.game.inventory.Inventory
-import soc.game.player.PlayerStateManager
+import soc.game.player.PlayerStateHelper
 import soc.game.{CatanMove, GameState}
 
 sealed trait RequestMessage[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]] extends GameMessage {

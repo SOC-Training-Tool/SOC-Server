@@ -39,29 +39,4 @@ object PossibleMoveSelector {
     val (a, b) = moves.duplicate
     b.drop(random.nextInt(a.length)).next()
   }
-
-//  def stateEvaluatorByMax(eval: GameState => Double) = PossibleMoveSelector { case (state, moves) =>
-//
-//      moves.map {
-//        case RollDiceMove =>
-//          (2 to 12).map { r =>
-//            val roll = Roll(r)
-//
-//
-//          }
-//
-//
-//      }
-//
-//
-//
-//
-//
-//  }
-//
-//
-//
-//
-//  def stateEvaluatorByMin(eval: GameState => Double) =>
-
 }

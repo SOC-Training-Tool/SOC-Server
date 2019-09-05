@@ -16,6 +16,8 @@ case class GameRules(
 
 object GameRules {
 
+  val default = GameRules()
+
   val POINTS_TO_WIN = 10
   val INITIAL_BANK = CatanResourceSet(19, 19, 19, 19, 19)
   val INITIAL_DEV_AMOUNTS = DevCardInventory(14, 5, 2, 2, 2)

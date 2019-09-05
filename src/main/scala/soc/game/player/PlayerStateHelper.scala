@@ -6,62 +6,62 @@ import soc.game.inventory.Inventory
 import soc.game.inventory._
 import soc.game.inventory.resources.SOCTransactions
 
-case class PlayerStateManager [T <: Inventory[T]] protected (val players: Map[Int, PlayerState[T]])(
-  implicit val inventoryManager: InventoryManager[T],
+case class PlayerStateHelper [T <: Inventory[T]] protected (val players: Map[Int, PlayerState[T]])(
+  implicit val inventoryHelper: InventoryHelper[T],
   implicit val gameRules: GameRules)  {
 
   def getPlayers: Seq[PlayerState[T]] = players.values.toList
   def getPlayer(id: Int): PlayerState[T] = players(id)
 
-  def buildSettlement(id: Int, vertex: Vertex, board: CatanBoard): PlayerStateManager[T] = copy (
+  def buildSettlement(id: Int, vertex: Vertex, board: CatanBoard): PlayerStateHelper[T] = copy (
     players = players.map {
       case(`id`, ps) => id -> ps.buildSettlement(board, vertex)
       case (i, ps) => i -> ps
     }
   )
-  def buildCity(id: Int, vertex: Vertex, board: CatanBoard): PlayerStateManager[T] = copy (
+  def buildCity(id: Int, vertex: Vertex, board: CatanBoard): PlayerStateHelper[T] = copy (
     players = players.map {
       case(`id`, ps) => id -> ps.buildCity(board, vertex)
       case (i, ps) => i -> ps
     }
   )
 
-   def buildRoad(id: Int, edge: Edge, board: CatanBoard): PlayerStateManager[T] = copy (
+   def buildRoad(id: Int, edge: Edge, board: CatanBoard): PlayerStateHelper[T] = copy (
     players = players.map {
       case(`id`, ps) => id -> ps.buildRoad(board, edge)
       case (i, ps) => i -> ps
     }
   )
 
-  def playKnight(id: Int): PlayerStateManager[T] = playDevelopmentCard(id, Knight).updateLargestArmy
+  def playKnight(id: Int): PlayerStateHelper[T] = playDevelopmentCard(id, Knight).updateLargestArmy
 
-  def updateResources(transactions: List[SOCTransactions]): PlayerStateManager[T] = {
-    val (newPlayers, newInvManager) = inventoryManager.updateResources(players, transactions)
+  def updateResources(transactions: List[SOCTransactions]): PlayerStateHelper[T] = {
+    val (newPlayers, newInvManager) = inventoryHelper.updateResources(players, transactions)
     copy(newPlayers)(newInvManager, gameRules)
   }
 
-  def buyDevelopmentCard(id: Int, card: Option[DevelopmentCard]):  PlayerStateManager[T] = {
-    val (newPlayers, newInvManager) = inventoryManager.buyDevelopmentCard(players, id, card)
+  def buyDevelopmentCard(id: Int, card: Option[DevelopmentCard]):  PlayerStateHelper[T] = {
+    val (newPlayers, newInvManager) = inventoryHelper.buyDevelopmentCard(players, id, card)
     copy(newPlayers)(newInvManager, gameRules)
   }
 
-  def endTurn(id: Int): PlayerStateManager[T] = copy (
+  def endTurn(id: Int): PlayerStateHelper[T] = copy (
     players = players.map {
       case (`id`, ps) => id -> ps.endTurn
       case (i, ps) => i -> ps
     }
   )
 
-  protected def playDevelopmentCard(id: Int, card: DevelopmentCard): PlayerStateManager[T] = {
-    val (newPlayers, newInvManager) = inventoryManager.playDevelopmentCard(players, id, card)
+  protected def playDevelopmentCard(id: Int, card: DevelopmentCard): PlayerStateHelper[T] = {
+    val (newPlayers, newInvManager) = inventoryHelper.playDevelopmentCard(players, id, card)
     copy(newPlayers)(newInvManager, gameRules)
   }
 
-  def playMonopoly(id: Int): PlayerStateManager[T] = playDevelopmentCard(id, Monopoly)
-  def playYearOfPlenty(id: Int): PlayerStateManager[T] = playDevelopmentCard(id, YearOfPlenty)
-  def playRoadBuilder(id: Int): PlayerStateManager[T] = playDevelopmentCard(id, RoadBuilder)
+  def playMonopoly(id: Int): PlayerStateHelper[T] = playDevelopmentCard(id, Monopoly)
+  def playYearOfPlenty(id: Int): PlayerStateHelper[T] = playDevelopmentCard(id, YearOfPlenty)
+  def playRoadBuilder(id: Int): PlayerStateHelper[T] = playDevelopmentCard(id, RoadBuilder)
 
-  def updateLongestRoad: PlayerStateManager[T] = {
+  def updateLongestRoad: PlayerStateHelper[T] = {
     val longestRoad: Option[PlayerState[T]] = players.values.find(_.roadPoints >= 2)
     val newLongestRoad = players.values.filter(p => p.roadLength > longestRoad.fold(4)(_.roadLength)).headOption.map(_.position)
     copy (
@@ -80,7 +80,7 @@ case class PlayerStateManager [T <: Inventory[T]] protected (val players: Map[In
     )
   }
 
-  def updateLargestArmy: PlayerStateManager[T] = {
+  def updateLargestArmy: PlayerStateHelper[T] = {
     val largestArmy: Option[PlayerState[T]] = players.values.find(_.armyPoints >= 2)
     val newLargestArmy = players.values.filter{ p =>
       p.inventory.playedDevCards.getAmount(Knight) > largestArmy.fold(2)(_.inventory.playedDevCards.getAmount(Knight))
@@ -102,11 +102,11 @@ case class PlayerStateManager [T <: Inventory[T]] protected (val players: Map[In
   }
 }
 
-object PlayerStateManager {
+object PlayerStateHelper {
 
-  def apply[T <: soc.game.inventory.Inventory[T]](s: Seq[(String, Int)])(implicit factory: InventoryManagerFactory[T], gameRules: GameRules) = {
-    implicit val invManager = factory.createInventoryManager
-    new PlayerStateManager[T](s.map {case(name, id) => id -> PlayerState(name, id, invManager.createInventory(id)) }.toMap)
+  def apply[T <: soc.game.inventory.Inventory[T]](s: Seq[(String, Int)])(implicit factory: InventoryHelperFactory[T], gameRules: GameRules) = {
+    implicit val invHelper = factory.createInventoryHelper
+    new PlayerStateHelper[T](s.map {case(name, id) => id -> PlayerState(name, id, invHelper.createInventory(id)) }.toMap)
   }
 
 }

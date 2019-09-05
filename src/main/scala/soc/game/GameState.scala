@@ -4,13 +4,13 @@ import soc.game._
 import soc.game.board.{CatanBoard, Edge, Vertex}
 import soc.game.inventory.Inventory
 import soc.game.inventory._
-import soc.game.player.{PlayerState, PlayerStateManager}
+import soc.game.player.{PlayerState, PlayerStateHelper}
 import soc.game.inventory.resources.CatanResourceSet._
 import soc.game.inventory.resources.{CatanResourceSet, Gain, Lose, SOCTransactions, Steal}
 
 case class GameState[T <: Inventory[T]](
   board: CatanBoard,
-  players: PlayerStateManager[T],
+  players: PlayerStateHelper[T],
   turnState: TurnState = TurnState(),
   bank: Resources = CatanResourceSet.fullBank,
   devCardsDeck: Int = 25,

@@ -3,10 +3,10 @@ package soc.simulation
 import akka.actor.typed.{ActorRef, ActorSystem}
 import soc.akka.MoveResultProviderMessage.{MoveResultProviderMessage, StopResultProvider}
 import soc.akka.GameBehavior
-import soc.akka.messages.{GameMessage, Terminate}
+import soc.akka.messages.{GameMessage, StateMessage, Terminate}
 import soc.game.{GameConfiguration, GameRules}
 import soc.game.board.{BoardConfiguration, BoardGenerator}
-import soc.game.inventory.{Inventory, InventoryManagerFactory}
+import soc.game.inventory.{Inventory, InventoryHelperFactory}
 
 import scala.concurrent.Future
 import scala.util.Random
@@ -20,8 +20,8 @@ class SimulationQueue[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BO
   gamesPerBoard: Int,
   gamesAtATime: Int
 )(implicit
-  gameInventoryManagerFactory: InventoryManagerFactory[GAME],
-  playersInventoryManagerFactory: InventoryManagerFactory[PLAYERS],
+  gameInventoryManagerFactory: InventoryHelperFactory[GAME],
+  playersInventoryManagerFactory: InventoryHelperFactory[PLAYERS],
   boardGenerator: BoardGenerator[BOARD]) {
 
   val gameConfigs: Iterator[GameConfiguration[GAME, PLAYERS, BOARD]] = boardConfigurations.zipWithIndex.toIterator.flatMap { case (board, index) =>
@@ -51,6 +51,8 @@ class SimulationQueue[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BO
 
   private def playNextSimulation: Unit =  if (gameConfigs.hasNext) {
     val config = gameConfigs.next()
+    val a: ActorSystem[StateMessage[GAME, PLAYERS]] = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${config.gameId}")
+
     currentSimulations = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${config.gameId}").whenTerminated :: currentSimulations
   }
 }
@@ -66,8 +68,8 @@ object SimulationQueue {
     gamesPerBoard: Int,
     gamesAtATime: Int
   )(implicit
-    gameInventoryManagerFactory: InventoryManagerFactory[GAME],
-    playersInventoryManagerFactory: InventoryManagerFactory[PLAYERS],
+    gameInventoryManagerFactory: InventoryHelperFactory[GAME],
+    playersInventoryManagerFactory: InventoryHelperFactory[PLAYERS],
     boardGenerator: BoardGenerator[BOARD],
     random: Random
   ): SimulationQueue[GAME, PLAYERS, BOARD] = {

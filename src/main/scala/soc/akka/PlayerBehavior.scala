@@ -6,111 +6,90 @@ import soc.akka.messages.RequestMessage._
 import soc.akka.messages.UpdateMessage
 import soc.akka.messages.UpdateMessage._
 import soc.akka.messages.{GameMessage, MoveResponse, Terminate}
-import soc.game.{GameRules, GameState}
-import soc.game.inventory.{Inventory, InventoryManagerFactory}
-import soc.game.player.PlayerStateManager
-import soc.game.player.moveSelector.MoveSelector
+import soc.game.inventory.Inventory
+import soc.playerRepository.PlayerContext
 
 import scala.concurrent.ExecutionContext
 
 object PlayerBehavior {
 
-  def playerBehavior[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER], T <: Inventory[T]](moveSelector: MoveSelector[GAME, T])(implicit ec: ExecutionContext, factory: InventoryManagerFactory[T], gameRules: GameRules): Behavior[GameMessage] = Behaviors.setup[GameMessage] { context =>
-
-    var gameStates: Map[Int, GameState[T]] = Map.empty
+  def playerBehavior[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER], T <: Inventory[T]](playerContext: PlayerContext[GAME, T])(implicit ec: ExecutionContext): Behavior[GameMessage] = Behaviors.setup[GameMessage] { context =>
 
     Behaviors.receiveMessage {
 
       case StartGame(gameId, board, players) =>
-        gameStates = gameStates + (gameId -> GameState(board, PlayerStateManager(players)))
+        playerContext.addGameState(gameId, board, players)
         Behaviors.same
       
       case InitialPlacementUpdate(gameId, id, first, settlement, road) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.initialPlacement(id, first, settlement, road))
+        playerContext.updateGameState(gameId)(_.initialPlacement(id, first, settlement, road))
         Behaviors.same
       case EndTurnUpdate(gameId, id) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.endTurn(id))
+        playerContext.updateGameState(gameId)(_.endTurn(id))
         Behaviors.same
       case RollDiceUpdate(gameId, id, roll, _) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.rollDice(id, roll))
+        playerContext.updateGameState(gameId)(_.rollDice(id, roll))
         Behaviors.same
       case DiscardCardsUpdate(gameId, cardsDiscarded) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.playersDiscardFromSeven(cardsDiscarded))
+        playerContext.updateGameState(gameId)(_.playersDiscardFromSeven(cardsDiscarded))
         Behaviors.same
       case MoveRobberUpdate(gameId, id, loc, steal) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.moveRobberAndSteal(id, loc, steal))
+        playerContext.updateGameState(gameId)(_.moveRobberAndSteal(id, loc, steal))
         Behaviors.same
       case BuildSettlementUpdate(gameId, id, settlement) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.buildSettlement(id, settlement))
+        playerContext.updateGameState(gameId)(_.buildSettlement(id, settlement))
         Behaviors.same
       case BuildCityUpdate(gameId, id, city) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.buildCity(id, city))
+        playerContext.updateGameState(gameId)(_.buildCity(id, city))
         Behaviors.same
       case BuildRoadUpdate(gameId, id, road) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.buildRoad(id, road))
+        playerContext.updateGameState(gameId)(_.buildRoad(id, road))
         Behaviors.same
       case BuyDevelopmentCardUpdate(gameId, id, card) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.buyDevelopmentCard(id, card))
+        playerContext.updateGameState(gameId)(_.buyDevelopmentCard(id, card))
         Behaviors.same
       case PortTradeUpdate(gameId, id, give, get) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.portTrade(id, give, get))
+        playerContext.updateGameState(gameId)(_.portTrade(id, give, get))
         Behaviors.same
       case KnightUpdate(gameId, id, loc, steal) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.playKnight(id, loc, steal))
+        playerContext.updateGameState(gameId)(_.playKnight(id, loc, steal))
         Behaviors.same
       case MonopolyUpdate(gameId, id, resourcesMoved) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.playMonopoly(id, resourcesMoved))
+        playerContext.updateGameState(gameId)(_.playMonopoly(id, resourcesMoved))
         Behaviors.same
       case YearOfPlentyUpdate(gameId, id, res1, res2) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.playYearOfPlenty(id, res1, res2))
+        playerContext.updateGameState(gameId)(_.playYearOfPlenty(id, res1, res2))
         Behaviors.same
       case RoadBuilderUpdate(gameId, id, road1, road2) =>
-        val gs = gameStates(gameId)
-        gameStates = (gameStates - gameId) + (gameId -> gs.playRoadBuilder(id, road1, road2))
+        playerContext.updateGameState(gameId)(_.playRoadBuilder(id, road1, road2))
+
         Behaviors.same
       case _: UpdateMessage =>
         Behaviors.same
 
       case request: InitialPlacementRequest[GAME, PLAYER] =>
-        moveSelector.initialPlacementMove(gameStates(request.gameId), request.inventory, request.playerId)(request.first).map { move =>
+        playerContext.moveSelector.initialPlacementMove(playerContext.getGameState(request.gameId), request.inventory, request.playerId)(request.first).map { move =>
           request.respondTo ! MoveResponse(request.playerId, move)
         }
         Behaviors.same
 
       case request: DiscardCardRequest[GAME, PLAYER] =>
-        moveSelector.discardCardsMove(gameStates(request.gameId), request.inventory, request.playerId).map { move =>
+        playerContext.moveSelector.discardCardsMove(playerContext.getGameState(request.gameId), request.inventory, request.playerId).map { move =>
           request.respondTo ! MoveResponse(request.playerId, move)
         }
         Behaviors.same
 
       case request: MoveRobberRequest[GAME, PLAYER] =>
-        moveSelector.moveRobberAndStealMove(gameStates(request.gameId), request.inventory, request.playerId).map { move =>
+        playerContext.moveSelector.moveRobberAndStealMove(playerContext.getGameState(request.gameId), request.inventory, request.playerId).map { move =>
           request.respondTo ! MoveResponse(request.playerId, move)
         }
         Behaviors.same
 
       case request: MoveRequest[GAME, PLAYER] =>
-        moveSelector.turnMove(gameStates(request.gameId), request.inventory, request.playerId).map { move =>
+        playerContext.moveSelector.turnMove(playerContext.getGameState(request.gameId), request.inventory, request.playerId).map { move =>
           request.respondTo ! MoveResponse(request.playerId, move)
         }
         Behaviors.same
-
-      case Terminate =>
-        context.log.info("Terminating Player Actor")
-        Behaviors.stopped
 
       case _ => Behaviors.stopped
     }

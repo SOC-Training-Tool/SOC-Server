@@ -5,7 +5,7 @@ import soc.akka.GameStateHolder
 import soc.akka.MoveResultProviderMessage.MoveResultProviderMessage
 import soc.game.board.BoardConfiguration
 import soc.game.inventory.Inventory
-import soc.game.player.PlayerStateManager
+import soc.game.player.PlayerStateHelper
 import soc.game.{CatanMove, GameState}
 import soc.storage.MoveEntry
 

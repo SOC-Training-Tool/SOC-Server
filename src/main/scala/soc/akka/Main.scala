@@ -15,7 +15,7 @@ import scala.util.Random
 import scala.concurrent.ExecutionContext.Implicits.global
 import soc.aws.client.CatanGameStoreClientFactory
 import soc.game.inventory.resources.CatanResourceSet
-import soc.game.inventory.InventoryManager._
+import soc.game.inventory.InventoryHelper._
 import soc.simulation.SimulationQueue
 
 object Main extends App {
