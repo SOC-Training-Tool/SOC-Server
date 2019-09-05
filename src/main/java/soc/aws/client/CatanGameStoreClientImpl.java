@@ -2,6 +2,7 @@ package soc.aws.client;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughputExceededException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -46,17 +47,31 @@ public class CatanGameStoreClientImpl implements CatanGameStoreClient
 
     private void indexInDynamo(List<PlayerContext> playerList, String moveSetKey, String boardKey)
     {
-        for (PlayerContext player : playerList)
+        try
         {
-            PlayerIndexDAO dao = new PlayerIndexDAO();
-            dao.setBoardKey(boardKey);
-            dao.setMoveSetKey(moveSetKey);
-            dao.setPlayerName(player.getPlayerName());
-            dao.setPosition(player.getPosition());
-            dao.setVictoryPoints(player.getVictoryPoints());
-            dao.setTimeStamp(new Date().getTime());
+            for (PlayerContext player : playerList) {
+                PlayerIndexDAO dao = new PlayerIndexDAO();
+                dao.setBoardKey(boardKey);
+                dao.setMoveSetKey(moveSetKey);
+                dao.setPlayerName(player.getPlayerName());
+                dao.setPosition(player.getPosition());
+                dao.setVictoryPoints(player.getVictoryPoints());
+                dao.setTimeStamp(new Date().getTime());
 
-            mDynamoDb.save(dao);
+                mDynamoDb.save(dao);
+            }
+        }
+        catch (ProvisionedThroughputExceededException e)
+        {
+            //If we get throttled, drop the game and sleep for a second
+            try
+            {
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException ie)
+            {
+                System.err.println(e.getMessage());
+            }
         }
     }
 
