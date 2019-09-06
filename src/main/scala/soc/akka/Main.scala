@@ -39,8 +39,14 @@ object Main extends App {
 
   import CatanResourceSet._
   import io.circe.generic.auto._
-  val awsGameSaver = new AWSMoveSaver[BaseBoardConfiguration](CatanGameStoreClientFactory.createClient())
-  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver")
+  
+  final val SAVE_MOVES: Boolean = false
+  var moverSaverOption: Option[ActorRef[GameMessage]] = None
+  if (SAVE_MOVES) {
+    val awsGameSaver = new AWSMoveSaver[BaseBoardConfiguration](CatanGameStoreClientFactory.createClient())
+    val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver")
+    moveSaverOption = Option(moveSaverActor)
+  }
 
   val randSelector = PossibleMoveSelector.randSelector[NoInfo]
 
@@ -55,5 +61,5 @@ object Main extends App {
   val randomMoveResultProvider = ActorSystem(MoveResultProvider.moveResultProvider(moveProvider), "resultProvider")
 
 
- SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, None, gameRules, 1, 60, 50).startGames
+ SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, moveSaverOption, gameRules, 1, 1, 1).startGames
 }
