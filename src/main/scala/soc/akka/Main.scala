@@ -54,6 +54,7 @@ object Main extends App {
   val moveProvider = new RandomMoveResultProvider(dice, dCardDeck)
   val randomMoveResultProvider = ActorSystem(MoveResultProvider.moveResultProvider(moveProvider), "resultProvider")
 
-
- SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, None, gameRules, 1, 60, 50).startGames
+  val config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](1, boardConfig, players, randomMoveResultProvider, None, gameRules)
+  val game = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${1}")
+ //SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, None, gameRules, 1, 60, 50).startGames
 }

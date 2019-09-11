@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package soc.protos;
+
+// All RPCs must have a request and response message, even if empty
+service CatanServer {
+  // Sends a greeting
+  rpc CreateGame (CreateGameRequest) returns (CreateGameResponse) {}
+  rpc StartGame (StartGameRequest) returns (StartGameResponse) {}
+}
+
+message CreateGameRequest {
+  // In the future this could take a board configuration
+  // Or an existing saved board state
+  // Or even the strategies
+  // It could also take settings about the game (like where to output the results)
+  // maybe string status?
+}
+
+message CreateGameResponse {
+  string game_id = 1;
+}
+
+message StartGameRequest {
+  string game_id = 1;
+}
+
+message StartGameResponse {
+    // Maybe string status
+}

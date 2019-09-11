@@ -1,6 +1,5 @@
 package soc.game.player.moveSelector
 
-import soc.akka.Main.random
 import soc.game.{CatanMove, GameState, Roll}
 import soc.game._
 import soc.game.inventory.Inventory
@@ -8,6 +7,8 @@ import soc.game.inventory.Inventory.PerfectInfo
 import soc.game.player.CatanPossibleMoves
 
 import scala.concurrent.Future
+
+import scala.util.Random
 
 case class PossibleMoveSelector[T <: Inventory[T]](select: (GameState[T], Iterator[CatanMove]) => CatanMove) extends MoveSelector[PerfectInfo, T] {
 
@@ -37,6 +38,7 @@ object PossibleMoveSelector {
 
   def randSelector[T <: Inventory[T]] = PossibleMoveSelector[T] { case (_, moves: Iterator[CatanMove]) =>
     val (a, b) = moves.duplicate
+    val random = new Random()
     b.drop(random.nextInt(a.length)).next()
   }
 
