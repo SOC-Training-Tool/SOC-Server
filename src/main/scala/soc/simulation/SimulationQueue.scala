@@ -51,8 +51,7 @@ class SimulationQueue[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BO
 
   private def playNextSimulation: Unit =  if (gameConfigs.hasNext) {
     val config = gameConfigs.next()
-    val x = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${config.gameId}")
-    currentSimulations = x.whenTerminated :: currentSimulations
+    currentSimulations = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${config.gameId}").whenTerminated :: currentSimulations
   }
 }
 

@@ -8,32 +8,37 @@ import soc.protos.game.CatanServerGrpc.CatanServerBlockingStub
 import io.grpc.{StatusRuntimeException, ManagedChannelBuilder, ManagedChannel}
 import soc.protos.game.StartGameRequest
 
-/**
- * [[https://github.com/grpc/grpc-java/blob/v0.15.0/examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java]]
- */
-object HelloWorldClient {
-  def apply(host: String, port: Int): HelloWorldClient = {
+
+object CatanGameOrchestrator {
+  def apply(host: String, port: Int): CatanGameOrchestrator = {
     val channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().build
     val blockingStub = CatanServerGrpc.blockingStub(channel)
-    new HelloWorldClient(channel, blockingStub)
+    new CatanGameOrchestrator(channel, blockingStub)
   }
 
   def main(args: Array[String]): Unit = {
-    val client = HelloWorldClient("localhost", 50051)
+    val client = CatanGameOrchestrator("localhost", 50051)
     try {
-      val target = args.headOption.getOrElse("world")
-      client.startGame("foo")
+      val target = args.headOption.getOrElse("create")
+      if (target == "create") {
+          client.createGame()
+      } else if (target == "start") {
+        val gameId = args.tail.headOption.getOrElse("0")
+        client.startGame(gameId)
+      } else {
+         println("Unrecognized target: " + target)
+      }
     } finally {
       client.shutdown()
     }
   }
 }
 
-class HelloWorldClient private(
+class CatanGameOrchestrator private(
   private val channel: ManagedChannel,
   private val blockingStub: CatanServerBlockingStub
 ) {
-  private[this] val logger = Logger.getLogger(classOf[HelloWorldClient].getName)
+  private[this] val logger = Logger.getLogger(classOf[CatanGameOrchestrator].getName)
 
   def shutdown(): Unit = {
     channel.shutdown.awaitTermination(5, TimeUnit.SECONDS)
@@ -44,7 +49,7 @@ class HelloWorldClient private(
     val request = CreateGameRequest()
     try {
       val response = blockingStub.createGame(request)
-      logger.info("Greeting: " + response.gameId)
+      logger.info("Created game with game id " + response.gameId)
     }
     catch {
       case e: StatusRuntimeException =>
@@ -52,9 +57,9 @@ class HelloWorldClient private(
     }
   }
 
-  def startGame(name: String): Unit = {
-    logger.info("Will try to start Game " + name + " ...")
-    val request = StartGameRequest()
+  def startGame(gameId: String): Unit = {
+    logger.info("Will try to start game with id " + gameId + " ...")
+    val request = StartGameRequest(gameId = gameId)
     try {
       val response = blockingStub.startGame(request)
       logger.info("Done")

@@ -1,5 +1,6 @@
 package server
 
+// TODO: Clean up imports
 import java.util.logging.Logger
 
 import io.grpc.{Server, ServerBuilder}
@@ -33,12 +34,12 @@ import soc.game.inventory.InventoryManager._
 import soc.simulation.SimulationQueue
 
 import soc.game.{GameConfiguration, GameRules}
+import scala.util.{Success, Failure}
 
 object GameContext {
   implicit val random = new Random()
 
   val boardConfig = BaseCatanBoard.randomBoard
-  import BaseCatanBoard._
 
   val dice = NormalDice()
 
@@ -69,25 +70,29 @@ object GameContext {
 
   val moveProvider = new RandomMoveResultProvider(dice, dCardDeck)
   val randomMoveResultProvider = ActorSystem(MoveResultProvider.moveResultProvider(moveProvider), "resultProvider")
-  val config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](1, boardConfig, players, randomMoveResultProvider, None, gameRules)
 }
 
 class GameContext(val gameId: String) {
   private var game: ActorSystem[StateMessage[PerfectInfo, NoInfo]] = null
   import GameContext._
+  import BaseCatanBoard._
 
   def start(): Unit = {
-    game = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${gameId}")
+    val config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](1, boardConfig, players, randomMoveResultProvider, None, gameRules)
+    // TODO: Hold onto a reference to this game / future 
+    // This will allow us to query a game status (ie, what is the current turn), save it, terminate it, etc.
+    val future = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${gameId}").whenTerminated
+    // TODO: Clean up the game from the hashtable of currently running games
+    //future onComplete {
+    //  case Success() => 
+    //  case Failure(t) => println("An error has occurred: " + t.getMessage)
+    //}
   }
-
 }
 
 
-object CatanServer{
+object CatanServer {
   private val logger = Logger.getLogger(classOf[CatanServer].getName)
-  import GameContext._
-
-  //val game = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${1}")
 
   def main(args: Array[String]): Unit = {
     val server = new CatanServer(ExecutionContext.global)
@@ -125,22 +130,37 @@ class CatanServer(executionContext: ExecutionContext) { self =>
 
 }
 
-class CatanServerImpl extends CatanServerGrpc.CatanServer {
+private class CatanServerImpl extends CatanServerGrpc.CatanServer {
 
   private val games: HashMap[String, GameContext] = HashMap()
+  private var counter = 0
   
   override def createGame(req: CreateGameRequest) = {
-    val gameId = "game1"
+    counter += 1
+    val gameId = counter.toString; // TODO: Create real ids (probably don't want them to be integers)
     val gameContext = new GameContext(gameId)
     games.put(gameId, gameContext)
-    val reply = CreateGameResponse(gameId = "foo")
+    println("Create game with id " + gameId)
+    val reply = CreateGameResponse(gameId = gameId)
     Future.successful(reply)
   }
 
   override def startGame(req: StartGameRequest) = {
     val reply = StartGameResponse()
-    for (i <- games.get("game1") ) { i.start() }
+    games.get(req.gameId) match {
+      case Some(gameContext) => {
+        println("Starting game " + req.gameId)
+        gameContext.start()
+      }
+      case None => println("No game found with " + req.gameId)
+    }
     Future.successful(reply)
   }
+
+  // TODO: Add methods for registerPlayer, setBoard, setState
+  // ie. The pattern should be to create a game, then configure the game how you want, then start.
+  // Note: We can create defaults so not every step has to be called every time
+  // Further, we can create parameterization on the CreateGameRequest, start=Boolean.
+  // This could allow a client to create and start a game with one call.
 
 }
