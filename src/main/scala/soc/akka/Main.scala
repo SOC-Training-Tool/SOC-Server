@@ -18,6 +18,9 @@ import soc.game.inventory.resources.CatanResourceSet
 import soc.game.inventory.InventoryManager._
 import soc.simulation.SimulationQueue
 
+import scala.util.{Success, Failure}
+import scala.collection.mutable
+
 object Main extends App {
 
   implicit val random = new Random()
@@ -39,20 +42,32 @@ object Main extends App {
 
   import CatanResourceSet._
   import io.circe.generic.auto._
-  val awsGameSaver = new AWSMoveSaver[BaseBoardConfiguration](CatanGameStoreClientFactory.createClient())
-  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver")
+  //val awsGameSaver = new AWSMoveSaver[BaseBoardConfiguration](CatanGameStoreClientFactory.createClient())
+  //val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver")
 
   val randSelector = PossibleMoveSelector.randSelector[NoInfo]
 
   val players = Map(
-    ("randomPlayer", 0) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player0"),
-    ("randomPlayer", 1) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player1"),
-    ("randomPlayer", 2) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player2"),
-    ("randomPlayer", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player3")
+    ("randomPlayer", 0) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "1"), "player0"),
+    ("randomPlayer", 1) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "2"), "player1"),
+    ("randomPlayer", 2) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "3"), "player2"),
+    ("randomPlayer", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "4"), "player3")
   )
 
   val moveProvider = new RandomMoveResultProvider(dice, dCardDeck)
   val randomMoveResultProvider = ActorSystem(MoveResultProvider.moveResultProvider(moveProvider), "resultProvider")
+  val config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](1, boardConfig, players, randomMoveResultProvider, None, gameRules)
+  val system = ActorSystem(GameBehavior.gameBehavior(config, new mutable.HashMap()), s"SettlersOfCatan1")
+  val future = system.whenTerminated
+  future onComplete {
+    case Success(_) =>  {
+      println("DONE")
+      players.values.foreach(_ ! Terminate)
+      randomMoveResultProvider.terminate()
+      system.terminate()
+    }
+    case Failure(t) => println("An error has occurred: " + t.getMessage)
+  }
 
-SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, None, gameRules, 1, 60, 50).startGames
+//SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, None, gameRules, 1, 60, 50).startGames
 }

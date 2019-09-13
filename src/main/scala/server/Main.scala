@@ -4,7 +4,8 @@ package server
 import java.util.logging.Logger
 
 import io.grpc.{Server, ServerBuilder}
-import soc.protos.game.{CatanServerGrpc, CreateGameRequest, CreateGameResponse, StartGameRequest, StartGameResponse}
+import io.grpc.stub.StreamObserver
+import soc.protos.game.{CatanServerGrpc, CreateGameRequest, CreateGameResponse, StartGameRequest, StartGameResponse, MoveRequest, MoveResponse, SubscribeRequest, GameUpdate}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -62,10 +63,10 @@ object GameContext {
   val randSelector = PossibleMoveSelector.randSelector[NoInfo]
 
   val players = Map(
-    ("randomPlayer", 0) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player0"),
-    ("randomPlayer", 1) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player1"),
-    ("randomPlayer", 2) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player2"),
-    ("randomPlayer", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector), "player3")
+    ("randomPlayer", 0) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "1"), "player0"),
+    ("randomPlayer", 1) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "2"), "player1"),
+    ("randomPlayer", 2) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "3"), "player2"),
+    ("randomPlayer", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "4"), "player3")
   )
 
   val moveProvider = new RandomMoveResultProvider(dice, dCardDeck)
@@ -74,6 +75,7 @@ object GameContext {
 
 class GameContext(val gameId: String) {
   private var game: ActorSystem[StateMessage[PerfectInfo, NoInfo]] = null
+  private val subscribers: HashMap[String, StreamObserver[GameUpdate]] = new HashMap()
   import GameContext._
   import BaseCatanBoard._
 
@@ -81,12 +83,16 @@ class GameContext(val gameId: String) {
     val config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](1, boardConfig, players, randomMoveResultProvider, None, gameRules)
     // TODO: Hold onto a reference to this game / future 
     // This will allow us to query a game status (ie, what is the current turn), save it, terminate it, etc.
-    val future = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${gameId}").whenTerminated
+    val future = ActorSystem(GameBehavior.gameBehavior(config, subscribers), s"SettlersOfCatan${gameId}").whenTerminated
     // TODO: Clean up the game from the hashtable of currently running games
     //future onComplete {
     //  case Success() => 
     //  case Failure(t) => println("An error has occurred: " + t.getMessage)
     //}
+  }
+
+  def subscribe(name: String, observer: StreamObserver[GameUpdate]): Unit = {
+    subscribers += (name -> observer)
   }
 }
 
@@ -155,6 +161,20 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
       case None => println("No game found with " + req.gameId)
     }
     Future.successful(reply)
+  }
+
+  override def subscribe(req: SubscribeRequest, responseObserver: StreamObserver[GameUpdate]) = {
+    games.get(req.gameId) match {
+      case Some(gameContext) => {
+        println("Registering listener " + req.name)
+        gameContext.subscribe(req.name, responseObserver)
+      }
+      case None => println("No game found with " + req.gameId + " cannot register listener: " + req.name)
+    }
+  }
+
+  override def move(req: MoveRequest) = {
+    Future.successful(new MoveResponse("ERROR: Unimplemented"))
   }
 
   // TODO: Add methods for registerPlayer, setBoard, setState
