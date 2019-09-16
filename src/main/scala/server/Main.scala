@@ -55,19 +55,20 @@ object GameContext {
       YearOfPlenty -> YearOfPlenty.initAmount)
   )
 
-  import CatanResourceSet._
-  import io.circe.generic.auto._
-  val awsGameSaver = new AWSMoveSaver[BaseBoardConfiguration](CatanGameStoreClientFactory.createClient())
-  val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver")
-
   val randSelector = PossibleMoveSelector.randSelector[NoInfo]
-
   val players = Map(
     ("randomPlayer", 0) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "1"), "player0"),
     ("randomPlayer", 1) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "2"), "player1"),
     ("randomPlayer", 2) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "3"), "player2"),
     ("randomPlayer", 3) -> ActorSystem(PlayerBehavior.playerBehavior(randSelector, "4"), "player3")
   )
+
+
+  import CatanResourceSet._
+  import io.circe.generic.auto._
+  //val awsGameSaver = new AWSMoveSaver[BaseBoardConfiguration](CatanGameStoreClientFactory.createClient())
+  //val moveSaverActor: ActorRef[GameMessage] = ActorSystem(MoveSaverBehavior.moveSaverBehavior(awsGameSaver), "moveSaver")
+
 
   val moveProvider = new RandomMoveResultProvider(dice, dCardDeck)
   val randomMoveResultProvider = ActorSystem(MoveResultProvider.moveResultProvider(moveProvider), "resultProvider")
@@ -80,7 +81,7 @@ class GameContext(val gameId: String) {
   import BaseCatanBoard._
 
   def start(): Unit = {
-    val config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](1, boardConfig, players, randomMoveResultProvider, None, gameRules)
+    val config = GameConfiguration[PerfectInfo, NoInfo, BaseBoardConfiguration](gameId.toInt, boardConfig, players, randomMoveResultProvider, None, gameRules)
     // TODO: Hold onto a reference to this game / future 
     // This will allow us to query a game status (ie, what is the current turn), save it, terminate it, etc.
     val future = ActorSystem(GameBehavior.gameBehavior(config, subscribers), s"SettlersOfCatan${gameId}").whenTerminated

@@ -79,7 +79,7 @@ object GameBehavior {
       val winner = states.gameState.players.getPlayers.find(_.points >= 10)
       if (winner.isDefined) {
         config.moveRecorder.map(_ ! SaveGameMessage(config.gameId, config.boardConfig, states.gameState.players.getPlayers.map(p => (p.name, p.position) -> p.points).toMap))
-        context.log.info(s"Player ${winner.get.position} has won with ${winner.get.points} points and ${states.gameState.diceRolls} rolls ${states.gameState.players.getPlayers.map(p => (p.position, p.points))}")
+        context.log.info(s"Player ${winner.get.position} has won game ${config.gameId} with ${winner.get.points} points and ${states.gameState.diceRolls} rolls ${states.gameState.players.getPlayers.map(p => (p.position, p.points))}")
         context.log.debug(s"${winner.get}")
         Behaviors.stopped
       } else if (moveNumber > 2000) {
@@ -87,7 +87,6 @@ object GameBehavior {
         Behaviors.stopped
       } 
       else {
-        context.log.info("Making Request! " + id.toString())
         context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(id))(ref => MoveRequest(config.gameId, states.playerStates(id), states.gameState.players.getPlayer(id).inventory, id, ref)) {
           case Success(MoveResponse(`id`, RollDiceMove)) if !states.gameState.turnState.canRollDice => null
           case Success(MoveResponse(`id`, _: CatanPlayCardMove)) if !states.gameState.turnState.canPlayDevCard => null
@@ -103,13 +102,11 @@ object GameBehavior {
     }
 
     def sendMove(id: Int, moveResult: MoveResult): Unit = {
-      println("Sending move: " + moveResult.toString())
       config.moveRecorder.map(_ ! MoveEntryMessage(storage.MoveEntry(config.gameId, moveNumber, config.playerIds(id), id, moveResult)))
       moveNumber = moveNumber + 1
     }
 
     def handleMessage(x: StateMessage[GAME, PLAYERS]): Behavior[StateMessage[GAME, PLAYERS]] = {
-      println(x.message)
       x match {
       case StateMessage(states, MoveResponse(player, move)) =>
         context.ask[GetMoveResultProviderMessage[GAME], ResultResponse](config.resultProvider)(ref => GetMoveResultProviderMessage(states.gameState, player, move, ref)) {

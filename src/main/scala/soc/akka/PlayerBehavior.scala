@@ -20,7 +20,6 @@ object PlayerBehavior {
     var gameStates: Map[Int, GameState[T]] = Map.empty
 
     def handleMessage(x: GameMessage): Behavior[GameMessage] = {
-        println(playerId + x.getClass().toString())
         x match {
         case StartGame(gameId, board, players) =>
           gameStates = gameStates + (gameId -> GameState(board, PlayerStateManager(players)))
