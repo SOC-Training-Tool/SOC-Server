@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package soc.protos;
+
+// All RPCs must have a request and response message, even if empty
+service CatanServer {
+  rpc CreateGame (CreateGameRequest) returns (CreateGameResponse) {}
+  rpc StartGame (StartGameRequest) returns (StartGameResponse) {}
+  // Subscribe to a game to recieve all its notifications
+  rpc Subscribe(SubscribeRequest) returns (stream GameUpdate) {}
+  rpc Move(MoveRequest) returns (MoveResponse) {}
+}
+
+message GameUpdate {
+  repeated string action_requested_players = 1;
+  string payload = 2; // TODO: define a rich type
+
+}
+
+message SubscribeRequest {
+  string game_id = 1;
+  string name = 2;
+  string type = 3; // ie. PLAYER, OBSERVER TODO: See if there are enums
+  int32 postion = 4; // Optional, raises an exception if type = OBSERVER. If not supplied default to next open position.
+
+}
+
+// NOTE: for now there is no authentication,
+// we can handle it a layer up, or we can register players with tokens they have to pass
+message MoveRequest {
+  string game_id = 1;
+  int32 position = 2; 
+  // We can create an action schema
+  string action = 3;
+}
+
+message MoveResponse {
+  // We can make this response richer
+  string status = 1; // ACCEPTED, NOT_YOUR_TURN, ILLEGAL_MOVE etc. 
+}
+
+message CreateGameRequest {
+  // In the future this could take a board configuration
+  // Or an existing saved board state
+  // Or even the strategies
+  // It could also take settings about the game (like where to output the results)
+  // maybe string status?
+}
+
+message CreateGameResponse {
+  string game_id = 1;
+}
+
+message StartGameRequest {
+  string game_id = 1;
+}
+
+message StartGameResponse {
+    // Maybe string status
+}
