@@ -3,7 +3,7 @@ package soc.game.inventory
 import soc.game.GameRules
 import soc.game.inventory.Inventory._
 import soc.game.inventory.developmentCard.{BuyDevelopmentCard, PlayDevelopmentCard, PossibleDevelopmentCards}
-import soc.game.inventory.resources.{PossibleHands, SOCPossibleHands, SOCTransactions}
+import soc.game.inventory.resources.{PossibleHands, ProbableResourceSet, SOCPossibleHands, SOCTransactions}
 import soc.game.player.PlayerState
 
 trait InventoryHelper[T <: Inventory[T]] {
@@ -48,7 +48,7 @@ case class ProbableInfoInventoryHelper(
     val newPossibleHands = possibleHands.calculateHands(transactions)
     val update = copy(possibleHands = newPossibleHands)
     (players.map{ case (i, ps) =>
-        i -> ps.updateResources(newPossibleHands.probableHands(i))
+        i -> ps.updateResources(newPossibleHands.probableHands.get(i).getOrElse(ProbableResourceSet.empty))
       }, update)
   }
 

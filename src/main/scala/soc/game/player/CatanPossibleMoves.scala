@@ -5,7 +5,7 @@ import soc.game.inventory.Inventory.PerfectInfo
 import soc.game.inventory._
 import soc.game.inventory.resources.CatanResourceSet
 
-case class CatanPossibleMoves[PLAYER <: Inventory[PLAYER]] (state: GameState[PLAYER], inventory: PerfectInfo, playerPosition: Int) {
+case class CatanPossibleMoves[T <: Inventory[T]] (state: GameState[T], inventory: PerfectInfo, playerPosition: Int) {
 
   val currPlayer = state.players.getPlayer(playerPosition)
   val board = state.board

@@ -4,9 +4,10 @@ import akka.actor.typed.ActorRef
 import soc.game.inventory.Inventory
 import soc.game.player.PlayerStateHelper
 import soc.game.{CatanMove, GameState}
+import soc.storage.GameId
 
 sealed trait RequestMessage[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]] extends GameMessage {
-  val gameId: Int
+  val gameId: GameId
   val playerState: GameState[PLAYER]
   val inventory: GAME
   val playerId: Int
@@ -14,10 +15,10 @@ sealed trait RequestMessage[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]
 }
 
 object RequestMessage {
-  case class InitialPlacementRequest[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](gameId: Int, playerState: GameState[PLAYER], inventory: GAME, playerId: Int, first: Boolean, respondTo: ActorRef[MoveResponse]) extends RequestMessage[GAME, PLAYER]
-  case class DiscardCardRequest[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](gameId: Int, playerState: GameState[PLAYER], inventory: GAME, playerId: Int, respondTo: ActorRef[MoveResponse]) extends RequestMessage[GAME, PLAYER]
-  case class MoveRobberRequest[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](gameId: Int, playerState: GameState[PLAYER], inventory: GAME, playerId: Int, respondTo: ActorRef[MoveResponse]) extends RequestMessage[GAME, PLAYER]
-  case class MoveRequest[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](gameId: Int, playerState: GameState[PLAYER], inventory: GAME, playerId: Int, respondTo: ActorRef[MoveResponse]) extends RequestMessage[GAME, PLAYER]
+  case class InitialPlacementRequest[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](gameId: GameId, playerState: GameState[PLAYER], inventory: GAME, playerId: Int, first: Boolean, respondTo: ActorRef[MoveResponse]) extends RequestMessage[GAME, PLAYER]
+  case class DiscardCardRequest[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](gameId: GameId, playerState: GameState[PLAYER], inventory: GAME, playerId: Int, respondTo: ActorRef[MoveResponse]) extends RequestMessage[GAME, PLAYER]
+  case class MoveRobberRequest[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](gameId: GameId, playerState: GameState[PLAYER], inventory: GAME, playerId: Int, respondTo: ActorRef[MoveResponse]) extends RequestMessage[GAME, PLAYER]
+  case class MoveRequest[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](gameId: GameId, playerState: GameState[PLAYER], inventory: GAME, playerId: Int, respondTo: ActorRef[MoveResponse]) extends RequestMessage[GAME, PLAYER]
 
   //case class ControllerRequestMessage(playerState: GameState, playerId: Int, first: Boolean, respondTo: ActorRef[Response], move: CatanMove) extends RequestMessage
 }

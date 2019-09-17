@@ -6,6 +6,6 @@ trait MoveSaver[BOARD <: BoardConfiguration] {
 
   def saveMove(move: MoveEntry): Unit
 
-  def saveGame(gameId: Int, initBoard: BOARD, players: Map[(String, Int), Int]): Unit
+  def saveGame(gameId: GameId, initBoard: BOARD, players: Map[(String, Int), Int]): Unit
 
 }

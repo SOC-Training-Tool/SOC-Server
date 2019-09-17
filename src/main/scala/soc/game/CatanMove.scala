@@ -17,7 +17,6 @@ trait TradeResponse extends CatanTradeMove
 
 sealed trait ImperfectInformation
 
-
   case object RollDiceMove extends CatanMove with ImperfectInformation
   case class RollResult(roll: Roll) extends MoveResult
 

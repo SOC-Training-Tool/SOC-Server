@@ -9,9 +9,10 @@ import soc.game.inventory.Inventory
 import soc.game.inventory.InventoryHelperFactory
 import soc.game.player.PlayerStateHelper
 import soc.playerRepository.PlayerContext
+import soc.storage.GameId
 
 case class GameConfiguration[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BOARD <: BoardConfiguration](
-  gameId: Int,
+  gameId: GameId,
   boardConfig: BOARD,
   players: Map[Int, PlayerContext[GAME, _]],
   resultProvider: ActorRef[MoveResultProviderMessage[GAME]],
@@ -22,7 +23,7 @@ case class GameConfiguration[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYE
     boardGenerator: BoardGenerator[BOARD]) {
 
   val playerIds = players.keys.toSeq.sorted
-  val playerNameIds = players.map { case (id, context) => (context.name, id)}.toSeq
+  val playerNameIds = players.toSeq.map { case (id, context) => (context.name, id)}
 
   val firstPlayerId = playerIds.min
   val lastPlayerId = playerIds.max
@@ -40,7 +41,7 @@ case class GameConfiguration[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYE
   val initBoard = boardGenerator.apply(boardConfig)
 
   val initStates: GameStateHolder[GAME, PLAYERS] = GameStateHolder(
-    GameState[GAME](board = initBoard, players = PlayerStateHelper(playerNameIds)(gameInventoryHelperFactory, rules), bank = rules.initBank, devCardsDeck = rules.initDevCardAmounts.getTotal),
-    playerIds.map { id => id -> GameState[PLAYERS](initBoard, PlayerStateHelper(playerNameIds)(playersInventoryHelperFactory, rules), bank = rules.initBank, devCardsDeck = rules.initDevCardAmounts.getTotal) }.toMap
+    GameState[GAME](board = initBoard, playerNameIds = playerNameIds, rules = rules),
+    playerIds.map { id => id -> GameState[PLAYERS](initBoard, playerNameIds, rules) }.toMap
   )
 }
