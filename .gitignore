@@ -1,4 +1,3 @@
-
 *.class
 *.log
 
@@ -26,5 +25,10 @@ snapshots/*
 *.iml
 .idea_modules
 projectFilesBackup
+
+# VS Code
+project/.bloop/*
+.bloop/*
+.metals/*
 
 .DS_Store

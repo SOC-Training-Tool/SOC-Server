@@ -10,6 +10,7 @@ import soc.game.inventory.{Inventory, InventoryManagerFactory}
 
 import scala.concurrent.Future
 import scala.util.Random
+import scala.collection.mutable.HashMap
 
 class SimulationQueue[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BOARD <: BoardConfiguration](
   players: Map[(String, Int), ActorRef[GameMessage]],
@@ -51,7 +52,7 @@ class SimulationQueue[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BO
 
   private def playNextSimulation: Unit =  if (gameConfigs.hasNext) {
     val config = gameConfigs.next()
-    currentSimulations = ActorSystem(GameBehavior.gameBehavior(config), s"SettlersOfCatan${config.gameId}").whenTerminated :: currentSimulations
+    currentSimulations = ActorSystem(GameBehavior.gameBehavior(config, new HashMap()), s"SettlersOfCatan${config.gameId}").whenTerminated :: currentSimulations
   }
 }
 

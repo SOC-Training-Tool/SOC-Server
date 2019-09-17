@@ -21,7 +21,20 @@ val circe = Seq(
 ).map(_ % circeVersion)
 
 
+
 libraryDependencies ++= Seq(scalatest, akka, akkatyped, akkatest, s3, ddb, junit) ++ circe
+libraryDependencies ++= Seq(
+    "io.grpc" % "grpc-netty" % scalapb.compiler.Version.grpcJavaVersion,
+    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion
+)
+
+PB.targets in Compile := Seq(
+  scalapb.gen() -> (sourceManaged in Compile).value
+)
+
+// Seeminlgy needed to set this once to get things to work?
+//PB.protocVersion := "-v300"
+
 
 // No need to run tests while building jar
 test in assembly := {}
