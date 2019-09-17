@@ -79,14 +79,13 @@ object GameBehavior {
       val winner = states.gameState.players.getPlayers.find(_.points >= 10)
       if (winner.isDefined) {
         config.moveRecorder.map(_ ! SaveGameMessage(config.gameId, config.boardConfig, states.gameState.players.getPlayers.map(p => (p.name, p.position) -> p.points).toMap))
-        context.log.info(s"Player ${winner.get.position} has won game ${config.gameId} with ${winner.get.points} points and ${states.gameState.diceRolls} rolls ${states.gameState.players.getPlayers.map(p => (p.position, p.points))}")
+        val winMsg = s"Player ${winner.get.position} has won game ${config.gameId} with ${winner.get.points} points and ${states.gameState.diceRolls} rolls ${states.gameState.players.getPlayers.map(p => (p.position, p.points))}"
+        context.log.info(winMsg)
         context.log.debug(s"${winner.get}")
+        val update = GameUpdate(payload = "GAME OVER: " + winMsg, actionRequestedPlayers = Seq.empty[String])
+        subscribers.values.foreach(subscriber => subscriber.onNext(update))
         Behaviors.stopped
-      } else if (moveNumber > 2000) {
-        println("Ending Game, move: " + moveNumber.toString())
-        Behaviors.stopped
-      } 
-      else {
+      } else {
         context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](config.playerRefs(id))(ref => MoveRequest(config.gameId, states.playerStates(id), states.gameState.players.getPlayer(id).inventory, id, ref)) {
           case Success(MoveResponse(`id`, RollDiceMove)) if !states.gameState.turnState.canRollDice => null
           case Success(MoveResponse(`id`, _: CatanPlayCardMove)) if !states.gameState.turnState.canPlayDevCard => null
