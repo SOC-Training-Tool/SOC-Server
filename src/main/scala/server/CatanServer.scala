@@ -65,8 +65,8 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
   import soc.game.inventory.InventoryHelper._
   import soc.game.board.BaseCatanBoard._
 
-  private val games: HashMap[String, GameContext[_, _, _]] = HashMap.empty
-  private val builders: HashMap[String, GameBuilder[_, _, _]] = HashMap.empty
+  private val games: HashMap[String, GameContext[PerfectInfo, NoInfo, BaseBoardConfiguration]] = HashMap.empty
+  private val builders: HashMap[String, GameBuilder[PerfectInfo, NoInfo, BaseBoardConfiguration]] = HashMap.empty
   private var counter = 0
 
   override def createGame(req: CreateGameRequest) = {

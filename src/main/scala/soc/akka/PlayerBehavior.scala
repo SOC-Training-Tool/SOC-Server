@@ -5,6 +5,7 @@ import akka.actor.typed.scaladsl.Behaviors
 import soc.akka.messages.RequestMessage._
 import soc.akka.messages.{GameMessage, MoveResponse, PlayerDoMove, UpdateMessage}
 import soc.akka.messages.UpdateMessage._
+import soc.game.GameState
 import soc.game.inventory.Inventory
 import soc.playerRepository.PlayerContext
 
@@ -17,9 +18,8 @@ object PlayerBehavior {
 
       Behaviors.receiveMessage {
 
-        case StartGame(gameId, board, players, respondTo) =>
-          playerContext.addGameState(gameId, position, board, players)
-          respondTo ! position
+        case StartGame(gameId, state: GameState[PLAYER]) =>
+          playerContext.sendInitialGameState(gameId, position, state)
           Behaviors.same
 
         case MoveResultUpdate(gameId, result) =>

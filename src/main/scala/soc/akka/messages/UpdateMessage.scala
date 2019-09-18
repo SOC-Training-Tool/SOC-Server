@@ -4,7 +4,7 @@ import akka.Done
 import akka.actor.typed.ActorRef
 import soc.game.{GameState, MoveResult, Roll}
 import soc.game.board.{BoardConfiguration, CatanBoard, Edge, Vertex}
-import soc.game.inventory.{DevelopmentCard, Resource}
+import soc.game.inventory.{DevelopmentCard, Inventory, Resource}
 import soc.game.inventory.resources.CatanResourceSet.Resources
 import soc.game.inventory.resources.Steal
 import soc.storage.GameId
@@ -15,7 +15,7 @@ sealed trait UpdateMessage extends GameMessage {
 sealed trait DevelopmentCardUpdate extends UpdateMessage
 
 object UpdateMessage {
-  case class StartGame(gameId: GameId, board: CatanBoard, players: Seq[(String, Int)], respondTo: ActorRef[Int]) extends UpdateMessage
+  case class StartGame[PLAYER <: Inventory[PLAYER]](gameId: GameId, state: GameState[PLAYER]) extends UpdateMessage
   case class TurnUpdate(gameId: GameId, playerId: Int, turnNumber: Int = 0) extends UpdateMessage
 
   case class MoveResultUpdate(gameId: GameId, moveResult: MoveResult) extends UpdateMessage

@@ -54,19 +54,15 @@ object GameBehavior {
 
     def broadcast(msg: GameMessage) {
       playerRefs.values.foreach(ref => ref ! msg)
-      val update = GameUpdate(payload = msg.getClass().toString(), actionRequestedPlayers = Seq.empty[String])
-      subscribers.values.foreach(subscriber => subscriber.onNext(update))
     }
 
     //config.playerRefs.values.foreach(ref => ref ! StartGame(config.gameId, config.initBoard, config.players.keys.toSeq))
-    broadcast(StartGame(config.gameId, config.initBoard, config.players.keys.toSeq))
 
     // Send first request for first player's initial placement
-    playerRefs.values.foreach(p => context.ask[StartGame, Int](p)(ref => StartGame(config.gameId, config.initBoard, config.playerNameIds, ref)) {
+    playerRefs.foreach{ case (pos, p) => context.ask[StartGame[PLAYERS], Int](p)(ref => StartGame(config.gameId, config.initStates.playerStates(pos))) {
       case Success(pos) => StateMessage(config.initStates, PlayerAdded(pos))
       case Failure(ex) => null
-    })
-
+    }}
 
     context.log.info(s"Starting Game ${config.gameId.key}")
 
@@ -75,6 +71,7 @@ object GameBehavior {
       val id = states.gameState.currTurn
 
       if (states.gameState.players.getPlayers.exists(_.points >= 10)) {
+
         context.scheduleOnce(10 millis, context.self, StateMessage(states, EndGame))
       }
       else {
@@ -104,28 +101,12 @@ object GameBehavior {
       case StateMessage(states, EndGame) =>
         val winner = states.gameState.players.getPlayers.find(_.points >= 10)
         config.moveRecorder.map(_ ! SaveGameMessage(config.gameId, config.boardConfig, states.gameState.players.getPlayers.map(p => (p.name, p.position) -> p.points).toMap))
-        context.log.info(s"Player ${winner.get.position} has won with ${winner.get.points} points and ${states.gameState.diceRolls} rolls ${states.gameState.players.getPlayers.map(p => (p.position, p.points))}")
+        val winMsg = s"Player ${winner.get.position} has won game ${config.gameId} with ${winner.get.points} points and ${states.gameState.diceRolls} rolls ${states.gameState.players.getPlayers.map(p => (p.position, p.points))}"
+        context.log.info(winMsg)
         context.log.debug(s"${winner.get}")
         val update = GameUpdate(payload = "GAME OVER: " + winMsg, actionRequestedPlayers = Seq.empty[String])
-        subscribers.values.foreach(subscriber => subscriber.onNext(update))
+        //subscribers.values.foreach(subscriber => subscriber.onNext(update))
         Behaviors.stopped
-
-      case StateMessage(_, PlayerAdded(pos)) =>
-        playersReceived = pos :: playersReceived
-        if (config.playerIds.forall(playersReceived.contains)) {
-          context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](playerRefs(firstPlayerId)) { ref =>
-            InitialPlacementRequest(config.gameId,
-              config.initStates.playerStates(firstPlayerId),
-              config.initStates.gameState.players.getPlayer(firstPlayerId).inventory,
-              firstPlayerId, true,
-              ref)
-          } {
-            case Success(r@MoveResponse(`firstPlayerId`, InitialPlacementMove(true, _, _))) => StateMessage[GAME, PLAYERS](config.initStates, r)
-            case Success(_) => null
-            case Failure(ex) => StateMessage[GAME, PLAYERS](config.initStates, ErrorMessage(ex))
-          }
-        }
-        Behaviors.same
 
       case StateMessage(states, MoveResponse(player, move)) =>
         context.ask[GetMoveResultProviderMessage[GAME], ResultResponse](config.resultProvider)(ref => GetMoveResultProviderMessage(states.gameState, player, move, ref)) {

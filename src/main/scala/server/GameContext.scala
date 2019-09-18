@@ -74,7 +74,7 @@ case class GameBuilder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], B
 
   def start: GameContext[GAME, PLAYERS, BOARD] = {
     if (subscribers.keys.size < numPlayers) {
-      // THROW EXCEPTION
+      throw new Exception(s"Not enough players for game. players subscribed: ${subscribers.keys.size }, required: $numPlayers")
     }
 
     val players = {
@@ -96,6 +96,8 @@ case class GameBuilder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], B
             .addObserver(gameId.key, position, observer)
       }
     }
+    println(players.keys)
+
     val config = GameConfiguration(gameId, boardConfig, players, moveResultProvider, moveRecorder, gameRules)
     new GameContext(config)
   }

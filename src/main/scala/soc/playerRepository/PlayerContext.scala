@@ -28,6 +28,11 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
     this
   }
 
+  def sendInitialGameState(gameId: GameId, position: Int, state: GameState[PLAYER]): Unit = {
+    val observer: StreamObserver[GameUpdate] = gameObservers.getOrElse((gameId.key, position), throw new Exception(""))
+    //observer.onNext(new GameUpdate(Nil, moveResult.toString, position))
+  }
+
   def updateGameState(gameId: GameId, position: Int, moveResult: MoveResult): Unit = {
     val observer: StreamObserver[GameUpdate] = gameObservers.getOrElse((gameId.key, position), throw new Exception(""))
     observer.onNext(new GameUpdate(Nil, moveResult.toString, position))
