@@ -69,7 +69,7 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
   private val builders: HashMap[String, GameBuilder[PerfectInfo, NoInfo, BaseBoardConfiguration]] = HashMap.empty
   private var counter = 0
 
-  override def createGame(req: CreateGameRequest) = {
+  override def createGame(req: CreateGameRequest) = this.synchronized  {
     counter += 1
     val gameId = GameId(SimulatedGame, "", counter); // TODO: Create real ids (probably don't want them to be integers)
 
@@ -88,7 +88,7 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
     Future.successful(reply)
   }
 
-  override def startGame(req: StartGameRequest) = {
+  override def startGame(req: StartGameRequest) = this.synchronized  {
     val reply = StartGameResponse()
     builders.get(req.gameId) match {
       case Some(gameContext) => {
@@ -101,7 +101,7 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
     Future.successful(reply)
   }
 
-  override def subscribe(req: SubscribeRequest, responseObserver: StreamObserver[GameUpdate]) = {
+  override def subscribe(req: SubscribeRequest, responseObserver: StreamObserver[GameUpdate]) = this.synchronized {
     builders.get(req.gameId) match {
       case Some(gameContext) => {
         println("Registering listener " + req.name)
@@ -114,7 +114,7 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
     }
   }
 
-  override def move(req: MoveRequest) = {
+  override def move(req: MoveRequest) = this.synchronized  {
     val playerContext = games.get(req.gameId).flatMap(_.getPlayer(req.position)).getOrElse(throw new Exception(""))
     playerContext.receiveMove(req.gameId, req.position, RollDiceMove)
     Future.successful(new MoveResponse("ERROR: Unimplemented"))

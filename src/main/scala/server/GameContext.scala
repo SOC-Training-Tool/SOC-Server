@@ -70,7 +70,9 @@ case class GameBuilder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], B
     playersInventoryHelperFactory: InventoryHelperFactory[PLAYERS],
     boardGenerator: BoardGenerator[BOARD]) {
 
-  def subscribePlayer(playerId: String, position: Option[Int], observer: StreamObserver[GameUpdate]): GameBuilder[GAME, PLAYERS, BOARD] = copy(subscribers = subscribers + (playerId -> (position, observer)))
+  def subscribePlayer(playerId: String, position: Option[Int], observer: StreamObserver[GameUpdate]): GameBuilder[GAME, PLAYERS, BOARD] = this.synchronized {
+    copy(subscribers = (subscribers + (playerId -> (position, observer))))
+  }
 
   def start: GameContext[GAME, PLAYERS, BOARD] = {
     if (subscribers.keys.size < numPlayers) {
@@ -79,8 +81,9 @@ case class GameBuilder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], B
 
     val players = {
       val positions = 0 to (numPlayers - 1)
+
       val selectedPositions = subscribers.filter(_._2._1.isDefined).values.map(_._1.get).toSeq
-      var nonSelectedPositions = random.shuffle(positions.filter(selectedPositions.contains)).toList
+      var nonSelectedPositions = random.shuffle(positions.filterNot(selectedPositions.contains)).toList
       subscribers.map {
         case (playerId, (Some(position), observer)) =>
           position -> playerRepo.getPlayer(playerId)
