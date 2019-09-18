@@ -41,6 +41,7 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
   def getMoveResponse(request: RequestMessage[GAME, PLAYER]): Future[CatanMove] = this.synchronized {
     val playerKey = (request.gameId.key, request.playerId)
 
+    // TODO These are just so the game can play. Once the client can response it will just be the _ case
     request match {
       case InitialPlacementRequest(gameId, state, inventory: PerfectInfo, position, first, _) =>
         randomMoveSelector.initialPlacementMove(state, inventory, position)(first)
