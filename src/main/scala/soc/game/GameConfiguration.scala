@@ -14,7 +14,7 @@ import soc.storage.GameId
 case class GameConfiguration[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BOARD <: BoardConfiguration](
   gameId: GameId,
   boardConfig: BOARD,
-  players: Map[Int, PlayerContext[GAME, _]],
+  players: Map[Int, PlayerContext[GAME, PLAYERS]],
   resultProvider: ActorRef[MoveResultProviderMessage[GAME]],
   moveRecorder: Option[ActorRef[GameMessage]],
   rules: GameRules)

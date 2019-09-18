@@ -62,7 +62,7 @@ object Main extends App {
 
  //SimulationQueue[PerfectInfo, NoInfo, BaseBoardConfiguration](players, randomMoveResultProvider, None, gameRules, 1, 60, 50).startGames
 
-  val playerRepo = new PlayerRepository[PerfectInfo]
+  val playerRepo = new PlayerRepository
   val simulationController = new SimulationController[PerfectInfo, NoInfo, BaseBoardConfiguration](
     playerRepo,
     randomMoveResultProvider,
