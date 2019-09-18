@@ -81,7 +81,6 @@ case class GameBuilder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], B
 
     val players = {
       val positions = 0 to (numPlayers - 1)
-
       val selectedPositions = subscribers.filter(_._2._1.isDefined).values.map(_._1.get).toSeq
       var nonSelectedPositions = random.shuffle(positions.filterNot(selectedPositions.contains)).toList
       subscribers.map {
@@ -99,8 +98,6 @@ case class GameBuilder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], B
             .addObserver(gameId.key, position, observer)
       }
     }
-    println(players.keys)
-
     val config = GameConfiguration(gameId, boardConfig, players, moveResultProvider, moveRecorder, gameRules)
     new GameContext(config)
   }

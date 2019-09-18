@@ -3,7 +3,7 @@ package soc.akka
 import akka.actor.typed.Behavior
 import akka.actor.typed.scaladsl.Behaviors
 import soc.akka.messages.RequestMessage._
-import soc.akka.messages.{GameMessage, MoveResponse, PlayerDoMove, UpdateMessage}
+import soc.akka.messages.{GameMessage, MoveResponse, PlayerDoMove, RequestMessage, UpdateMessage}
 import soc.akka.messages.UpdateMessage._
 import soc.game.GameState
 import soc.game.inventory.Inventory
@@ -29,7 +29,7 @@ object PlayerBehavior {
         case _: UpdateMessage =>
           Behaviors.same
 
-        case request: MoveRequest[GAME, PLAYER] =>
+        case request: RequestMessage[GAME, PLAYER] =>
           context.pipeToSelf(playerContext.getMoveResponse(request)) {
             case Success(move) => PlayerDoMove(request.playerId, move, request.respondTo)
             case Failure(ex) => null

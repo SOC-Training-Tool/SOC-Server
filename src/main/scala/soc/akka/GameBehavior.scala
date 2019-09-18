@@ -52,19 +52,24 @@ object GameBehavior {
       id -> context.spawn[GameMessage](PlayerBehavior.playerBehavior(playerContext, id), s"${config.gameId.key}_${playerContext.name}_$id")
     }
 
-    def broadcast(msg: GameMessage) {
-      playerRefs.values.foreach(ref => ref ! msg)
+    context.log.info(s"Starting Game ${config.gameId.key}")
+    playerRefs.foreach{ case (pos, p) => p ! StartGame(config.gameId, config.initStates.playerStates(pos)) }
+
+
+    println("HERE")
+    // Send first request for first player's initial placement
+    context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](playerRefs(firstPlayerId)) { ref =>
+      InitialPlacementRequest(config.gameId,
+        config.initStates.playerStates(firstPlayerId),
+        config.initStates.gameState.players.getPlayer(firstPlayerId).inventory,
+        firstPlayerId, true,
+        ref)
+    } {
+      case Success(r@MoveResponse(`firstPlayerId`, InitialPlacementMove(true, _, _))) => StateMessage[GAME, PLAYERS](config.initStates, r)
+      case Success(_) => null
+      case Failure(ex) => StateMessage[GAME, PLAYERS](config.initStates, ErrorMessage(ex))
     }
 
-    //config.playerRefs.values.foreach(ref => ref ! StartGame(config.gameId, config.initBoard, config.players.keys.toSeq))
-
-    // Send first request for first player's initial placement
-    playerRefs.foreach{ case (pos, p) => context.ask[StartGame[PLAYERS], Int](p)(ref => StartGame(config.gameId, config.initStates.playerStates(pos))) {
-      case Success(pos) => StateMessage(config.initStates, PlayerAdded(pos))
-      case Failure(ex) => null
-    }}
-
-    context.log.info(s"Starting Game ${config.gameId.key}")
 
     def turnMove(updateState: => GameStateHolder[GAME, PLAYERS]): Behavior[StateMessage[GAME, PLAYERS]] = {
       val states = updateState
@@ -96,7 +101,7 @@ object GameBehavior {
 
     var playersReceived: List[Int] = Nil
 
-    def handleMessage(x: StateMessage[GAME, PLAYERS]): Behavior[StateMessage[GAME, PLAYERS]] = x match {
+    Behaviors.receiveMessage[StateMessage[GAME, PLAYERS]] {
 
       case StateMessage(states, EndGame) =>
         val winner = states.gameState.players.getPlayers.find(_.points >= 10)
@@ -403,11 +408,6 @@ object GameBehavior {
         Behaviors.stopped
 
       case _ => Behaviors.same
-    }
-
-    Behaviors.receiveMessage[StateMessage[GAME, PLAYERS]] {
-      case any =>
-        handleMessage(any)
     }
   }
 

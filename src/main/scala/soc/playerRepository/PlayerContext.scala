@@ -38,7 +38,7 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
     observer.onNext(new GameUpdate(Nil, moveResult.toString, position))
   }
 
-  def getMoveResponse(request: RequestMessage[GAME, PLAYER]): Future[CatanMove] = {
+  def getMoveResponse(request: RequestMessage[GAME, PLAYER]): Future[CatanMove] = this.synchronized {
     val playerKey = (request.gameId.key, request.playerId)
 
     request match {
