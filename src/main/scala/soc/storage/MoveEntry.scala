@@ -6,7 +6,7 @@ import io.circe.generic.semiauto._
 import soc.game.MoveResult
 
 case class MoveEntry (
-  gameId: Int,
+  gameId: GameId,
   moveNumber: Int,
   playerId: Int,
   playerOrderNumber: Int,

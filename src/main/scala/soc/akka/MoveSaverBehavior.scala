@@ -3,13 +3,13 @@ package soc.akka
 import akka.actor.typed.scaladsl.Behaviors
 import soc.akka.messages.{GameMessage, MoveEntryMessage, SaveGameMessage, Terminate}
 import soc.game.board.BoardConfiguration
-import soc.storage.{MoveEntry, MoveSaver}
+import soc.storage.{GameId, MoveEntry, MoveSaver}
 
 import scala.concurrent.duration._
 
 object MoveSaverBehavior {
 
-  case class GameToSave[BOARD <: BoardConfiguration](gameId: Int, boardConfiguration: BOARD, players: Map[(String, Int), Int])
+  case class GameToSave[BOARD <: BoardConfiguration](gameId: GameId, boardConfiguration: BOARD, players: Map[(String, Int), Int])
 
   object SendGame extends GameMessage
 

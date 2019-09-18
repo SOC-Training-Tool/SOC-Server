@@ -12,9 +12,11 @@ class MoveEntrySpec extends FunSpec with Matchers {
 
   describe("json encoder") {
 
-    val moveEntryA = MoveEntry(0, 0, 0, 0, RollResult(Roll(6)))
-    val moveEntryB = MoveEntry(1, 1, 1, 1, BuildCityMove(Vertex(0)))
-    val moveEntryC = MoveEntry(1, 1, 1, 1, DiscardResourcesMove(Map(0 -> CatanResourceSet(Brick))))
+    val gId = GameId(SimulatedGame, "", 0)
+
+    val moveEntryA = MoveEntry(gId, 0, 0, 0, RollResult(Roll(6)))
+    val moveEntryB = MoveEntry(gId, 1, 1, 1, BuildCityMove(Vertex(0)))
+    val moveEntryC = MoveEntry(gId, 1, 1, 1, DiscardResourcesMove(Map(0 -> CatanResourceSet(Brick))))
 
     val l: List[MoveEntry] = List(moveEntryA, moveEntryB, moveEntryC)
 

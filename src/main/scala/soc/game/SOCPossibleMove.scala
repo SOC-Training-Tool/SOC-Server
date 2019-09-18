@@ -21,7 +21,6 @@ case class Roll(number: Int) {
 /**
   * CatanTypes for Possible Moves
   */
-case class RobberLocationsAndSteal(node: Int, playerStole: Option[Int])
 
 /**
   * Catan Move and Response

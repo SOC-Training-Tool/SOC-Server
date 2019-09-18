@@ -4,7 +4,7 @@ import soc.game.GameState
 import soc.game.CatanMove
 import soc.game.inventory.Inventory
 import soc.game.inventory.Inventory.PerfectInfo
-import soc.game.player.PlayerStateManager
+import soc.game.player.PlayerStateHelper
 
 import scala.concurrent.Future
 

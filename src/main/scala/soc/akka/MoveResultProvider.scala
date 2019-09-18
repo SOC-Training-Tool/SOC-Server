@@ -4,8 +4,8 @@ import akka.actor.typed.ActorRef
 import akka.actor.typed.scaladsl.Behaviors
 import soc.akka.MoveResultProviderMessage.{GetMoveResultProviderMessage, MoveResultProviderMessage, SendMoveResultProviderMessage, StopResultProvider}
 import soc.akka.messages.ResultResponse
-import soc.game.{BuyDevelopmentCardMove, BuyDevelopmentCardResult, CatanMove, GameState, KnightMove, KnightResult, MonopolyMove, MonopolyResult, MoveResult, MoveRobberAndStealMove, MoveRobberAndStealResult, Roll, RollDiceMove, RollResult}
-import soc.game.dice.Dice
+import soc.game.{BuyDevelopmentCardMove, BuyDevelopmentCardResult, CatanMove, DevelopmentCardDeckBuilder, GameRules, GameState, KnightMove, KnightResult, MonopolyMove, MonopolyResult, MoveResult, MoveRobberAndStealMove, MoveRobberAndStealResult, Roll, RollDiceMove, RollResult}
+import soc.game.dice.{Dice, NormalDice}
 import soc.game.inventory.Inventory.PerfectInfo
 import soc.game.inventory.resources.{CatanResourceSet, Steal}
 import soc.game.inventory.resources.CatanResourceSet.Resources
@@ -124,4 +124,14 @@ class RandomMoveResultProvider(dice: Dice, dcardDeck: List[DevelopmentCard])(imp
       p.position -> CatanResourceSet.empty[Int].add(p.inventory.resourceSet.getAmount(res), res)
     }.toMap
   }
+}
+
+object RandomMoveResultProvider {
+
+  def apply(gameRules: GameRules)(implicit random: Random) = {
+    val dice = NormalDice()
+    val dCardDeck: List[DevelopmentCard] = DevelopmentCardDeckBuilder.buildDeckByCardTypeAndAmount(gameRules.initDevCardAmounts.amountMap)
+    new RandomMoveResultProvider(dice, dCardDeck)
+  }
+
 }

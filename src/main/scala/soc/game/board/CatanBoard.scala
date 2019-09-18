@@ -168,7 +168,7 @@ case class CatanBoard private (
     roads.map(r => calcLongestRoadLengthRecur(playerId, List((r.v1, r.v2)), List(r))).max
   }
 
-  // I toally forget how this works...
+  // I totally forget how this works...
   private def calcLongestRoadLengthRecur(playerId: Int, stack: List[(Vertex, Vertex)], visited: List[Edge] = Nil): Int =
   {
     if (stack.isEmpty) visited.length

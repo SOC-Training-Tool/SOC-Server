@@ -6,24 +6,25 @@ import soc.akka.{GameStateHolder, MoveResultProvider}
 import soc.akka.messages.GameMessage
 import soc.game.board.{BoardConfiguration, BoardGenerator, CatanBoard}
 import soc.game.inventory.Inventory
-import soc.game.inventory.InventoryManagerFactory
-import soc.game.player.PlayerStateManager
+import soc.game.inventory.InventoryHelperFactory
+import soc.game.player.PlayerStateHelper
+import soc.playerRepository.PlayerContext
+import soc.storage.GameId
 
 case class GameConfiguration[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], BOARD <: BoardConfiguration](
-  gameId: Int,
+  gameId: GameId,
   boardConfig: BOARD,
-  players: Map[(String, Int), ActorRef[GameMessage]],
+  players: Map[Int, PlayerContext[GAME, PLAYERS]],
   resultProvider: ActorRef[MoveResultProviderMessage[GAME]],
   moveRecorder: Option[ActorRef[GameMessage]],
   rules: GameRules)
-  (implicit gameInventoryManagerFactory: InventoryManagerFactory[GAME],
-    playersInventoryManagerFactory: InventoryManagerFactory[PLAYERS],
+  (implicit gameInventoryHelperFactory: InventoryHelperFactory[GAME],
+    playersInventoryHelperFactory: InventoryHelperFactory[PLAYERS],
     boardGenerator: BoardGenerator[BOARD]) {
 
-  val playerIds = players.keys.map(_._2).toSeq.sorted
-  val playerRefs: Map[Int, ActorRef[GameMessage]] = players.map {
-    case ((_, id), ref) => (id, ref)
-  }
+  val playerIds = players.keys.toSeq.sorted
+  val playerNameIds = players.toSeq.map { case (id, context) => (context.name, id)}
+
   val firstPlayerId = playerIds.min
   val lastPlayerId = playerIds.max
 
@@ -40,7 +41,7 @@ case class GameConfiguration[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYE
   val initBoard = boardGenerator.apply(boardConfig)
 
   val initStates: GameStateHolder[GAME, PLAYERS] = GameStateHolder(
-    GameState[GAME](board = initBoard, players = PlayerStateManager(players.keys.toSeq)(gameInventoryManagerFactory, rules), bank = rules.initBank, devCardsDeck = rules.initDevCardAmounts.getTotal),
-    playerIds.map { id => id -> GameState[PLAYERS](initBoard, PlayerStateManager(players.keys.toSeq)(playersInventoryManagerFactory, rules), bank = rules.initBank, devCardsDeck = rules.initDevCardAmounts.getTotal) }.toMap
+    GameState[GAME](board = initBoard, playerNameIds = playerNameIds, rules = rules),
+    playerIds.map { id => id -> GameState[PLAYERS](initBoard, playerNameIds, rules) }.toMap
   )
 }

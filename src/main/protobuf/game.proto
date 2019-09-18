@@ -14,7 +14,7 @@ service CatanServer {
 message GameUpdate {
   repeated string action_requested_players = 1;
   string payload = 2; // TODO: define a rich type
-
+  int32 position = 3;
 }
 
 message SubscribeRequest {
@@ -22,8 +22,9 @@ message SubscribeRequest {
   string name = 2;
   string type = 3; // ie. PLAYER, OBSERVER TODO: See if there are enums
   int32 postion = 4; // Optional, raises an exception if type = OBSERVER. If not supplied default to next open position.
-
 }
+
+
 
 // NOTE: for now there is no authentication,
 // we can handle it a layer up, or we can register players with tokens they have to pass
@@ -44,13 +45,16 @@ message CreateGameRequest {
   // Or an existing saved board state
   // Or even the strategies
   // It could also take settings about the game (like where to output the results)
+  // Should include game parameters such as game rules and number of players
   // maybe string status?
 }
+
 
 message CreateGameResponse {
   string game_id = 1;
 }
 
+//This should raise an exception if number of players needed for game have not subscribed
 message StartGameRequest {
   string game_id = 1;
 }
