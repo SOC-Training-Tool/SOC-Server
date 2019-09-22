@@ -21,7 +21,7 @@ message SubscribeRequest {
   string game_id = 1;
   string name = 2;
   string type = 3; // ie. PLAYER, OBSERVER TODO: See if there are enums
-  int32 postion = 4; // Optional, raises an exception if type = OBSERVER. If not supplied default to next open position.
+  int32 position = 4; // Optional, raises an exception if type = OBSERVER. If not supplied default to next open position.
 }
 
 

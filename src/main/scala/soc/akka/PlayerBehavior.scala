@@ -22,6 +22,10 @@ object PlayerBehavior {
           playerContext.sendInitialGameState(gameId, position, state)
           Behaviors.same
 
+        case GameOver(gameId, msg) =>
+          playerContext.sendGameOver(gameId, position, msg)
+          Behaviors.stopped
+
         case MoveResultUpdate(gameId, result) =>
           playerContext.updateGameState(gameId, position, result)
           Behaviors.same

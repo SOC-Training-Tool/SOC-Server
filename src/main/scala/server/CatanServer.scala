@@ -108,7 +108,7 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
         if (!playerRepo.contains(req.name)) playerRepo.addPlayer(new PlayerContext[PerfectInfo, NoInfo](req.name))
 
         //Todo throw error if player already declared position
-        builders.put(req.gameId, gameContext.subscribePlayer(req.name, None, responseObserver))
+        builders.put(req.gameId, gameContext.subscribePlayer(req.name, Some(req.position), responseObserver))
       }
       case None => println("No game found with " + req.gameId + " cannot register listener: " + req.name)
     }
@@ -116,8 +116,9 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
 
   override def move(req: MoveRequest) = this.synchronized  {
     val playerContext = games.get(req.gameId).flatMap(_.getPlayer(req.position)).getOrElse(throw new Exception(""))
-    playerContext.receiveMove(req.gameId, req.position, RollDiceMove)
-    Future.successful(new MoveResponse("ERROR: Unimplemented"))
+    val move = playerContext.getLastRequestRandomMove(req.gameId, req.position)
+    val result = playerContext.receiveMove(req.gameId, req.position, move)
+    Future.successful(new MoveResponse(if (result) "SUCCESS" else "ERROR"))
   }
 
   // TODO: Add methods for registerPlayer, setBoard, setState

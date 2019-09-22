@@ -16,6 +16,7 @@ sealed trait DevelopmentCardUpdate extends UpdateMessage
 
 object UpdateMessage {
   case class StartGame[PLAYER <: Inventory[PLAYER]](gameId: GameId, state: GameState[PLAYER]) extends UpdateMessage
+  case class GameOver(gameId: GameId, msg: String) extends UpdateMessage
   case class TurnUpdate(gameId: GameId, playerId: Int, turnNumber: Int = 0) extends UpdateMessage
 
   case class MoveResultUpdate(gameId: GameId, moveResult: MoveResult) extends UpdateMessage

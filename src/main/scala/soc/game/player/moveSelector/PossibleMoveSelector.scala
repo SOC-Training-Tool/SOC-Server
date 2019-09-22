@@ -10,25 +10,25 @@ import scala.util.Random
 
 case class PossibleMoveSelector[T <: Inventory[T]](select: (GameState[T], Iterator[CatanMove]) => CatanMove) extends MoveSelector[PerfectInfo, T] {
 
-  override def initialPlacementMove(gameState: GameState[T], inventory: PerfectInfo, position: Int)(first: Boolean): Future[CatanMove] = {
+  override def initialPlacementMove(gameState: GameState[T], inventory: PerfectInfo, position: Int)(first: Boolean): CatanMove = {
     val moves = CatanPossibleMoves(gameState, inventory, position).getPossibleInitialPlacements(first).toIterator
-    Future.successful(select(gameState, moves))
+    select(gameState, moves)
   }
 
-  override def discardCardsMove(gameState: GameState[T], inventory: PerfectInfo, position: Int): Future[CatanMove] = {
+  override def discardCardsMove(gameState: GameState[T], inventory: PerfectInfo, position: Int): CatanMove = {
     val moves = CatanPossibleMoves(gameState, inventory, position).getPossibleDiscards().toIterator
-    Future.successful(select(gameState, moves))
+    select(gameState, moves)
   }
 
-  override def moveRobberAndStealMove(gameState: GameState[T], inventory: PerfectInfo, position: Int): Future[CatanMove] = {
+  override def moveRobberAndStealMove(gameState: GameState[T], inventory: PerfectInfo, position: Int): CatanMove = {
     val moves = CatanPossibleMoves(gameState, inventory, position).getPossibleRobberLocations.toIterator
-    Future.successful(select(gameState, moves))
+    select(gameState, moves)
 
   }
 
-  override def turnMove(gameState: GameState[T], inventory: PerfectInfo, position: Int): Future[CatanMove] = {
+  override def turnMove(gameState: GameState[T], inventory: PerfectInfo, position: Int): CatanMove = {
     val moves =  CatanPossibleMoves(gameState, inventory, position).getPossibleMovesForState.toIterator
-    Future.successful(select(gameState, moves))
+    select(gameState, moves)
   }
 }
 

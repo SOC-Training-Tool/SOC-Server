@@ -20,6 +20,7 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
 
   private[this] val gameObservers: HashMap[(String, Int), StreamObserver[GameUpdate]] = HashMap.empty
   private[this] val expectedResponses: HashMap[(String, Int), Promise[CatanMove]] = HashMap.empty
+  private [this] var lastRequest: HashMap[(String, Int), RequestMessage[GAME, PLAYER]] = HashMap.empty
 
   def numGames = gameObservers.size
 
@@ -33,6 +34,11 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
     //observer.onNext(new GameUpdate(Nil, moveResult.toString, position))
   }
 
+  def sendGameOver(gameId: GameId, position: Int, msg: String) {
+    val observer: StreamObserver[GameUpdate] = gameObservers.getOrElse((gameId.key, position), throw new Exception(""))
+    observer.onNext(GameUpdate(payload = "GAME OVER: " + msg, actionRequestedPlayers = Seq.empty[String]))
+  }
+
   def updateGameState(gameId: GameId, position: Int, moveResult: MoveResult): Unit = {
     val observer: StreamObserver[GameUpdate] = gameObservers.getOrElse((gameId.key, position), throw new Exception(""))
     observer.onNext(new GameUpdate(Nil, moveResult.toString, position))
@@ -40,8 +46,28 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
 
   def getMoveResponse(request: RequestMessage[GAME, PLAYER]): Future[CatanMove] = this.synchronized {
     val playerKey = (request.gameId.key, request.playerId)
+    lastRequest.put(playerKey, request)
 
-    // TODO These are just so the game can play. Once the client can response it will just be the _ case
+    val observer: StreamObserver[GameUpdate] = gameObservers.getOrElse(playerKey, throw new Exception(""))
+    // TODO pass state: request.toString
+    observer.onNext(new GameUpdate(Seq(name), request.getClass().toString().split("\\$")(1), request.playerId))
+
+    val responsePromise = Promise.apply[CatanMove]()
+    expectedResponses.put(playerKey, responsePromise)
+    responsePromise.future
+  }
+
+  def receiveMove(gameId: String, position: Int, move: CatanMove): Boolean = {
+    expectedResponses.get((gameId, position)).map(_.success(move))
+    val p = expectedResponses.remove((gameId, position))
+    p match {
+      case Some(p) => true
+      case None => false
+    }
+  }
+
+  def getLastRequestRandomMove(gameId: String, position: Int): CatanMove = this.synchronized {
+    val request = lastRequest.getOrElse((gameId, position), null)
     request match {
       case InitialPlacementRequest(gameId, state, inventory: PerfectInfo, position, first, _) =>
         randomMoveSelector.initialPlacementMove(state, inventory, position)(first)
@@ -51,20 +77,9 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
         randomMoveSelector.moveRobberAndStealMove(state, inventory, position)
       case MoveRequest(gameId, state: GameState[PLAYER], inventory: PerfectInfo, position, _) =>
         randomMoveSelector.turnMove(state, inventory, position)
-
       case _ =>
-        val observer: StreamObserver[GameUpdate] = gameObservers.getOrElse(playerKey, throw new Exception(""))
-        observer.onNext(new GameUpdate(Seq(name), request.toString, request.playerId))
-
-        val responsePromise = Promise.apply[CatanMove]()
-        expectedResponses.put(playerKey, responsePromise)
-        responsePromise.future
+        null
     }
-  }
-
-  def receiveMove(gameId: String, position: Int, move: CatanMove): Unit = {
-    expectedResponses.get((gameId, position)).map(_.success(move))
-    expectedResponses.remove((gameId, position))
   }
 
 //  def getInitialPlacementMove(gameId: GameId, position: Int, inventory: GAME, id: Int, first: Boolean): Future[CatanMove] = {
