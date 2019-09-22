@@ -6,7 +6,7 @@ import akka.actor.typed.ActorSystem
 import io.grpc.{Server, ServerBuilder}
 import io.grpc.stub.StreamObserver
 import soc.akka.{MoveResultProvider, RandomMoveResultProvider}
-import soc.game.{GameRules, RollDiceMove}
+import soc.game.{GameRules, RollDiceMove, CatanMove}
 import soc.game.board.{BaseBoardConfiguration, BaseCatanBoard}
 import soc.game.inventory.Inventory.{NoInfo, PerfectInfo}
 import soc.playerRepository.{PlayerContext, PlayerRepository}
@@ -116,15 +116,19 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
 
   override def move(req: MoveRequest) = this.synchronized  {
     val playerContext = games.get(req.gameId).flatMap(_.getPlayer(req.position)).getOrElse(throw new Exception(""))
-    val move = playerContext.getLastRequestRandomMove(req.gameId, req.position)
+    val move = if(req.action == "") playerContext.getLastRequestRandomMove(req.gameId, req.position) else translate(req.action)
     val result = playerContext.receiveMove(req.gameId, req.position, move)
     Future.successful(new MoveResponse(if (result) "SUCCESS" else "ERROR"))
   }
 
-  // TODO: Add methods for registerPlayer, setBoard, setState
-  // ie. The pattern should be to create a game, then configure the game how you want, then start.
-  // Note: We can create defaults so not every step has to be called every time
-  // Further, we can create parameterization on the CreateGameRequest, start=Boolean.
-  // This could allow a client to create and start a game with one call.
+  // TODO: Move this method somewhere generic
+  // Instead of taking a string, this should take an object defined in the gRPC schema
+  /**
+   * Takes a move object from the gRPC layer and translates it into a CatanMove object
+   **/
+  def translate(action: String): CatanMove = {
+      // TODO: Implement
+      return null
 
+  }
 }
