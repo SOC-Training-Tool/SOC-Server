@@ -7,14 +7,185 @@ service CatanServer {
   rpc CreateGame (CreateGameRequest) returns (CreateGameResponse) {}
   rpc StartGame (StartGameRequest) returns (StartGameResponse) {}
   // Subscribe to a game to recieve all its notifications
-  rpc Subscribe(SubscribeRequest) returns (stream GameUpdate) {}
-  rpc Move(MoveRequest) returns (MoveResponse) {}
+  rpc Subscribe(SubscribeRequest) returns (stream GameMessage) {}
+  rpc Move(Action) returns (MoveResponse) {}
 }
 
+message GameMessage {
+  oneof payload {
+    ActionRequest request = 1;
+    GameUpdate update = 2;
+    GameEvent event = 3;
+  }
+}
+
+message ActionRequest {
+  int32 position = 1;
+  enum ActionRequestType {
+    ACKNOWLEDGE_PING = 0;
+    ACKNOWLEDGE_START_GAME = 1;
+    PLACE_INITIAL_SETTLEMENT = 2;
+    START_TURN = 3;
+    BUILD_OR_TRADE_OR_PLAY_OR_PASS = 4;
+    MOVE_ROBBER = 5;
+    DISCARD = 6;
+    ACCEPT_OR_REJECT_TRADE = 7;
+    ACKNOWLEDGE_TRADE = 8;
+  }
+  ActionRequestType type = 2;
+}
+
+enum GameAction {
+  ROLL_DICE = 0;
+  MOVE_ROBBER_AND_STEAL = 1;
+  BUILD_ROAD = 2;
+  BUILD_SETTLEMENT = 3;
+  BUILD_CITY_BUILD = 4;
+  BUILD_DEVELOPMENT = 5;
+  ACTIVATE_KNIGHT = 6;
+  ACTIVATE_YEAR_OF_PLENTY= 7;
+  ACTIVATE_MONOPOLY = 8;
+  ACTIVATE_VICTORY_POINT = 9;
+  PROPOSE_TRADE = 10
+  PORT_TRADE = 11;
+  ACCEPT_TRADE = 12;
+  REJECT_TRADE = 13;
+  DISCARD = 14;
+}
+
+
+
 message GameUpdate {
-  repeated string action_requested_players = 1;
-  string payload = 2; // TODO: define a rich type
-  int32 position = 3;
+  int32 postition = 1;
+  GameAction action = 2;
+  oneof result {
+    int32 roll = 1;
+    MoverRobberAndStealResult move_robber_and_steal = 2;
+    VertexLocation vertex_location = 3;
+    EdgeLocation edge_location = 4;
+    repeatead EdgeLocation road_locations = 5;
+    HiddenResult card = 6;
+    Trade trade = 7;
+  }
+  oneof result {
+    DiceRoll dice_roll = 1;
+    MoveRobberAndSteal move_robber_and_steal = 3;
+    RoadBuild road_build = 3;
+    SettlementBuild settlement_build = 4;
+    CityBuilt city_build = 5;
+    DevelopmentCardPurchase development_card_purchase = 6;
+    KnightActivation knight_activation = 7;
+    YearOfPlentyActivation year_of_plenty_activation = 8;
+    MonopolyActivation monopoly_activation = 9;
+    VictoryPointActivation victory_point_activation = 10;
+    PortTrade port_trade = 11;
+    PlayerTrade player_trade = 12;
+  }
+}
+
+message ActionResult {
+  int32 roll = 1;
+  string hex = 2;
+  string vertex = 3;
+  string edge = 4;
+  repeated string edges = 5; // RoadBuilding
+  HiddenCard card = 6; // Steal, Build Dev Card
+  int32 other_player = 7; // Trade, Steal
+  repeated Resource ask = 8; // Propose Trade, Monoploy
+  repeated Resource give = 9; // Propose Trade
+  map<int32, ResourceTransaction> public_resource_transactions = 10;
+}
+
+message ResourceTransaction {
+  repeated Resource lose = 1;
+  repeated Resource gain = 2;
+}
+
+message DiceRoll {
+  int32 roll = 1;
+}
+
+message MoveRobberAndSteal {
+  string hex = 1;
+  int32 stolen_from_position = 2;
+  HiddenMessage card = 3;
+}
+
+message RoadBuild {
+  string vertex1 = 1;
+  string vertex2 = 2;
+}
+
+message SettlementBuild {
+  string vertex = 1;
+}
+
+message CityBuild {
+  string vertex1 = 1;
+}
+
+message DevelopmentCardPurchase {
+  HiddenMessage card = 1;
+}
+
+message KnightActivation {
+  string hex = 1;
+  int32 stolen_from_position = 2;
+  HiddenMessage card = 3;
+}
+
+message YearOfPlenetyActivation {
+  Resource resource1 = 1;
+  Resource resource2 = 2;
+}
+
+message MonoployActivation {
+  Resource resource = 1;
+}
+
+message RoadBuildingActivation {
+  string road1_vertex1 = 1;
+  string road1_vertex2 = 2;
+  string road2_vertex1 = 3;
+  string road2_vertex2 = 4;
+}
+
+message VictoryPointActivation {
+  // pass
+}
+
+message PortTrade {
+  repeated Resource send = 1;
+  repeated Resource receive = 2;
+}
+
+message PlayerTrade {
+  int32 trade_with_position = 1;
+  repeated Resource send = 2;
+  repeated Resource receive = 3;
+}
+
+message HiddenCard {
+  repeated int32 viewable_by_positions = 1;
+  string value = 2;
+}
+
+enum Resource {
+  CLAY = 0;
+  SHEEP = 1;
+  STONE = 2;
+  WHEAT = 3;
+  WOOD = 4;
+}
+
+// This would get broadcast when a player proposes a trade
+// Are there other 'events' that would get broadcast that don't impact state change?
+// Should this just be called TradeProposal? 
+// How do we handle counter proposals? 
+// What if in the future the AI can ask other players where they think it should place the Robber?
+// Another type of game event could be pausing the game?
+message GameEvent {
+
 }
 
 message SubscribeRequest {
@@ -22,9 +193,8 @@ message SubscribeRequest {
   string name = 2;
   string type = 3; // ie. PLAYER, OBSERVER TODO: See if there are enums
   int32 position = 4; // Optional, raises an exception if type = OBSERVER. If not supplied default to next open position.
+
 }
-
-
 
 // NOTE: for now there is no authentication,
 // we can handle it a layer up, or we can register players with tokens they have to pass
@@ -45,16 +215,13 @@ message CreateGameRequest {
   // Or an existing saved board state
   // Or even the strategies
   // It could also take settings about the game (like where to output the results)
-  // Should include game parameters such as game rules and number of players
   // maybe string status?
 }
-
 
 message CreateGameResponse {
   string game_id = 1;
 }
 
-//This should raise an exception if number of players needed for game have not subscribed
 message StartGameRequest {
   string game_id = 1;
 }
