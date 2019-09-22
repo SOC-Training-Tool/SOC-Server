@@ -10,7 +10,7 @@ import soc.game.{GameRules, RollDiceMove, CatanMove}
 import soc.game.board.{BaseBoardConfiguration, BaseCatanBoard}
 import soc.game.inventory.Inventory.{NoInfo, PerfectInfo}
 import soc.playerRepository.{PlayerContext, PlayerRepository}
-import soc.protos.game.{CatanServerGrpc, CreateGameRequest, CreateGameResponse, GameUpdate, MoveRequest, MoveResponse, StartGameRequest, StartGameResponse, SubscribeRequest}
+import soc.protos.game.{CatanServerGrpc, CreateGameRequest, CreateGameResponse, GameMessage, TakeActionRequest, MoveResponse, StartGameRequest, StartGameResponse, SubscribeRequest}
 import soc.storage.{GameId, SimulatedGame}
 
 import scala.collection.mutable.HashMap
@@ -101,7 +101,7 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
     Future.successful(reply)
   }
 
-  override def subscribe(req: SubscribeRequest, responseObserver: StreamObserver[GameUpdate]) = this.synchronized {
+  override def subscribe(req: SubscribeRequest, responseObserver: StreamObserver[GameMessage]) = this.synchronized {
     builders.get(req.gameId) match {
       case Some(gameContext) => {
         println("Registering listener " + req.name)
@@ -114,10 +114,10 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
     }
   }
 
-  override def move(req: MoveRequest) = this.synchronized  {
+  override def takeAction(req: TakeActionRequest) = this.synchronized  {
     val playerContext = games.get(req.gameId).flatMap(_.getPlayer(req.position)).getOrElse(throw new Exception(""))
-    val move = if(req.action == "") playerContext.getLastRequestRandomMove(req.gameId, req.position) else translate(req.action)
-    val result = playerContext.receiveMove(req.gameId, req.position, move)
+    //val move = if(req.action == "") playerContext.getLastRequestRandomMove(req.gameId, req.position) else translate(req.action)
+    val result = playerContext.receiveMove(req.gameId, req.position, null)
     Future.successful(new MoveResponse(if (result) "SUCCESS" else "ERROR"))
   }
 

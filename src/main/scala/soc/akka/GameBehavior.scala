@@ -20,7 +20,6 @@ import scala.util.{Failure, Success}
 import scala.concurrent.ExecutionContextExecutor
 import scala.collection.mutable.HashMap
 import io.grpc.stub.StreamObserver
-import soc.protos.game.GameUpdate
 import soc.akka.messages.GameMessage
 
 case class GameStateHolder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS]](

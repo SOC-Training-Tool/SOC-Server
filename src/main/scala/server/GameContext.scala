@@ -4,13 +4,13 @@ import akka.actor.typed.{ActorRef, ActorSystem}
 import io.grpc.stub.StreamObserver
 import soc.akka.GameBehavior
 import soc.akka.MoveResultProviderMessage.MoveResultProviderMessage
-import soc.akka.messages.{GameMessage, StateMessage}
+import soc.akka.messages.{GameMessage => AkkaGameMessage, StateMessage}
 import soc.game.{GameConfiguration, GameRules, GameState}
 import soc.game.board.{BaseBoardConfiguration, BaseCatanBoard, BoardConfiguration, BoardGenerator}
 import soc.game.inventory.{Inventory, InventoryHelperFactory}
 import soc.game.inventory.Inventory.{NoInfo, PerfectInfo}
 import soc.playerRepository.{PlayerContext, PlayerRepository}
-import soc.protos.game.GameUpdate
+import soc.protos.game.GameMessage
 import soc.storage.GameId
 
 import scala.collection.mutable.HashMap
@@ -59,10 +59,10 @@ case class GameBuilder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], B
   gameId: GameId,
   boardConfig: BOARD,
   moveResultProvider: ActorRef[MoveResultProviderMessage[GAME]],
-  moveRecorder: Option[ActorRef[GameMessage]],
+  moveRecorder: Option[ActorRef[AkkaGameMessage]],
   gameRules: GameRules,
   numPlayers: Int,
-  subscribers: Map[String, (Option[Int], StreamObserver[GameUpdate])] = Map.empty)
+  subscribers: Map[String, (Option[Int], StreamObserver[GameMessage])] = Map.empty)
   (implicit
     playerRepo: PlayerRepository,
     random: Random,
@@ -70,7 +70,7 @@ case class GameBuilder[GAME <: Inventory[GAME], PLAYERS <: Inventory[PLAYERS], B
     playersInventoryHelperFactory: InventoryHelperFactory[PLAYERS],
     boardGenerator: BoardGenerator[BOARD]) {
 
-  def subscribePlayer(playerId: String, position: Option[Int], observer: StreamObserver[GameUpdate]): GameBuilder[GAME, PLAYERS, BOARD] = this.synchronized {
+  def subscribePlayer(playerId: String, position: Option[Int], observer: StreamObserver[GameMessage]): GameBuilder[GAME, PLAYERS, BOARD] = this.synchronized {
     copy(subscribers = (subscribers + (playerId -> (position, observer))))
   }
 
@@ -110,7 +110,7 @@ object GameContext {
     gameId: GameId,
     boardConfig: BOARD,
     moveResultProvider: ActorRef[MoveResultProviderMessage[GAME]],
-    moveRecorder: Option[ActorRef[GameMessage]],
+    moveRecorder: Option[ActorRef[AkkaGameMessage]],
     gameRules: GameRules,
     numPlayers: Int = 4)
     (implicit playerRepo: PlayerRepository,
