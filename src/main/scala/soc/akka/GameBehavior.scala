@@ -55,8 +55,6 @@ object GameBehavior {
     context.log.info(s"Starting Game ${config.gameId.key}")
     playerRefs.foreach{ case (pos, p) => p ! StartGame(config.gameId, config.initStates.playerStates(pos)) }
 
-
-    println("HERE")
     // Send first request for first player's initial placement
     context.ask[RequestMessage[GAME, PLAYERS], MoveResponse](playerRefs(firstPlayerId)) { ref =>
       InitialPlacementRequest(config.gameId,
@@ -109,8 +107,7 @@ object GameBehavior {
         val winMsg = s"Player ${winner.get.position} has won game ${config.gameId} with ${winner.get.points} points and ${states.gameState.diceRolls} rolls ${states.gameState.players.getPlayers.map(p => (p.position, p.points))}"
         context.log.info(winMsg)
         context.log.debug(s"${winner.get}")
-        val update = GameUpdate(payload = "GAME OVER: " + winMsg, actionRequestedPlayers = Seq.empty[String])
-        //subscribers.values.foreach(subscriber => subscriber.onNext(update))
+        playerRefs.values.foreach(_ ! GameOver(config.gameId, winMsg))
         Behaviors.stopped
 
       case StateMessage(states, MoveResponse(player, move)) =>

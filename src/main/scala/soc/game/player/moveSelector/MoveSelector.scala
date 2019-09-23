@@ -10,12 +10,12 @@ import scala.concurrent.Future
 
 trait MoveSelector[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]] {
 
-  def initialPlacementMove(gameState: GameState[PLAYER], inventory: GAME, position: Int)(first: Boolean): Future[CatanMove]
+  def initialPlacementMove(gameState: GameState[PLAYER], inventory: GAME, position: Int)(first: Boolean): CatanMove
 
-  def discardCardsMove(gameState: GameState[PLAYER],inventory: GAME, position: Int): Future[CatanMove]
+  def discardCardsMove(gameState: GameState[PLAYER],inventory: GAME, position: Int): CatanMove
 
-  def moveRobberAndStealMove(gameState: GameState[PLAYER],inventory: GAME, position: Int): Future[CatanMove]
+  def moveRobberAndStealMove(gameState: GameState[PLAYER],inventory: GAME, position: Int): CatanMove
 
-  def turnMove(gameState: GameState[PLAYER],inventory: GAME, position: Int): Future[CatanMove]
+  def turnMove(gameState: GameState[PLAYER],inventory: GAME, position: Int): CatanMove
 
 }
