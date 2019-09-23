@@ -59,11 +59,7 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
 
   def receiveMove(gameId: String, position: Int, move: CatanMove): Boolean = {
     expectedResponses.get((gameId, position)).map(_.success(move))
-    val p = expectedResponses.remove((gameId, position))
-    p match {
-      case Some(p) => true
-      case None => false
-    }
+    expectedResponses.remove((gameId, position)).isDefined
   }
 
   def getLastRequestRandomMove(gameId: String, position: Int): CatanMove = this.synchronized {
