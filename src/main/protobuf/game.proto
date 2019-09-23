@@ -39,7 +39,7 @@ enum GameAction {
   BUILD_ROAD = 3;
   BUILD_SETTLEMENT = 4;
   BUILD_CITY = 5;
-  BUILD_DEVELOPMENT = 6;
+  BUILD_DEVELOPMENT_CARD = 6;
   ACTIVATE_KNIGHT = 7;
   ACTIVATE_ROAD_BUILDING = 8;
   ACTIVATE_YEAR_OF_PLENTY= 9;
@@ -64,11 +64,16 @@ message GameEvent {
 message ActionSpecification {
   string hex = 2;
   string vertex = 3;
-  string edge = 4;
-  repeated string edges = 5; // Road Building
+  Edge edge = 4;
+  repeated Edge edges = 5; // Road Building
   int32 other_player_position = 7; // Trade, Steal
   repeated Resource ask = 8; // Trade, Monopoly
   repeated Resource give = 9; // Trade, Discard
+}
+
+message Edge {
+  string v1 = 1;
+  string v2 = 2;
 }
 
 message ActionResult {
@@ -78,13 +83,13 @@ message ActionResult {
 }
 
 message ResourceTransaction {
-  repeated Resource lose = 1;
-  repeated Resource gain = 2;
+  repeated Resource gain = 1;
+  repeated Resource lose = 2;
 }
 
 message HiddenCard {
   repeated int32 viewable_by_positions = 1;
-  string value = 2;
+  string encrypted_name = 2; // One of: "CLAY", "SHEEP", "STONE", "WHEAT", "WOOD", "KNIGHT", "VICTORY_POINT", "MONOPOLY", "YEAR_OF_PLENTY", "ROAD_BUILDING"
 }
 
 enum Resource {
@@ -109,14 +114,6 @@ message SubscribeRequest {
   int32 position = 4; // Optional, raises an exception if type = OBSERVER. If not supplied default to next open position.
 }
 
-// NOTE: for now there is no authentication,
-// we can handle it a layer up, or we can register players with tokens they have to pass
-message MoveRequest {
-  string game_id = 1;
-  int32 position = 2; 
-  // We can create an action schema
-  string action = 3;
-}
 
 message MoveResponse {
   // We can make this response richer

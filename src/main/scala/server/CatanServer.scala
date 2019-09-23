@@ -115,9 +115,11 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
   }
 
   override def takeAction(req: TakeActionRequest) = this.synchronized  {
+    println("Take Action: " + req.action + " player: " + req.position)
     val playerContext = games.get(req.gameId).flatMap(_.getPlayer(req.position)).getOrElse(throw new Exception(""))
-    //val move = if(req.action == "") playerContext.getLastRequestRandomMove(req.gameId, req.position) else translate(req.action)
-    val result = playerContext.receiveMove(req.gameId, req.position, null)
+    // TODO: Actually parse the Action Request
+    val move = playerContext.getLastRequestRandomMove(req.gameId, req.position)
+    val result = playerContext.receiveMove(req.gameId, req.position, move)
     Future.successful(new MoveResponse(if (result) "SUCCESS" else "ERROR"))
   }
 
