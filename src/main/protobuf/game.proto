@@ -9,6 +9,17 @@ service CatanServer {
   rpc TakeAction(TakeActionRequest) returns (MoveResponse) {}
 }
 
+/**
+ * A GameMessage is the datum streamed from the Catan game server to all subscribers (genearlly players)
+ * The GameMessage comes in one of two flavors. Either it is an ActionRequest or a GameEvent.
+ * An ActionRequest specifies the player which should perform an action and what type of action.
+ * The GameEvent reflects the result of an action taken by a player, or otherwise an update from the server to players.
+ * For example, proposing a trade is a GameEvent, even though no game state has changed.
+ * Similarly, notifying players the game has started or ended is a GameEvent (even though no game state has changed).
+ * Further examples of "stateless" changes are turns ending or a roll on which no player picks up resources.
+ * More typical of a GameEvent, is a corresponding state change. In these cases, the result field of the GameEvent will be populated.
+ * In nearly all cases, the GameEvent is directly triggered by a TakeActionRequest.
+ */
 message GameMessage {
   oneof payload {
     ActionRequest request = 1;
@@ -16,10 +27,13 @@ message GameMessage {
   }
 }
 
+/**
+ * GameMessage targeted at a specific player, telling that player a specific action is requested.
+ **/
 message ActionRequest {
   int32 position = 1;
   enum ActionRequestType {
-    ACTION_REQUEST_TYPE_NONE = 0;
+    ACTION_REQUEST_TYPE_NONE = 0; // Best Practice: start enums with a default 0
     ACKNOWLEDGE_PING = 1;
     ACKNOWLEDGE_START_GAME = 2;
     PLACE_INITIAL_SETTLEMENT = 3;
@@ -31,10 +45,19 @@ message ActionRequest {
     ACKNOWLEDGE_TRADE = 9;
   }
   ActionRequestType type = 2;
+  // TODO: This object should probably also contian the game state
 }
 
+/**
+ * The GameAction enum specifies all possible actions a player might take.
+ * It is used both in the TakeAction RPC, but also in the GameEvent response.
+ * In fact, the general pattern for a GameEvent is to pipe through the TakeAction specification into a GameEvent response.
+ * For example:
+ * TakeAction(TakeActionRequest{game_id: 1, position: 3, action: ROLL_DICE}) --> GameEvent{position: 3, action: ROLL_DICE, result: {roll: 8}}
+ * Notice the same action is used to specify the request and is then echoed back in the response.
+ **/
 enum GameAction {
-  GAME_ACTION_NONE = 0;
+  GAME_ACTION_NONE = 0; // Best Practice: start enum with default 0
   INITIAL_PLACEMENT = 1;
   ROLL_DICE = 2;
   MOVE_ROBBER_AND_STEAL = 3;
@@ -53,24 +76,102 @@ enum GameAction {
   REJECT_TRADE = 16;
   DISCARD = 17;
   END_TURN = 18;
-  ACKNOWLEDGE = 19;
+  // Should we have a seperate way of acknowleding game start vs akcnowledging a trade vs acknowleding a ping?
+  // Should we add another rpc call for acknowledge other than TakeAction?
+  ACKNOWLEDGE = 19; 
 }
 
+/**
+ * Encapsulates a GameEvent response from the Catan game server.
+ * All fields are optional (leaving the action blank will default it to the enum value 0 GAME_ACTION_NONE).
+ * Depending on the type of action, different combinations of fields will be specified.
+ * Examples:
+ * GameEvent {
+ *   position:-1, 
+ *   action: GAME_ACTION_NONE,
+ *   specification: null,
+ *   result: null,
+ *   message: "GAME END"
+ *  }
+ * GameEvent {
+ *   position: 2
+ *   action: MOVE_ROBBER_AND_STEAL,
+ *   specification: {hex: B4, other_player_position: 1},
+ *   result: {card: HiddenCard{ viewable_by_positions: [1, 2], encrypted_name: "askdgi4858fjmcd39932"}},
+ *   message: null
+ * }
+ * GameEvent {
+ *   position: 2
+ *   action: ACTIVATE_MONOPOLY,
+ *   specification: {ask: ORE},
+ *   result: {resources_transacted: {
+ *     1: {gain: [], lose: [ORE, ORE, ORE, ORE]},
+ *     2: {gain: [ORE, ORE, ORE, ORE, ORE, ORE], lose: []},
+ *     3: {gain: [], lose: [ORE, ORE]},
+ *     4: {gain: [] lose: []},
+ *   message: null
+ * }
+ * GameEvent {
+ *   position: 3, 
+ *   action: BUILD_CITY,
+ *   specification: {vertex: B4R},
+ *   result: {resources_transacted: {
+ *     1: {gain: [], lose: []},
+ *     2: {gain: [], lose: []},
+ *     3: { gain: [], lose: [ORE, ORE, ORE, WHEAT, WHEAT]},
+ *     4: {gain: [] lose: []},
+ *   message: null
+ *  }
+ * Important to note, is that multiple actions are able to recycle specification.
+ * For example, BUILD_CITY and BUILD_ROAD have the same specification.
+ * Similarly proposing a trade, making a trade, playing a monopoly or a year of plenty
+ * all take advantage of one or both of the `ask` and `give` fields in the ActionSpecification.
+ **/
 message GameEvent {
-  int32 position = 1;
+  int32 position = 1; // Player positions on the server need to be 1 not 0 based, so 0 can indicate no position, or we can pass -1
   GameAction action = 2;
   ActionSpecification specification = 3;
   ActionResult result = 4;
   string message = 5;
 }
 
+/**
+ * Defines the action a player wants to make.
+ * Is used both in the TakeAction RPC and in the GameEvent response.
+ * Of note, like the GameAction enum, the ActionSpecification object used in the TaekAction RPC
+ * is directly piped through into the GameEvent response.
+ * The GameEvent response might optionally also inlcude a result.
+ * For more inforamtion see GameEvent.
+ * Depending on the action being taken, different combinations of the below fields will be specified.
+ * See mapping below:
+ * GAME_ACTION_NONE --> No Action Spec
+ * INITIAL_PLACEMENT --> vertex, edge
+ * ROLL_DICE --> No Action Spec
+ * MOVE_ROBBER_AND_STEAL --> hex, other_player
+ * BUILD_ROAD --> edge
+ * BUILD_SETTLEMENT --> vertex
+ * BUILD_CITY --> vertex
+ * BUILD_DEVELOPMENT_CARD --> No Action Spec
+ * ACTIVATE_KNIGHT --> hex, other_player
+ * ACTIVATE_ROAD_BUILDING --> edges
+ * ACTIVATE_YEAR_OF_PLENTY --> ask
+ * ACTIVATE_MONOPOLY --> ask
+ * ACTIVATE_VICTORY_POINT --> No Action Spec
+ * PROPOSE_TRADE --> ask, give
+ * PORT_TRADE --> ask, give
+ * ACCEPT_TRADE --> ask, give
+ * REJECT_TRADE --> ask, give
+ * DISCARD --> give
+ * END_TURN --> No Action Spec
+ * ACKNOWLEDGE --> No Action Spec
+ **/
 message ActionSpecification {
   string hex = 2;
   string vertex = 3;
   Edge edge = 4;
   repeated Edge edges = 5; // Road Building
   int32 other_player_position = 7; // Trade, Steal
-  repeated Resource ask = 8; // Trade, Monopoly
+  repeated Resource ask = 8; // Trade, Monopoly, Year of Plenty
   repeated Resource give = 9; // Trade, Discard
 }
 
@@ -79,10 +180,21 @@ message Edge {
   string v2 = 2;
 }
 
+/**
+ * Specifies the result of a TakeAction RPC call.
+ * Used as a subfield of the GameEvent response.
+ * Dependingon the GameAction, there is a different payload, as specified in the mapping below
+ * GAME_ACTION_NONE, INITIAL_PLACEMENT, ACTIVATE_VICTORY_POINT, PROPOSE_TRADE, REJECT_TRADE, END_TURN, ACKNOWLEDGE   --> No Action Result
+ * ROLL_DICE --> roll, resources_transacted
+ * MOVE_ROBBER_AND_STEAL,   ACTIVATE_KNIGHT --> HiddenCard
+ * BUILD_ROAD, BUILD_SETTLEMENT, BUILD_CITY, BUILD_DEVELOPMENT_CARD,  ACTIVATE_ROAD_BUILDING, ACTIVATE_YEAR_OF_PLENTY, ACTIVATE_MONOPOLY, PORT_TRADE, ACCEPT_TRADE,  DISCARD --> resources_transacted
+ * For more information, see GameEvent
+ **/
 message ActionResult {
+  // TODO: I think this should be a 'oneof' is there any action that might include multiple of these fields as its result?
   int32 roll = 1;
   HiddenCard card = 2;
-  map<int32, ResourceTransaction> resources_transacted = 3;
+  map<int32, ResourceTransaction> resources_transacted = 3; // Only shows publically transacted resources
 }
 
 message ResourceTransaction {
@@ -90,13 +202,20 @@ message ResourceTransaction {
   repeated Resource lose = 2;
 }
 
+/**
+ * Specifies a card that exchanged hands via a steal or a newly drawn development card.
+ * In both cases, there are only certain players that can see this card.
+ * Those player positions are specified, and the name of the card is encrypted using those clients' keys.
+ * Note: Usually resources and development cards are specified as an enum, in this case they are not.
+ * The client will have to map the string to the enum value. 
+ **/
 message HiddenCard {
   repeated int32 viewable_by_positions = 1;
   string encrypted_name = 2; // One of: "BRICK", "ORE", "SHEEP", "WHEAT", "WOOD", "KNIGHT", "VICTORY_POINT", "MONOPOLY", "YEAR_OF_PLENTY", "ROAD_BUILDING"
 }
 
 enum Resource {
-  RESOURCE_NONE = 0;
+  RESOURCE_NONE = 0; // Best Practice: start enum with default 0
   BRICK = 1;
   ORE = 2;
   SHEEP = 3;
@@ -104,6 +223,11 @@ enum Resource {
   WOOD = 5;
 }
 
+/**
+ * Specifies the action a player woiuld like to take.
+ * Must include an action field, and certain action require a specification.
+ * For more details see GameAction and ActionSpecification.
+ **/
 message TakeActionRequest {
   string game_id = 1;
   int32 position = 2;
