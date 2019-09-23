@@ -36,7 +36,7 @@ import soc.protos.game.ActionRequest.ActionRequestType
 class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val name: String) {
 
   val randomMoveSelector = PossibleMoveSelector.randSelector[PLAYER](new Random)
-  val resourceMap = HashMap(("Brick", Resource.CLAY), ("Ore", Resource.STONE), ("Sheep", Resource.SHEEP), ("Wheat", Resource.WHEAT), ("Wood", Resource.WOOD))  
+  val resourceMap = HashMap(("Brick", Resource.BRICK), ("Ore", Resource.ORE), ("Sheep", Resource.SHEEP), ("Wheat", Resource.WHEAT), ("Wood", Resource.WOOD))  
 
   private[this] val gameObservers: HashMap[(String, Int), StreamObserver[GameMessage]] = HashMap.empty
   private[this] val expectedResponses: HashMap[(String, Int), Promise[CatanMove]] = HashMap.empty
@@ -62,38 +62,23 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
   def updateGameState(gameId: GameId, position: Int, moveResult: MoveResult): Unit = {
     val observer: StreamObserver[GameMessage] = gameObservers.getOrElse((gameId.key, position), throw new Exception(""))
     var event = getEvent(position, moveResult)
-    println(event)
     observer.onNext(new GameMessage().withEvent(event));
   }
 
   def getMoveResponse(request: RequestMessage[GAME, PLAYER]): Future[CatanMove] = this.synchronized {
-    println("Move request: " + request.playerId)
     val playerKey = (request.gameId.key, request.playerId)
     lastRequest.put(playerKey, request)
 
     val observer: StreamObserver[GameMessage] = gameObservers.getOrElse(playerKey, throw new Exception(""))
     // TODO pass state
-    val action = getActionRequestType(request)
-    observer.onNext(new GameMessage().withRequest(ActionRequest(request.playerId, action)))
+    observer.onNext(new GameMessage().withRequest(ActionRequest(request.playerId, getActionRequestType(request))))
 
-    request match {
-      case InitialPlacementRequest(gameId, state, inventory: PerfectInfo, position, first, _) =>
-        Future.successful(randomMoveSelector.initialPlacementMove(state, inventory, position)(first))
-      case DiscardCardRequest(gameId, state: GameState[PLAYER], inventory: PerfectInfo, position, _) =>
-        Future.successful(randomMoveSelector.discardCardsMove(state, inventory, position))
-      case MoveRobberRequest(gameId, state: GameState[PLAYER], inventory: PerfectInfo, position, _) =>
-        Future.successful(randomMoveSelector.moveRobberAndStealMove(state, inventory, position))
-      case MoveRequest(gameId, state: GameState[PLAYER], inventory: PerfectInfo, position, _) =>
-        Future.successful((randomMoveSelector.turnMove(state, inventory, position)))
-      case _ =>
-        val responsePromise = Promise.apply[CatanMove]()
-        expectedResponses.put(playerKey, responsePromise)
-        responsePromise.future
-    }
+    val responsePromise = Promise.apply[CatanMove]()
+    expectedResponses.put(playerKey, responsePromise)
+    responsePromise.future
   }
 
   def receiveMove(gameId: String, position: Int, move: CatanMove): Boolean = {
-    println(move)
     expectedResponses.get((gameId, position)).map(_.success(move))
     expectedResponses.remove((gameId, position)).isDefined
   }
@@ -169,7 +154,6 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
     val resources: mutable.ListBuffer[Resource] = mutable.ListBuffer()
     resourceSet.amountMap.foreach({ case (res, amt) =>
         for (i <- 0 to amt) {
-          println(res.name)
           resources += resourceMap.getOrElse(res.name, null)
         } 
     })

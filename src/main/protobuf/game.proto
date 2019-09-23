@@ -19,38 +19,41 @@ message GameMessage {
 message ActionRequest {
   int32 position = 1;
   enum ActionRequestType {
-    ACKNOWLEDGE_PING = 0;
-    ACKNOWLEDGE_START_GAME = 1;
-    PLACE_INITIAL_SETTLEMENT = 2;
-    START_TURN = 3;
-    BUILD_OR_TRADE_OR_PLAY_OR_PASS = 4;
-    MOVE_ROBBER = 5;
-    DISCARD = 6;
-    ACCEPT_OR_REJECT_TRADE = 7;
-    ACKNOWLEDGE_TRADE = 8;
+    ACTION_REQUEST_TYPE_NONE = 0;
+    ACKNOWLEDGE_PING = 1;
+    ACKNOWLEDGE_START_GAME = 2;
+    PLACE_INITIAL_SETTLEMENT = 3;
+    START_TURN = 4;
+    BUILD_OR_TRADE_OR_PLAY_OR_PASS = 5;
+    MOVE_ROBBER = 6;
+    DISCARD = 7;
+    ACCEPT_OR_REJECT_TRADE = 8;
+    ACKNOWLEDGE_TRADE = 9;
   }
   ActionRequestType type = 2;
 }
 
 enum GameAction {
-  INITIAL_PLACEMENT = 0;
-  ROLL_DICE = 1;
-  MOVE_ROBBER_AND_STEAL = 2;
-  BUILD_ROAD = 3;
-  BUILD_SETTLEMENT = 4;
-  BUILD_CITY = 5;
-  BUILD_DEVELOPMENT_CARD = 6;
-  ACTIVATE_KNIGHT = 7;
-  ACTIVATE_ROAD_BUILDING = 8;
-  ACTIVATE_YEAR_OF_PLENTY= 9;
-  ACTIVATE_MONOPOLY = 10;
-  ACTIVATE_VICTORY_POINT = 11;
-  PROPOSE_TRADE = 12;
-  PORT_TRADE = 13;
-  ACCEPT_TRADE = 14;
-  REJECT_TRADE = 15;
-  DISCARD = 16;
-  END_TURN = 17;
+  GAME_ACTION_NONE = 0;
+  INITIAL_PLACEMENT = 1;
+  ROLL_DICE = 2;
+  MOVE_ROBBER_AND_STEAL = 3;
+  BUILD_ROAD = 4;
+  BUILD_SETTLEMENT = 5;
+  BUILD_CITY = 6;
+  BUILD_DEVELOPMENT_CARD = 7;
+  ACTIVATE_KNIGHT = 8;
+  ACTIVATE_ROAD_BUILDING = 9;
+  ACTIVATE_YEAR_OF_PLENTY= 10;
+  ACTIVATE_MONOPOLY = 11;
+  ACTIVATE_VICTORY_POINT = 12;
+  PROPOSE_TRADE = 13;
+  PORT_TRADE = 14;
+  ACCEPT_TRADE = 15;
+  REJECT_TRADE = 16;
+  DISCARD = 17;
+  END_TURN = 18;
+  ACKNOWLEDGE = 19;
 }
 
 message GameEvent {
@@ -89,15 +92,16 @@ message ResourceTransaction {
 
 message HiddenCard {
   repeated int32 viewable_by_positions = 1;
-  string encrypted_name = 2; // One of: "CLAY", "SHEEP", "STONE", "WHEAT", "WOOD", "KNIGHT", "VICTORY_POINT", "MONOPOLY", "YEAR_OF_PLENTY", "ROAD_BUILDING"
+  string encrypted_name = 2; // One of: "BRICK", "ORE", "SHEEP", "WHEAT", "WOOD", "KNIGHT", "VICTORY_POINT", "MONOPOLY", "YEAR_OF_PLENTY", "ROAD_BUILDING"
 }
 
 enum Resource {
-  CLAY = 0;
-  SHEEP = 1;
-  STONE = 2;
-  WHEAT = 3;
-  WOOD = 4;
+  RESOURCE_NONE = 0;
+  BRICK = 1;
+  ORE = 2;
+  SHEEP = 3;
+  WHEAT = 4;
+  WOOD = 5;
 }
 
 message TakeActionRequest {
