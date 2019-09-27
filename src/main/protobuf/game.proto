@@ -33,16 +33,15 @@ message GameMessage {
 message ActionRequest {
   int32 position = 1;
   enum ActionRequestType {
-    ACTION_REQUEST_TYPE_NONE = 0; // Best Practice: start enums with a default 0
-    ACKNOWLEDGE_PING = 1;
-    ACKNOWLEDGE_START_GAME = 2;
-    PLACE_INITIAL_SETTLEMENT = 3;
-    START_TURN = 4;
-    BUILD_OR_TRADE_OR_PLAY_OR_PASS = 5;
-    MOVE_ROBBER = 6;
-    DISCARD = 7;
-    ACCEPT_OR_REJECT_TRADE = 8;
-    ACKNOWLEDGE_TRADE = 9;
+    ACKNOWLEDGE_PING = 0;
+    ACKNOWLEDGE_START_GAME = 1;
+    PLACE_INITIAL_SETTLEMENT = 2;
+    START_TURN = 3;
+    BUILD_OR_TRADE_OR_PLAY_OR_PASS = 4;
+    MOVE_ROBBER = 5;
+    DISCARD = 6;
+    ACCEPT_OR_REJECT_TRADE = 7;
+    ACKNOWLEDGE_TRADE = 8;
   }
   ActionRequestType type = 2;
   // TODO: This object should probably also contian the game state
@@ -57,7 +56,7 @@ message ActionRequest {
  * Notice the same action is used to specify the request and is then echoed back in the response.
  **/
 enum GameAction {
-  GAME_ACTION_NONE = 0; // Best Practice: start enum with default 0
+  GAME_ACTION_NONE = 0;
   INITIAL_PLACEMENT = 1;
   ROLL_DICE = 2;
   MOVE_ROBBER_AND_STEAL = 3;
@@ -69,16 +68,15 @@ enum GameAction {
   ACTIVATE_ROAD_BUILDING = 9;
   ACTIVATE_YEAR_OF_PLENTY= 10;
   ACTIVATE_MONOPOLY = 11;
-  ACTIVATE_VICTORY_POINT = 12;
-  PROPOSE_TRADE = 13;
-  PORT_TRADE = 14;
-  ACCEPT_TRADE = 15;
-  REJECT_TRADE = 16;
-  DISCARD = 17;
-  END_TURN = 18;
+  PROPOSE_TRADE = 12;
+  PORT_TRADE = 13;
+  ACCEPT_TRADE = 14;
+  REJECT_TRADE = 15;
+  DISCARD = 16;
+  END_TURN = 17;
   // Should we have a seperate way of acknowleding game start vs akcnowledging a trade vs acknowleding a ping?
   // Should we add another rpc call for acknowledge other than TakeAction?
-  ACKNOWLEDGE = 19; 
+  ACKNOWLEDGE = 18; 
 }
 
 /**
@@ -147,16 +145,15 @@ message GameEvent {
  * GAME_ACTION_NONE --> No Action Spec
  * INITIAL_PLACEMENT --> vertex, edge
  * ROLL_DICE --> No Action Spec
- * MOVE_ROBBER_AND_STEAL --> hex, other_player
+ * MOVE_ROBBER_AND_STEAL --> hex, other_player (optional)
  * BUILD_ROAD --> edge
  * BUILD_SETTLEMENT --> vertex
  * BUILD_CITY --> vertex
  * BUILD_DEVELOPMENT_CARD --> No Action Spec
  * ACTIVATE_KNIGHT --> hex, other_player
- * ACTIVATE_ROAD_BUILDING --> edges
+ * ACTIVATE_ROAD_BUILDING --> edges OR edge
  * ACTIVATE_YEAR_OF_PLENTY --> ask
  * ACTIVATE_MONOPOLY --> ask
- * ACTIVATE_VICTORY_POINT --> No Action Spec
  * PROPOSE_TRADE --> ask, give
  * PORT_TRADE --> ask, give
  * ACCEPT_TRADE --> ask, give
@@ -184,14 +181,28 @@ message Edge {
  * Specifies the result of a TakeAction RPC call.
  * Used as a subfield of the GameEvent response.
  * Dependingon the GameAction, there is a different payload, as specified in the mapping below
- * GAME_ACTION_NONE, INITIAL_PLACEMENT, ACTIVATE_VICTORY_POINT, PROPOSE_TRADE, REJECT_TRADE, END_TURN, ACKNOWLEDGE   --> No Action Result
+ * GAME_ACTION_NONE --> No Action Result
+ * INITIAL_PLACEMENT --> No Action Result
  * ROLL_DICE --> roll, resources_transacted
- * MOVE_ROBBER_AND_STEAL,   ACTIVATE_KNIGHT --> HiddenCard
- * BUILD_ROAD, BUILD_SETTLEMENT, BUILD_CITY, BUILD_DEVELOPMENT_CARD,  ACTIVATE_ROAD_BUILDING, ACTIVATE_YEAR_OF_PLENTY, ACTIVATE_MONOPOLY, PORT_TRADE, ACCEPT_TRADE,  DISCARD --> resources_transacted
+ * MOVE_ROBBER_AND_STEAL --> card
+ * BUILD_ROAD --> resources_transacted
+ * BUILD_SETTLEMENT --> resources_transacted
+ * BUILD_CITY --> resources_transacted
+ * BUILD_DEVELOPMENT_CARD --> resources_transacted
+ * ACTIVATE_KNIGHT --> card
+ * ACTIVATE_ROAD_BUILDING --> No Action Result
+ * ACTIVATE_YEAR_OF_PLENTY --> resources_transacted
+ * ACTIVATE_MONOPOLY --> resources_transacted
+ * PROPOSE_TRADE --> No Action Result
+ * PORT_TRADE --> resources_transacted
+ * ACCEPT_TRADE --> resources_transacted
+ * REJECT_TRADE --> No Action Result
+ * DISCARD --> resources_transacted
+ * END_TURN --> No Action Result
+ * ACKNOWLEDGE --> N/A
  * For more information, see GameEvent
  **/
 message ActionResult {
-  // TODO: I think this should be a 'oneof' is there any action that might include multiple of these fields as its result?
   int32 roll = 1;
   HiddenCard card = 2;
   map<int32, ResourceTransaction> resources_transacted = 3; // Only shows publically transacted resources
@@ -205,22 +216,34 @@ message ResourceTransaction {
 /**
  * Specifies a card that exchanged hands via a steal or a newly drawn development card.
  * In both cases, there are only certain players that can see this card.
- * Those player positions are specified, and the name of the card is encrypted using those clients' keys.
- * Note: Usually resources and development cards are specified as an enum, in this case they are not.
- * The client will have to map the string to the enum value. 
+ * The players who can see the card are specified via the viewable_by_positions field.
+ * Players in this array will see the corresponding resource or development card
+ * All other players will receive `null` in the payload field
  **/
 message HiddenCard {
   repeated int32 viewable_by_positions = 1;
-  string encrypted_name = 2; // One of: "BRICK", "ORE", "SHEEP", "WHEAT", "WOOD", "KNIGHT", "VICTORY_POINT", "MONOPOLY", "YEAR_OF_PLENTY", "ROAD_BUILDING"
+  oneof payload {
+    Resource resource = 2;
+    DevelopmentCard development_card = 3;
+  }
 }
 
 enum Resource {
-  RESOURCE_NONE = 0; // Best Practice: start enum with default 0
+  RESOURCE_NONE = 0;
   BRICK = 1;
   ORE = 2;
   SHEEP = 3;
   WHEAT = 4;
   WOOD = 5;
+}
+
+enum DevelopmentCard {
+  DEVELOPMENT_CARD_NONE = 0;
+  KNIGHT = 1;
+  VICTORY_POINT = 2;
+  YEAR_OF_PLENTY = 3;
+  ROAD_BUILDING = 4;
+  MONOPOLY = 5;
 }
 
 /**
