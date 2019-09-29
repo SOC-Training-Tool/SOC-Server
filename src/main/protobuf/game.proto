@@ -30,7 +30,7 @@ message GameMessage {
 /**
  * GameMessage targeted at a specific player, telling that player a specific action is requested.
  **/
-message ActionRequest {
+ message ActionRequest {
   int32 position = 1;
   enum ActionRequestType {
     ACKNOWLEDGE_PING = 0;
@@ -40,8 +40,9 @@ message ActionRequest {
     BUILD_OR_TRADE_OR_PLAY_OR_PASS = 4;
     MOVE_ROBBER = 5;
     DISCARD = 6;
-    ACCEPT_OR_REJECT_TRADE = 7;
-    ACKNOWLEDGE_TRADE = 8;
+    EVALUATE_TRADE = 7;
+    COUNTER_OR_ACKNOWLEDGE_TRADE = 8;
+    PROPOSE_TRADE_OR_PASS = 9;
   }
   ActionRequestType type = 2;
   // TODO: This object should probably also contian the game state
@@ -74,8 +75,6 @@ enum GameAction {
   REJECT_TRADE = 15;
   DISCARD = 16;
   END_TURN = 17;
-  // Should we have a seperate way of acknowleding game start vs akcnowledging a trade vs acknowleding a ping?
-  // Should we add another rpc call for acknowledge other than TakeAction?
   ACKNOWLEDGE = 18; 
 }
 
@@ -94,7 +93,7 @@ enum GameAction {
  * GameEvent {
  *   position: 2
  *   action: MOVE_ROBBER_AND_STEAL,
- *   specification: {hex: B4, other_player_position: 1},
+ *   specification: {hex: B4, other_player_positions: [1]},
  *   result: {card: HiddenCard{ viewable_by_positions: [1, 2], encrypted_name: "askdgi4858fjmcd39932"}},
  *   message: null
  * }
@@ -139,37 +138,16 @@ message GameEvent {
  * Of note, like the GameAction enum, the ActionSpecification object used in the TaekAction RPC
  * is directly piped through into the GameEvent response.
  * The GameEvent response might optionally also inlcude a result.
- * For more inforamtion see GameEvent.
  * Depending on the action being taken, different combinations of the below fields will be specified.
- * See mapping below:
- * GAME_ACTION_NONE --> No Action Spec
- * INITIAL_PLACEMENT --> vertex, edge
- * ROLL_DICE --> No Action Spec
- * MOVE_ROBBER_AND_STEAL --> hex, other_player (optional)
- * BUILD_ROAD --> edge
- * BUILD_SETTLEMENT --> vertex
- * BUILD_CITY --> vertex
- * BUILD_DEVELOPMENT_CARD --> No Action Spec
- * ACTIVATE_KNIGHT --> hex, other_player
- * ACTIVATE_ROAD_BUILDING --> edges OR edge
- * ACTIVATE_YEAR_OF_PLENTY --> ask
- * ACTIVATE_MONOPOLY --> ask
- * PROPOSE_TRADE --> ask, give
- * PORT_TRADE --> ask, give
- * ACCEPT_TRADE --> ask, give
- * REJECT_TRADE --> ask, give
- * DISCARD --> give
- * END_TURN --> No Action Spec
- * ACKNOWLEDGE --> No Action Spec
+ * For more inforamtion see GameEvent.
  **/
 message ActionSpecification {
-  string hex = 2;
-  string vertex = 3;
-  Edge edge = 4;
-  repeated Edge edges = 5; // Road Building
-  int32 other_player_position = 7; // Trade, Steal
-  repeated Resource ask = 8; // Trade, Monopoly, Year of Plenty
-  repeated Resource give = 9; // Trade, Discard
+  string hex = 1; // Robber
+  string vertex = 2; // Build City / Settelemnt
+  repeated Edge edges = 3; // Build Road, Road Building
+  repeated int32 other_player_positions = 4; // Trade, Robber
+  repeated Resource ask = 5; // Trade, Monopoly, Year of Plenty
+  repeated Resource give = 6; // Trade, Discard
 }
 
 message Edge {
@@ -180,27 +158,8 @@ message Edge {
 /**
  * Specifies the result of a TakeAction RPC call.
  * Used as a subfield of the GameEvent response.
- * Dependingon the GameAction, there is a different payload, as specified in the mapping below
- * GAME_ACTION_NONE --> No Action Result
- * INITIAL_PLACEMENT --> No Action Result
- * ROLL_DICE --> roll, resources_transacted
- * MOVE_ROBBER_AND_STEAL --> card
- * BUILD_ROAD --> resources_transacted
- * BUILD_SETTLEMENT --> resources_transacted
- * BUILD_CITY --> resources_transacted
- * BUILD_DEVELOPMENT_CARD --> resources_transacted
- * ACTIVATE_KNIGHT --> card
- * ACTIVATE_ROAD_BUILDING --> No Action Result
- * ACTIVATE_YEAR_OF_PLENTY --> resources_transacted
- * ACTIVATE_MONOPOLY --> resources_transacted
- * PROPOSE_TRADE --> No Action Result
- * PORT_TRADE --> resources_transacted
- * ACCEPT_TRADE --> resources_transacted
- * REJECT_TRADE --> No Action Result
- * DISCARD --> resources_transacted
- * END_TURN --> No Action Result
- * ACKNOWLEDGE --> N/A
- * For more information, see GameEvent
+ * Depending on the GameAction, there is a different payload, as specified in the mapping below.
+ * For more inforamtion see GameEvent.
  **/
 message ActionResult {
   int32 roll = 1;

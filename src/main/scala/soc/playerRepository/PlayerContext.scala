@@ -102,16 +102,16 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
   def getEvent(position: Int, moveResult: MoveResult): GameEvent = {
     moveResult match {
       case InitialPlacementMove(first, settlement, road) => 
-        val actionSpec = ActionSpecification(vertex = settlement.node.toString(), edge = Some(Edge(road.v1.node.toString(), road.v2.node.toString())))
+        val actionSpec = ActionSpecification(vertex = settlement.node.toString(), edges = Seq(Edge(road.v1.node.toString(), road.v2.node.toString())))
         GameEvent(position, GameAction.INITIAL_PLACEMENT, Some(actionSpec))
       case RollResult(roll) => 
         GameEvent(position, GameAction.ROLL_DICE, result = Some(ActionResult(roll=roll.number)))
       case MoveRobberAndStealResult(robberLocation, steal) => 
         val s = steal.getOrElse(null)
         val op = if (s == null) -1 else s.victim
-        GameEvent(position, GameAction.MOVE_ROBBER_AND_STEAL, Some(ActionSpecification(hex = robberLocation.toString(), otherPlayerPosition = op)))
+        GameEvent(position, GameAction.MOVE_ROBBER_AND_STEAL, Some(ActionSpecification(hex = robberLocation.toString(), otherPlayerPositions = Seq(op))))
       case BuildRoadMove(edge) => 
-          val actionSpec = ActionSpecification(edge=Some(Edge(edge.v1.node.toString(), edge.v2.node.toString())))
+          val actionSpec = ActionSpecification(edges=Seq(Edge(edge.v1.node.toString(), edge.v2.node.toString())))
           GameEvent(position, GameAction.BUILD_ROAD, Some(actionSpec))
       case BuildSettlementMove(vertex) =>
         GameEvent(position, GameAction.BUILD_SETTLEMENT, Some(ActionSpecification(vertex = vertex.node.toString())))
@@ -122,7 +122,7 @@ class PlayerContext[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]](val na
       case KnightResult(robber) => 
         val s = robber.steal.getOrElse(null)
         val op = if (s == null) -1 else s.victim
-        GameEvent(position, GameAction.ACTIVATE_KNIGHT, Some(ActionSpecification(hex=robber.robberLocation.toString(), otherPlayerPosition=op)))
+        GameEvent(position, GameAction.ACTIVATE_KNIGHT, Some(ActionSpecification(hex=robber.robberLocation.toString(), otherPlayerPositions = Seq(op))))
       case RoadBuilderMove(road1, road2) => 
         val r2 = road2.getOrElse(road1) // TODO FIX
         val edges = Seq(Edge(road1.v1.node.toString(), road1.v2.node.toString()), Edge(r2.v1.node.toString(), r2.v2.node.toString()))
