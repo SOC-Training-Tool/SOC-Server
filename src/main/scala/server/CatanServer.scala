@@ -10,7 +10,7 @@ import soc.game.{GameRules, RollDiceMove, CatanMove}
 import soc.game.board.{BaseBoardConfiguration, BaseCatanBoard}
 import soc.game.inventory.Inventory.{NoInfo, PerfectInfo}
 import soc.playerRepository.{PlayerContext, PlayerRepository}
-import soc.protos.game.{CatanServerGrpc, CreateGameRequest, CreateGameResponse, GameUpdate, MoveRequest, MoveResponse, StartGameRequest, StartGameResponse, SubscribeRequest}
+import soc.protos.game.{GameAction, CatanServerGrpc, CreateGameRequest, CreateGameResponse, GameMessage, TakeActionRequest, MoveResponse, StartGameRequest, StartGameResponse, SubscribeRequest}
 import soc.storage.{GameId, SimulatedGame}
 
 import scala.collection.mutable.HashMap
@@ -101,7 +101,7 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
     Future.successful(reply)
   }
 
-  override def subscribe(req: SubscribeRequest, responseObserver: StreamObserver[GameUpdate]) = this.synchronized {
+  override def subscribe(req: SubscribeRequest, responseObserver: StreamObserver[GameMessage]) = this.synchronized {
     builders.get(req.gameId) match {
       case Some(gameContext) => {
         println("Registering listener " + req.name)
@@ -114,19 +114,20 @@ private class CatanServerImpl extends CatanServerGrpc.CatanServer {
     }
   }
 
-  override def move(req: MoveRequest) = this.synchronized  {
+  override def takeAction(req: TakeActionRequest) = this.synchronized  {
+    println("Take Action: " + req.action + " player: " + req.position)
     val playerContext = games.get(req.gameId).flatMap(_.getPlayer(req.position)).getOrElse(throw new Exception(""))
-    val move = if(req.action == "") playerContext.getLastRequestRandomMove(req.gameId, req.position) else translate(req.action)
+    // TODO: Actually parse the Action Request
+    val move = if (req.action == GameAction.GAME_ACTION_NONE) playerContext.getLastRequestRandomMove(req.gameId, req.position) else translate(req)
     val result = playerContext.receiveMove(req.gameId, req.position, move)
     Future.successful(new MoveResponse(if (result) "SUCCESS" else "ERROR"))
   }
 
-  // TODO: Move this method somewhere generic
-  // Instead of taking a string, this should take an object defined in the gRPC schema
+
   /**
-   * Takes a move object from the gRPC layer and translates it into a CatanMove object
+   * Takes a TakeActionRequest from the gRPC layer and translates it into a CatanMove object
    **/
-  def translate(action: String): CatanMove = {
+  def translate(action: TakeActionRequest): CatanMove = {
       // TODO: Implement
       return null
 
