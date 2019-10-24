@@ -1,0 +1,73 @@
+syntax = "proto2";
+
+package protos.soc;
+
+enum Resource {
+    BRICK = 0;
+    ORE = 1;
+    SHEEP = 2;
+    WHEAT = 3;
+    WOOD = 4;
+}
+
+enum DevelopmentCard {
+    KNIGHT = 0;
+    YEAR_OF_PLENTY = 1;
+    MONOPOLY = 2;
+    ROAD_BUILDER = 3;
+    VICTORY_POINT = 4;
+}
+
+message ResourceCount {
+    required Resource type = 1;
+    required int32 count = 2;
+}
+
+message DevelopmentCardSpecification {
+    required DevelopmentCard type = 1;
+    optional int32 turn_purchased = 2;
+    optional int32 turn_played = 3;
+}
+
+message ProbableResourceSet {
+    message ProbableCardValue {
+        required Resource type = 1;
+        required int32 known_amount = 2;
+        required double unknown_amount = 3;
+    }
+    repeated ProbableCardValue probable_resource_cards = 1;
+}
+
+message PossibleHands {
+
+    message HandCombination {
+        message HandsWithMultiplier {
+            repeated ResourceCount cards = 1;
+            required int32 multiplier = 2;
+        }
+        map<int32, HandsWithMultiplier> hand = 1;
+    }
+    repeated HandCombination hands = 1;
+}
+
+message PublicInventory {
+    required int32 card_count = 1;
+    required int32 development_card_count = 2;
+    repeated DevelopmentCardSpecification played_development_cards = 3;
+}
+
+message PrivateInventory {
+    repeated ResourceCount resource_cards = 1;
+    repeated DevelopmentCardSpecification unplayed_development_cards = 2;
+}
+
+message Inventory {
+    oneof inventory {
+        PublicInventory public = 1;
+        PrivateInventory private = 2;
+    }
+}
+
+
+
+

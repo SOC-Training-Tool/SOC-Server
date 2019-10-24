@@ -1,0 +1,136 @@
+syntax = "proto2";
+
+package protos.soc;
+
+import "inventory.proto";
+import "board.proto";
+import "state.proto";
+
+enum GameAction {
+    GAME_ACTION_NONE = 0;
+    ROLL_DICE = 1;
+    END_TURN = 2;
+    INITIAL_PLACEMENT = 3;
+    DISCARD_RESOURCES = 4;
+    MOVE_ROBBER_AND_STEAL = 5;
+    BUY_DEVELOPMENT_CARD = 6;
+    BUILD_ROAD = 7;
+    BUILD_SETTLEMENT = 8;
+    BUILD_CITY = 9;
+    PORT_TRADE = 10;
+    PLAY_KNIGHT = 11;
+    PLAY_YEAR_OF_PLENTY = 12;
+    PLAY_MONOPOLY = 13;
+    PLAY_ROAD_BUILDER = 14;
+    ACKNOWLEDGE = 15;
+}
+
+message HiddenCard {
+    repeated int32 viewable_by = 1;
+    oneof card {
+        Resource resource_card = 2;
+        DevelopmentCard development_card = 3;
+    }
+}
+
+message ResourceTransaction {
+    required Player player = 1;
+    enum TransactionType {
+        GAIN = 0;
+        LOSE = 1;
+    }
+    required TransactionType type = 2;
+    repeated ResourceCount resources = 3;
+}
+
+message ActionSpecification {
+    required GameAction type = 1;
+    oneof specification {
+        InitialPlacement initial_placement_payload = 2;
+        DiscardResources discard_resources_payload = 3;
+        MoveRobberAndSteal move_robber_and_steal_payload = 4;
+        BuildRoad build_road_payload = 5;
+        BuildSettlement build_settlement_payload = 6;
+        BuildCity build_city_payload = 7;
+        PortTrade port_trade_payload = 8;
+        MoveRobberAndSteal play_knight_payload = 9;
+        PlayYearOfPlenty play_year_of_plenty_payload = 10;
+        PlayMonopoly play_monopoly_payload = 11;
+        PlayRoadBuilder play_road_builder_payload = 12;
+    }
+}
+
+message ActionResult {
+    required GameAction type = 1;
+    repeated ResourceTransaction resource_transactions = 2;
+    oneof result {
+        RollDiceResult roll_dice_payload = 3;
+        InitialPlacement initial_placement_payload = 4;
+        //DiscardResources discard_resources_payload = 5;
+        //MoveRobberAndSteal move_robber_and_steal_payload = 6;
+        BuildRoad build_road_payload = 7;
+        BuildSettlement build_settlement_payload = 8;
+        BuildCity build_city_payload = 9;
+        //BuyDevelopmentCard buy_development_card_payload = 10;
+        PortTrade port_trade_payload = 11;
+        //MoveRobberAndSteal play_knight_payload = 12;
+        PlayYearOfPlenty play_year_of_plenty_payload = 13;
+        //PlayMonopoly play_monopoly_payload = 14;
+        PlayRoadBuilder play_road_builder_payload = 15;
+    }
+}
+
+message GameEvent {
+   required ActionSpecification specification = 1;
+   optional ActionResult result = 2;
+}
+
+message RollDiceResult {
+    required int32 roll = 1;
+}
+
+message InitialPlacement {
+    required Vertex settlement = 1;
+    required Edge road = 2;
+    required bool first_placement = 3;
+}
+
+message DiscardResources {
+    repeated ResourceCount discard_resources = 1;
+}
+
+message MoveRobberAndSteal {
+    required Vertex robber_location = 1;
+    optional int32 player_to_steal = 2;
+}
+
+message BuildRoad {
+    required Edge edge = 1;
+}
+
+message BuildSettlement {
+    required Vertex vertex = 1;
+}
+
+message BuildCity {
+    required Vertex vertex = 1;
+}
+
+message PortTrade {
+    repeated ResourceCount give = 1;
+    repeated ResourceCount get = 2;
+}
+
+message PlayYearOfPlenty {
+    required Resource resource1 = 1;
+    required Resource resource2 = 2;
+}
+
+message PlayMonopoly {
+    required Resource resource = 1;
+}
+
+message PlayRoadBuilder {
+    required Edge road1 = 1;
+    optional Edge road2 = 2;
+}

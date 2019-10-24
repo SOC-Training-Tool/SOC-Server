@@ -1,7 +1,7 @@
 package soc.storage.aws
 
 import soc.aws.client.CatanGameStoreClient
-import soc.game.board.BoardConfiguration
+import soc.board.BoardConfiguration
 import soc.model.PlayerContext
 import soc.storage.{GameId, MoveEntry, MoveSaver}
 

@@ -1,6 +1,6 @@
 package soc.storage
 
-import soc.game.board.BoardConfiguration
+import soc.board.BoardConfiguration
 
 trait MoveSaver[BOARD <: BoardConfiguration] {
 
