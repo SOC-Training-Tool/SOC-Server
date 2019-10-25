@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package protos.soc;
+
+import "board.proto";
+import "inventory.proto";
+
+enum TurnPhase {
+    ROLL = 0;
+    BUY_TRADE_OR_END = 1;
+    DISCARD = 2;
+    MOVE_ROBBER = 3;
+    INITIAL = 4;
+
+}
+
+message Player {
+    required string name = 1;
+    required int32 position = 2;
+}
+
+message PublicPlayerState {
+    required Player player = 1;
+    required PublicInventory public_inventory = 2;
+    required int32 longest_road_length = 3;
+    required int32 knight_count = 4;
+    required bool has_longest = 5;
+    required bool has_largest = 6;
+}
+
+message PublicGameState {
+    required Board board = 1;
+    map<int32, PublicPlayerState> player_states = 2;
+    repeated ResourceCount resource_bank = 3;
+    required int32 development_cards_left = 4;
+    required Player current_turn_player = 5;
+    required TurnPhase phase = 6;
+    required int32 turn = 7;
+}

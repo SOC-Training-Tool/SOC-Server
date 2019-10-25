@@ -2,11 +2,9 @@ package soc.storage
 
 import io.circe.Encoder
 import org.scalatest.{FunSpec, Matchers}
-import soc.game._
-import soc.game.Roll
-import soc.game.board.Vertex
-import soc.game.inventory.Brick
-import soc.game.inventory.resources.CatanResourceSet
+import soc.board.Vertex
+import soc.core.Roll
+import soc.moves._
 
 class MoveEntrySpec extends FunSpec with Matchers {
 
@@ -16,9 +14,8 @@ class MoveEntrySpec extends FunSpec with Matchers {
 
     val moveEntryA = MoveEntry(gId, 0, 0, 0, RollResult(Roll(6)))
     val moveEntryB = MoveEntry(gId, 1, 1, 1, BuildCityMove(Vertex(0)))
-    val moveEntryC = MoveEntry(gId, 1, 1, 1, DiscardResourcesMove(Map(0 -> CatanResourceSet(Brick))))
 
-    val l: List[MoveEntry] = List(moveEntryA, moveEntryB, moveEntryC)
+    val l: List[MoveEntry] = List(moveEntryA, moveEntryB)
 
     val moveResult = RollResult(Roll(6))
 

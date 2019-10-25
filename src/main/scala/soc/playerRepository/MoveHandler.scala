@@ -1,13 +1,13 @@
 package soc.playerRepository
 
-import soc.akka.messages.RequestMessage.MoveRequest
-import soc.game.CatanMove
-import soc.game.inventory.Inventory
+import soc.behaviors.messages.RequestMessage.MoveRequest
+import soc.moves.CatanMove
+import soc.inventory.Inventory
 
 import scala.concurrent.Future
 
-trait MoveHandler[GAME <: Inventory[GAME], PLAYER <: Inventory[PLAYER]] {
+trait MoveHandler[GAME <: Inventory[GAME]] {
 
-  def getMoveResponse(request: MoveRequest[GAME, PLAYER]): Future[CatanMove]
+  def getMoveResponse(request: MoveRequest[GAME]): Future[CatanMove]
 
 }

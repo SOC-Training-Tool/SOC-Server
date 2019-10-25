@@ -1,7 +1,8 @@
 package soc.playerRepository
 
-import soc.game.{GameState, MoveResult}
-import soc.game.inventory.Inventory
+import soc.inventory.Inventory
+import soc.moves.MoveResult
+import soc.state.GameState
 import soc.storage.GameId
 
 trait StateHandler[T <: Inventory[T]] {

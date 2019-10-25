@@ -2,17 +2,19 @@ name := "SettlersOfCatan"
 
 version := "0.1"
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.13.0"
 
-val circeVersion = "0.11.1"
+val circeVersion = "0.12.0"
 
-val scalatest = "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test"
+val scalatest = "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 val akkatest = "com.typesafe.akka" %% "akka-testkit" % "2.5.23" % "test"
 val akka = "com.typesafe.akka" %% "akka-actor" % "2.5.23"
 val akkatyped = "com.typesafe.akka" %% "akka-actor-typed" % "2.5.23"
 val s3 = "com.amazonaws" % "aws-java-sdk-s3" % "1.11.311"
 val ddb = "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.311"
 val junit = "junit" % "junit" % "4.11"
+
+val immutablesoc = "io.github.soc-training-tool" %% "immutablesoc" % "0.4.2"
 
 val circe = Seq(
   "io.circe" %% "circe-core",
@@ -22,7 +24,7 @@ val circe = Seq(
 
 
 
-libraryDependencies ++= Seq(scalatest, akka, akkatyped, akkatest, s3, ddb, junit) ++ circe
+libraryDependencies ++= Seq(scalatest, akka, akkatyped, akkatest, s3, ddb, junit, immutablesoc) ++ circe
 libraryDependencies ++= Seq(
     "io.grpc" % "grpc-netty" % scalapb.compiler.Version.grpcJavaVersion,
     "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion
