@@ -32,20 +32,19 @@ object PlayerBehavior {
           //playerContext.sendGameOver(gameId, position, msg)
           Behaviors.stopped
 
-        case MoveResultUpdate(gameId, result) =>
-          playerContext.updateGameState(gameId, position, result)
-          Behaviors.same
+//        case MoveResultUpdate(gameId, result) =>
+//          playerContext.updateGameState(gameId, position, result)
+//          Behaviors.same
 
         case _: UpdateMessage =>
           Behaviors.same
 
-        case request: RequestMessage[GAME] =>
-          context.log.debug(s"received request $request")
-          context.pipeToSelf(playerContext.getMoveResponse(request)) {
-            case Success(move) => PlayerDoMove(request.playerId, move, request.respondTo)
-            case Failure(ex) => null
-          }
-          Behaviors.same
+//        case request: RequestMessage[GAME] =>
+//          context.pipeToSelf(playerContext.getMoveResponse(request)) {
+//           // case Success(move) => PlayerDoMove(request.playerId, move, request.respondTo)
+//            case Failure(ex) => null
+//          }
+//          Behaviors.same
 
 //        case request: InitialPlacementRequest[GAME, PLAYER] =>
 //          context.pipeToSelf(playerContext.getInitialPlacementMove(request.gameId, position, request.inventory, request.playerId, request.first)) {
@@ -75,9 +74,9 @@ object PlayerBehavior {
 //          }
 //          Behaviors.same
 
-        case PlayerDoMove(playerId, receievedMove, respondTo) =>
-          val clientMoveResponse: Future[MoveResponse] = respondTo ? (replyTo => (ServerMoveResponse(playerId, receievedMove.move, replyTo)))
-          clientMoveResponse.map(receievedMove.moveResponse.success(_))
+        case PlayerDoMove(playerId, receivedMove, respondTo) =>
+          val clientMoveResponse: Future[MoveResponse] = respondTo ? (replyTo => (ServerMoveResponse(playerId, receivedMove.move, replyTo)))
+          clientMoveResponse.map(receivedMove.moveResponse.success(_))
 
           Behaviors.same
 

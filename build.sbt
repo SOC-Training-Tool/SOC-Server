@@ -14,7 +14,7 @@ val s3 = "com.amazonaws" % "aws-java-sdk-s3" % "1.11.311"
 val ddb = "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.311"
 val junit = "junit" % "junit" % "4.11"
 
-val immutablesoc = "io.github.soc-training-tool" %% "immutablesoc" % "0.4.2"
+val immutablesoc = "io.github.soc-training-tool" %% "immutablesoc" % "0.4.5"
 
 val circe = Seq(
   "io.circe" %% "circe-core",

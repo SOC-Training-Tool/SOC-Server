@@ -7,6 +7,7 @@ import soc.behaviors.messages.ResultResponse
 import soc.core.{GameRules, Roll}
 import soc.dice.{Dice, NormalDice}
 import soc.inventory.Inventory.PerfectInfo
+import soc.inventory.developmentCard.{DevelopmentCardManager, DevelopmentCardSet}
 import soc.inventory.resources.CatanResourceSet.Resources
 import soc.inventory.{CatanSet, DevelopmentCard, Inventory, Resource}
 import soc.inventory.resources.{CatanResourceSet, Steal}
@@ -31,7 +32,7 @@ object MoveResultProvider {
 
       case GetMoveResultProviderMessage(gs: GameState[GAME], id, MoveRobberAndStealMove(loc, playerStole), respondTo) =>
         context.pipeToSelf(provider.stealCardMoveResult(gs, playerStole)) {
-          case Success(steal) if playerStole.isEmpty => SendMoveResultProviderMessage[GAME](
+          case Success(_) if playerStole.isEmpty => SendMoveResultProviderMessage[GAME](
             id,
             MoveRobberAndStealResult(Nil, loc, None),
             respondTo)
@@ -45,6 +46,10 @@ object MoveResultProvider {
 
       case GetMoveResultProviderMessage(gs: GameState[GAME], id, KnightMove(MoveRobberAndStealMove(loc, playerStole)), respondTo) =>
         context.pipeToSelf(provider.stealCardMoveResult(gs, playerStole)) {
+          case Success(_) if playerStole.isEmpty => SendMoveResultProviderMessage[GAME](
+            id,
+            KnightResult(MoveRobberAndStealResult(Nil, loc, None)),
+            respondTo)
           case Success(steal) => SendMoveResultProviderMessage[GAME](
             id,
             KnightResult(MoveRobberAndStealResult(Seq(id, playerStole.get), loc, steal.flatMap(r => playerStole.map(v => RobPlayer(v, Some(r)))))),
@@ -143,7 +148,7 @@ object RandomMoveResultProvider {
 
   def apply(gameRules: GameRules)(implicit random: Random) = {
     val dice = NormalDice()
-    val dCardDeck: List[DevelopmentCard] = Nil //DevelopmentCardDeckBuilder.buildDeckByCardTypeAndAmount(gameRules.initDevCardAmounts.amountMap)
+    val dCardDeck: List[DevelopmentCard] = (new DevelopmentCardManager(gameRules.initDevCardAmounts.kn, gameRules.initDevCardAmounts.pt, gameRules.initDevCardAmounts.mp, gameRules.initDevCardAmounts.rb, gameRules.initDevCardAmounts.yp)).buildDevelopmentCardDeck
     new RandomMoveResultProvider(dice, dCardDeck)
   }
 

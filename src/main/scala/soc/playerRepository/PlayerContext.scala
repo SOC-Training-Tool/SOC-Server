@@ -1,22 +1,15 @@
 package soc.playerRepository
 
 import io.grpc.stub.StreamObserver
-import protos.soc.game.GameMessage.Payload.Request
+import protos.soc.game.GameMessage.Payload.{Request, Result}
 import protos.soc.game.{ActionRequest, GameMessage, MoveResponse}
-import protos.soc.moves.GameEvent
+import protos.soc.moves.{ActionResult, GameEvent}
 import protos.soc.state.Player
-import soc.behaviors.messages.RequestMessage
-import soc.behaviors.messages.RequestMessage.{DiscardCardRequest, InitialPlacementRequest, MoveRequest, MoveRobberRequest}
 import soc.storage.GameId
 
 import scala.concurrent.{Future, Promise}
 import soc.moves._
 import soc.inventory.Inventory
-import soc.inventory.Inventory.{PerfectInfo, PublicInfo}
-import soc.state.GameState
-
-import protocoder.ProtoCoder.ops._
-import protocoder.implicits.RequestsProto._
 
 class PlayerContext[GAME <: Inventory[GAME]](
   val name: String,
@@ -26,7 +19,6 @@ class PlayerContext[GAME <: Inventory[GAME]](
 ) {
 
   private[this] var expectedResponses: Promise[ReceiveMoveFromClient] = _
-  private[this] var lastRequest: RequestMessage[GAME] = _
 
 //  def sendInitialGameState(gameId: GameId, position: Int, state: GameState[PublicInfo]): Unit = {
 //    val observer: StreamObserver[GameMessage] = gameObservers.getOrElse((gameId.key, position), throw new Exception(""))
@@ -38,27 +30,29 @@ class PlayerContext[GAME <: Inventory[GAME]](
 //    observer.onNext(GameMessage().withEvent(new GameEvent(message = "GAME OVER")))
 //  }
 
-  def updateGameState(gameId: GameId, position: Int, moveResult: MoveResult): Unit = {
+  def updateGameState(gameId: GameId, position: Int, actionResult: ActionResult): Unit = {
+    observer.onNext(GameMessage.of(Player(name, position), Result(actionResult)))
+
+
     //val observer: StreamObserver[GameMessage] = gameObservers.getOrElse((gameId.key, position), throw new Exception(""))
     //observer.onNext(GameMessage().withEvent(event))
   }
 
-  def getMoveResponse(request: RequestMessage[GAME]): Future[ReceiveMoveFromClient] = this.synchronized {
-
-    observer.onNext(GameMessage.of(Player(name, position), Request(request.proto)))
+  def getMoveResponse(actionRequest: ActionRequest): Future[ReceiveMoveFromClient] = this.synchronized {
+    observer.onNext(GameMessage.of(Player(name, position), Request(actionRequest)))
     expectedResponses = Promise.apply[ReceiveMoveFromClient]()
     expectedResponses.future
   }
 
   def receiveMove(move: CatanMove): Future[MoveResponse] = {
-    val moveReceieved = ReceiveMoveFromClient(move)
-    expectedResponses.success(moveReceieved)
-    moveReceieved.moveResponse.future
+    val moveReceived = ReceiveMoveFromClient(position, move)
+    expectedResponses.success(moveReceived)
+    moveReceived.moveResponse.future
   }
 }
 
 
-case class ReceiveMoveFromClient(move: CatanMove) {
+case class ReceiveMoveFromClient(id: Int, move: CatanMove) {
   val moveResponse = Promise.apply[MoveResponse]()
 }
 

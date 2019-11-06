@@ -10,9 +10,13 @@ import protocoder.ProtoCoder.ops._
 import soc.core.GameRules
 import soc.inventory.Inventory.PublicInfo
 import soc.inventory.resources.CatanResourceSet
-import soc.state.{GameState, GamePhase}
+import soc.state.{GamePhase, GameState}
 import BoardProto._
+import protos.soc.game.ActionRequest
+import protos.soc.game.ActionRequest.ActionRequestType
+import protos.soc.game.ActionRequest.ActionRequestType._
 import soc.board.BaseCatanBoard.baseBoardMapping
+import soc.state.GamePhase._
 import util.MapReverse
 
 object StateProto {
@@ -83,6 +87,13 @@ object StateProto {
       gs.turn,
       gameRules,
       Nil)
+  }
+
+  private val typeMap: Map[GamePhase, ActionRequestType] = Map(InitialPlacement -> PLACE_INITIAL_SETTLEMENT, Discard -> DISCARD, Roll -> START_TURN, MoveRobber -> MOVE_ROBBER, BuyTradeOrEnd -> BUILD_OR_TRADE_OR_PLAY_OR_PASS)
+
+  implicit def requestProto[GAME <: Inventory[GAME]]: ProtoCoder[(GamePhase, GameState[PublicInfo], GAME), ActionRequest] = {
+    case (req: GamePhase, gs: GameState[_], inv: GAME) =>
+      ActionRequest(typeMap(req), gs.toPublicGameState.proto, inv.proto)
   }
 
 }

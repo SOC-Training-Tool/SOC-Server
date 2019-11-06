@@ -1,19 +1,19 @@
 package protocoder.implicits
 
 import protos.soc.moves.GameAction._
-import protos.soc.moves.HiddenCard.Card.{DevelopmentCard, ResourceCard}
-import protos.soc.moves.ResourceTransaction.TransactionType.LOSE
-import protos.soc.moves._
+import protos.soc.moves.{BuyDevelopmentCardResult => PBuyDevResult, _}
 import soc.board.Vertex
-import soc.core.Roll
 import soc.moves._
 import protocoder.ProtoCoder
 import ProtoCoder.ops._
 import protocoder.implicits.ResourceProto._
 import protocoder.implicits.BoardProto._
+import protos.soc.inventory.Resource.UNKNOWN_RESOURCE
+import protos.soc.inventory.ResourceCount
 import protos.soc.moves.ActionResult.Result
 import protos.soc.moves.ActionSpecification.Specification
 import soc.board.BaseCatanBoard.baseBoardMapping
+import soc.inventory.resources.SOCTransactions
 
 object MoveProto {
 
@@ -80,50 +80,66 @@ object MoveProto {
     }
   }
 
-  implicit def protoResult[U <: MoveResult]: ProtoCoder[U, ActionResult] = {
+  implicit def protoResult[U <: MoveResult]: ProtoCoder[(U,  List[SOCTransactions]), ActionResult] = { case (move: U, transactions: List[SOCTransactions]) =>
     import Result._
-    move =>
+
+    import protocoder.implicits.ResourceProto.{protoTransactions => transactionImplicit}
+    val protoTransactions: Seq[ResourceTransaction] = transactions.map( t => ProtoCoder.ops.proto(t)(transactionImplicit))
       move match {
         case RollResult(roll) =>
-          ActionResult(ROLL_DICE, Nil, RollDicePayload(RollDiceResult(roll.number)))
+          ActionResult.of(ROLL_DICE, protoTransactions, RollDicePayload(RollDiceResult(roll.number)))
         case EndTurnMove => ActionResult(END_TURN)
         case InitialPlacementMove(first, settlement, road) =>
-          ActionResult(INITIAL_PLACEMENT, Nil, InitialPlacementPayload(InitialPlacement(settlement.proto, road.proto, first)))
-        //    case DiscardResourcesResult(resMap) =>
-        //      val result = Some(ActionResult(resourceTransactions = resMap.view.mapValues(r => ResourceTransaction(LOSE, r.proto)).toMap))
-        //      ActionResult(DISCARD_RESOURCES, result)
+          ActionResult(INITIAL_PLACEMENT, protoTransactions, InitialPlacementPayload(InitialPlacement(settlement.proto, road.proto, first)))
+        case DiscardResourcesResult(_) =>
+          ActionResult.of(DISCARD_RESOURCES, protoTransactions, Empty)
+        case MoveRobberAndStealResult(viewableBy, node, steal) =>
+          val t = steal.map { s =>
+            val p = protoTransactions.head.player
+            val o = protoTransactions.head.getSteal.otherPlayer
+           s.res.fold(Seq(ResourceTransaction(p, ResourceTransaction.Transaction.Steal(ResourceTransaction.Steal(o, Seq(ResourceCount(UNKNOWN_RESOURCE, 1))))))) { _ =>
+             protoTransactions
+           }
+         }.getOrElse(Nil)
 
-        //          case MoveRobberAndStealResult(viewableBy, node, steal) =>
-        //            val result = steal.map { p =>
-        //              ActionResult(hiddenCard = Some(HiddenCard(viewableBy, p.res.fold[HiddenCard.Card](HiddenCard.Card.Empty)(r => ResourceCard(r.proto)))))
-        //            }
-        //            val playerStole = steal.map(_.player)
-        //            ActionResult(MOVE_ROBBER_AND_STEAL, result, MoveRobberAndStealPayload(MoveRobberAndSteal(Vertex(node).proto, playerStole)))
-
-        //          case BuyDevelopmentCardResult(viewableBy, card) =>
-        //            val result = card.map ( c => ActionResult(hiddenCard = Some(HiddenCard(viewableBy, DevelopmentCard(c.proto)))) )
-        //            ActionResult(BUY_DEVELOPMENT_CARD, result)
+          ActionResult.of(MOVE_ROBBER_AND_STEAL, t, MoveRobberAndStealPayload(MoveRobberAndSteal(Vertex(node).proto, steal.map(_.player))))
+//          val result = steal.map { p =>
+//                      ActionResult(hiddenCard = Some(HiddenCard(viewableBy, p.res.fold[HiddenCard.Card](HiddenCard.Card.Empty)(r => ResourceCard(r.proto)))))
+//                    }
+//                    val playerStole = steal.map(_.player)
+//                    ActionResult(MOVE_ROBBER_AND_STEAL, result, MoveRobberAndStealPayload(MoveRobberAndSteal(Vertex(node).proto, playerStole)))
+        case BuyDevelopmentCardResult(viewableBy, card) =>
+          ActionResult.of(BUY_DEVELOPMENT_CARD, protoTransactions, card.fold[Result](Empty)(c => BuyDevelopmentCardPayload(PBuyDevResult(c.proto))))
         case BuildSettlementMove(vertex) =>
-          ActionResult(BUILD_SETTLEMENT, Nil, BuildSettlementPayload(BuildSettlement(vertex.proto)))
+          ActionResult(BUILD_SETTLEMENT, protoTransactions, BuildSettlementPayload(BuildSettlement(vertex.proto)))
         case BuildCityMove(vertex) =>
-          ActionResult(BUILD_CITY, Nil, BuildCityPayload(BuildCity(vertex.proto)))
+          ActionResult(BUILD_CITY, protoTransactions, BuildCityPayload(BuildCity(vertex.proto)))
         case BuildRoadMove(edge) =>
-          ActionResult(BUILD_ROAD, Nil, BuildRoadPayload(BuildRoad(edge.proto)))
-        case PortTradeMove(give, get) =>
-          ActionResult(PORT_TRADE, Nil, PortTradePayload(PortTrade(give.proto, get.proto)))
-        //          case KnightResult( MoveRobberAndStealResult(viewableBy, node, steal)) =>
+          ActionResult(BUILD_ROAD, protoTransactions, BuildRoadPayload(BuildRoad(edge.proto)))
+        case PortTradeMove(_, _) =>
+          ActionResult(PORT_TRADE, protoTransactions, Empty)
+        case KnightResult( MoveRobberAndStealResult(viewableBy, node, steal)) =>
+          val t = steal.map { s =>
+            val p = protoTransactions.head.player
+            val o = protoTransactions.head.getSteal.otherPlayer
+            s.res.fold(Seq(ResourceTransaction(p, ResourceTransaction.Transaction.Steal(ResourceTransaction.Steal(o, Seq(ResourceCount(UNKNOWN_RESOURCE, 1))))))) { _ =>
+              protoTransactions
+            }
+          }.getOrElse(Nil)
+          ActionResult.of(PLAY_KNIGHT, t, PlayKnightPayload(MoveRobberAndSteal(Vertex(node).proto, steal.map(_.player))))
         //            val result = steal.map { p =>
         //              ActionResult(hiddenCard = Some(HiddenCard(viewableBy, p.res.fold[HiddenCard.Card](HiddenCard.Card.Empty)(r => ResourceCard(r.proto)))))
         //            }
         //            val playerStole = steal.map(_.player)
         //            ActionResult(PLAY_KNIGHT, result, PlayKnightPayload(MoveRobberAndSteal(Vertex(node).proto, playerStole)))
-        case YearOfPlentyMove(res1, res2) =>
-          ActionResult(PLAY_YEAR_OF_PLENTY, Nil, PlayYearOfPlentyPayload(PlayYearOfPlenty(res1.proto, res2.proto)))
-        //          case MonopolyResult(cardsLost) =>
+        case YearOfPlentyMove(_, _) =>
+          ActionResult(PLAY_YEAR_OF_PLENTY, protoTransactions, Empty)
+        case MonopolyResult(_) =>
+          ActionResult.of(PLAY_MONOPOLY, protoTransactions, Empty)
         //            val result = Some(ActionResult(resourceTransactions = cardsLost.view.mapValues(r => ResourceTransaction(LOSE, r.proto)).toMap))
         //            ActionResult(PLAY_MONOPOLY, result)
         case RoadBuilderMove(road1, road2) =>
-          ActionResult(PLAY_ROAD_BUILDER, Nil, PlayRoadBuilderPayload(PlayRoadBuilder(road1.proto, road2.map(_.proto))))
+          ActionResult(PLAY_ROAD_BUILDER, protoTransactions, PlayRoadBuilderPayload(PlayRoadBuilder(road1.proto, road2.map(_.proto))))
       }
   }
 

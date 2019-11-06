@@ -34,13 +34,23 @@ message HiddenCard {
 }
 
 message ResourceTransaction {
-    required Player player = 1;
-    enum TransactionType {
-        GAIN = 0;
-        LOSE = 1;
+    message Gain {
+        repeated ResourceCount resources = 1;
     }
-    required TransactionType type = 2;
-    repeated ResourceCount resources = 3;
+    message Lose {
+        repeated ResourceCount resources = 1;
+    }
+    message Steal {
+        required int32 otherPlayer = 1;
+        repeated ResourceCount resources = 2;
+    }
+    required int32 player = 1;
+    oneof transaction {
+        Gain gain = 2;
+        Lose lose = 3;
+        Steal steal = 4;
+    }
+
 }
 
 message ActionSpecification {
@@ -67,14 +77,14 @@ message ActionResult {
         RollDiceResult roll_dice_payload = 3;
         InitialPlacement initial_placement_payload = 4;
         //DiscardResources discard_resources_payload = 5;
-        //MoveRobberAndSteal move_robber_and_steal_payload = 6;
+        MoveRobberAndSteal move_robber_and_steal_payload = 6;
         BuildRoad build_road_payload = 7;
         BuildSettlement build_settlement_payload = 8;
         BuildCity build_city_payload = 9;
-        //BuyDevelopmentCard buy_development_card_payload = 10;
-        PortTrade port_trade_payload = 11;
-        //MoveRobberAndSteal play_knight_payload = 12;
-        PlayYearOfPlenty play_year_of_plenty_payload = 13;
+        BuyDevelopmentCardResult buy_development_card_payload = 10;
+        //PortTrade port_trade_payload = 11;
+        MoveRobberAndSteal play_knight_payload = 12;
+        //PlayYearOfPlenty play_year_of_plenty_payload = 13;
         //PlayMonopoly play_monopoly_payload = 14;
         PlayRoadBuilder play_road_builder_payload = 15;
     }
@@ -114,6 +124,10 @@ message BuildSettlement {
 
 message BuildCity {
     required Vertex vertex = 1;
+}
+
+message BuyDevelopmentCardResult {
+    required DevelopmentCard card = 1;
 }
 
 message PortTrade {

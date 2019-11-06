@@ -1,10 +1,8 @@
 package soc.behaviors.messages
 
 import akka.actor.typed.ActorRef
-import soc.behaviors.MoveResultProviderMessage.MoveResultProviderMessage
 import soc.board.BoardConfiguration
 import soc.inventory.Inventory
-import soc.moves.CatanMove
 import soc.playerRepository.ReceiveMoveFromClient
 import soc.state.GameState
 import soc.storage.{GameId, MoveEntry}
