@@ -7,12 +7,15 @@ import protos.soc.inventory.ResourceCount
 import soc.inventory.Inventory.{PerfectInfo, PublicInfo}
 import soc.inventory.developmentCard.{DevelopmentCardSpecification, DevelopmentCardSpecificationSet}
 import soc.inventory.resources.CatanResourceSet.Resources
-import soc.inventory.resources.{CatanResourceSet, PossibleHands, ProbableResourceSet}
+import soc.inventory.resources.{CatanResourceSet, Gain, Lose, PossibleHands, ProbableResourceSet, SOCTransactions, Steal}
 import soc.inventory._
 import util.MapReverse
 import protocoder.ProtoCoder
 import protocoder.ProtoCoder.ops._
-import protos.soc.inventory.{DevelopmentCard => PDev, DevelopmentCardSpecification => PDCS, PossibleHands => PPossible, PrivateInventory => PPrivate, ProbableResourceSet => PProb, PublicInventory => PPublic, Resource => PResource, Inventory => PInventory}
+import protos.soc.inventory.Resource.UNKNOWN_RESOURCE
+import protos.soc.inventory.{DevelopmentCard => PDev, DevelopmentCardSpecification => PDCS, Inventory => PInventory, PossibleHands => PPossible, PrivateInventory => PPrivate, ProbableResourceSet => PProb, PublicInventory => PPublic, Resource => PResource}
+import protos.soc.moves.ResourceTransaction
+import protos.soc.moves.ResourceTransaction.{Gain => PGain, Lose => PLose, Steal => PSteal}
 
 object ResourceProto {
 
@@ -26,7 +29,7 @@ object ResourceProto {
   implicit val protoDevelopmentCard: ProtoCoder[DevelopmentCard, PDev] = dev => devCardMap(dev)
   implicit val developmentCardFromProto: ProtoCoder[PDev, DevelopmentCard] = protoDev => reverseDevCardMap(protoDev)
 
-  implicit val protoResourceSet: ProtoCoder[CatanResourceSet[Int], Seq[ResourceCount]] = resources => resources.amountMap.toSeq.map { case (res, amt) => ResourceCount(res.proto, amt) }
+  implicit val protoResourceSet: ProtoCoder[CatanResourceSet[Int], Seq[ResourceCount]] = resources => resources.amountMap.toSeq.map { case (res, amt) => ResourceCount(res.proto, amt) }.filter(_.count > 0)
   implicit val resourceSetFromProto: ProtoCoder[Seq[ResourceCount], CatanResourceSet[Int]] = { protoResources =>
      CatanResourceSet.fromMap(protoResources.map { case ResourceCount(res, amt) => res.proto -> amt}.toMap[Resource, Int])
   }
@@ -51,6 +54,20 @@ object ResourceProto {
       (k.add(card.knownAmount, res), u.add(card.unknownAmount, res))
     }
     ProbableResourceSet(known, unknown)
+  }
+
+  implicit def protoTransactions[U <: SOCTransactions]: ProtoCoder[U, ResourceTransaction] = {
+    case Gain(id, res) => ResourceTransaction.of(id, ResourceTransaction.Transaction.Gain(PGain(res.proto)))
+    case Lose(id, res) => ResourceTransaction.of(id, ResourceTransaction.Transaction.Lose(PLose(res.proto)))
+    case Steal(robber, victim, Some(res)) => ResourceTransaction.of(robber, ResourceTransaction.Transaction.Steal(PSteal(victim, res.proto)))
+    case Steal(robber, victim, None) => ResourceTransaction.of(robber, ResourceTransaction.Transaction.Steal(PSteal(victim, Seq(ResourceCount(UNKNOWN_RESOURCE, 1)))))
+  }
+
+  implicit val transactionsFromProto: ProtoCoder[ResourceTransaction, SOCTransactions] = {
+    case ResourceTransaction(id, ResourceTransaction.Transaction.Gain(PGain(res))) => Gain(id, res.proto)
+    case ResourceTransaction(id, ResourceTransaction.Transaction.Lose(PLose(res))) => Lose(id, res.proto)
+    case ResourceTransaction(id, ResourceTransaction.Transaction.Steal(PSteal(victim, ResourceCount(UNKNOWN_RESOURCE, 1) :: Nil))) => Steal(id, victim, None)
+    case ResourceTransaction(id, ResourceTransaction.Transaction.Steal(PSteal(victim, resources))) => Steal(id, victim, Some(resources.proto))
   }
 
   implicit val protoPossibleHands: ProtoCoder[PossibleHands, PPossible] = { possibleHands =>

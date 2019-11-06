@@ -18,7 +18,8 @@ import soc.board.BoardConfiguration
 import soc.inventory.Inventory
 import soc.inventory.resources.{DiscardedCardsMapBuilder, Steal}
 import soc.moves._
-import soc.state.GameState
+import soc.playerRepository.ReceiveMoveFromClient
+import soc.state.{GamePhase, GameState}
 
 import scala.language.postfixOps
 
@@ -28,8 +29,6 @@ object GameBehavior {
 
     implicit val timeout: Timeout = 60.seconds
     implicit val scheduler = context.system.scheduler
-
-
     implicit val ec: ExecutionContextExecutor = context.executionContext
 
     var discarding: Option[DiscardedCardsMapBuilder] = None
@@ -45,10 +44,12 @@ object GameBehavior {
     }
 
     context.log.info(s"Starting Game ${config.gameId.key}")
-    playerRefs.foreach{ case (pos, p) => p ! StartGame(config.gameId, config.initState.toPublicGameState) }
+    playerRefs.foreach { case (pos, p) => p ! StartGame(config.gameId, config.initState.toPublicGameState) }
 
     def respond(replyTo: ActorRef[ProtoMoveResponse], response: String) = replyTo ! ProtoMoveResponse(response)
+
     def respondSuccess(replyTo: ActorRef[ProtoMoveResponse]) = respond(replyTo, "Success")
+
     def respondFailure(replyTo: ActorRef[ProtoMoveResponse]) = respond(replyTo, "Failure")
 
     // Send first request for first player's initial placement
@@ -56,7 +57,8 @@ object GameBehavior {
       InitialPlacementRequest(config.gameId,
         gamestate.toPublicGameState,
         gamestate.players.getPlayer(firstPlayerId).inventory,
-        firstPlayerId, true,
+        firstPlayerId,
+        true,
         ref)
     } {
       case Success(r@MoveResponse(`firstPlayerId`, InitialPlacementMove(true, _, _), replyTo)) =>
@@ -74,7 +76,6 @@ object GameBehavior {
       val id = gamestate.currentPlayer
 
       if (gamestate.players.getPlayers.exists(_.points >= 10)) {
-
         context.scheduleOnce(10 millis, context.self, StateMessage(gamestate, EndGame))
       }
       else {
@@ -220,6 +221,7 @@ object GameBehavior {
       case StateMessage(state, ResultResponse(id, m@RollResult(roll))) =>
         sendMove(id, m)
 
+        context.log.debug(s"$id: $m")
         playerRefs.values.foreach(_ ! MoveResultUpdate(config.gameId, m))
         gamestate = state.apply(m).state
 
@@ -301,22 +303,22 @@ object GameBehavior {
         }
         gamestate
 
-//        states.copy(
-//          states.apply(result),
-//          states.playerStates.filterNot(_._1 == id).map { case (playerId, state) =>
-//            steal match {
-//              case Some(RobPlayer(`playerId`, _))  =>
-//                playerRefs(playerId) ! MoveResultUpdate(config.gameId, result)
-//                playerId -> state.moveRobberAndSteal(robberLocation, steal)
-//              case Some(Steal(robber, victim, _)) =>
-//                playerRefs(playerId) ! MoveResultUpdate(config.gameId, MoveRobberAndStealResult(robberLocation, Some(Steal(robber, victim, None))))
-//                playerId -> state.moveRobberAndSteal(robberLocation, Some(Steal(robber, victim, None)))
-//              case None =>
-//                playerRefs(playerId) ! MoveResultUpdate(config.gameId, MoveRobberAndStealResult(robberLocation, None))
-//                playerId -> state.moveRobberAndSteal(robberLocation, None)
-//            }
-//          }
-//        )
+        //        states.copy(
+        //          states.apply(result),
+        //          states.playerStates.filterNot(_._1 == id).map { case (playerId, state) =>
+        //            steal match {
+        //              case Some(RobPlayer(`playerId`, _))  =>
+        //                playerRefs(playerId) ! MoveResultUpdate(config.gameId, result)
+        //                playerId -> state.moveRobberAndSteal(robberLocation, steal)
+        //              case Some(Steal(robber, victim, _)) =>
+        //                playerRefs(playerId) ! MoveResultUpdate(config.gameId, MoveRobberAndStealResult(robberLocation, Some(Steal(robber, victim, None))))
+        //                playerId -> state.moveRobberAndSteal(robberLocation, Some(Steal(robber, victim, None)))
+        //              case None =>
+        //                playerRefs(playerId) ! MoveResultUpdate(config.gameId, MoveRobberAndStealResult(robberLocation, None))
+        //                playerId -> state.moveRobberAndSteal(robberLocation, None)
+        //            }
+        //          }
+        //        )
       }
 
       case StateMessage(state, ResultResponse(id, m@BuyDevelopmentCardResult(viewableBy, nextCard))) => turnMove {
@@ -378,7 +380,7 @@ object GameBehavior {
 
         context.log.debug(s"$id: $result")
         sendMove(id, result)
-        gamestate= state.apply(result).state
+        gamestate = state.apply(result).state
 
         playerRefs.foreach { case (refId, ref) =>
           if (viewableBy.contains(refId)) ref ! MoveResultUpdate(config.gameId, result)
@@ -386,6 +388,8 @@ object GameBehavior {
             case Some(RobPlayer(victim, Some(_))) =>
               ref ! MoveResultUpdate(config.gameId, KnightResult(MoveRobberAndStealResult(viewableBy, robberLocation, Some(RobPlayer(victim, None)))))
             case Some(RobPlayer(_, None)) =>
+              ref ! MoveResultUpdate(config.gameId, KnightResult(MoveRobberAndStealResult(viewableBy, robberLocation, None)))
+            case None =>
               ref ! MoveResultUpdate(config.gameId, KnightResult(MoveRobberAndStealResult(viewableBy, robberLocation, None)))
           }
         }
@@ -454,6 +458,73 @@ object GameBehavior {
       case _ => Behaviors.same
     }
   }
+
+  def gameBehavior2[GAME <: Inventory[GAME], BOARD <: BoardConfiguration](config: GameConfiguration[GAME, BOARD]) = Behaviors.setup[Behavior2Messages] { context =>
+
+    implicit val timeout: Timeout = 60.seconds
+    implicit val scheduler = context.system.scheduler
+    implicit val ec: ExecutionContextExecutor = context.executionContext
+
+    val resultProvider = context.spawn[MoveResultProviderMessage[GAME]](MoveResultProvider.moveResultProvider(config.resultProvider), s"${config.gameId.key}_result_provider")
+
+    def getNextAction: Unit = {
+      config.context.getNextAction.foreach { action =>
+        context.pipeToSelf(action) {
+          case Success(r@ReceiveMoveFromClient(id, move)) if config.context.canDoMove(move) =>
+            r.moveResponse.success(ProtoMoveResponse("SUCCESS"))
+            ToMoveResult(move, config.context.getGameState, id)
+          case Success(r@ReceiveMoveFromClient(_, _)) =>
+            r.moveResponse.success(ProtoMoveResponse("FAILURE"))
+            null
+        }
+      }
+    }
+
+    getNextAction
+
+    Behaviors.receiveMessage[Behavior2Messages] {
+
+      case ToMoveResult(move, state: GameState[GAME], id) =>
+        context.ask[GetMoveResultProviderMessage[GAME], ResultResponse](resultProvider)(ref => GetMoveResultProviderMessage[GAME](state, id, move, ref)) {
+          case Success(ResultResponse(_, result: DiscardResourcesResult)) =>
+            context.log.debug(s"$id: $result")
+            config.context.updateGameState(id, result)
+            if (config.context.getGameState.phase != GamePhase.Discard) MoveRequest2
+            else Empty
+
+          case Success(ResultResponse(_, result: MoveResult)) =>
+            context.log.debug(s"$id: $result")
+            config.context.updateGameState(id, result)
+            MoveRequest2
+          case Failure(ex) => null
+        }
+        Behaviors.same
+
+      case MoveRequest2 if config.context.getGameState.isOver =>
+        val state = config.context.getGameState
+        val winner = state.players.getPlayers.find(_.points >= 10)
+        val winMsg = s"Player ${winner.get.position} has won game ${config.gameId} with ${winner.get.points} points and ${state.turn} rolls ${state.players.getPlayers.map(p => (p.position, p.points))}"
+        context.log.info(winMsg)
+        Behaviors.stopped
+
+      case MoveRequest2 =>
+        getNextAction
+        Behaviors.same
+
+      case Empty => Behaviors.same
+
+      case other =>
+        println(other)
+        Behaviors.same
+
+    }
+  }
+
+  sealed trait Behavior2Messages
+
+  case class ToMoveResult[GAME <: Inventory[GAME]](catanMove: CatanMove, gameState: GameState[GAME], pos: Int) extends Behavior2Messages
+  case object MoveRequest2 extends Behavior2Messages
+  case object Empty extends Behavior2Messages
 
 }
 

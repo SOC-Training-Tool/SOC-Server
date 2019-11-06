@@ -3,19 +3,21 @@ syntax = "proto2";
 package protos.soc;
 
 enum Resource {
-    BRICK = 0;
-    ORE = 1;
-    SHEEP = 2;
-    WHEAT = 3;
-    WOOD = 4;
+    UNKNOWN_RESOURCE = 0;
+    BRICK = 1;
+    ORE = 2;
+    SHEEP = 3;
+    WHEAT = 4;
+    WOOD = 5;
 }
 
 enum DevelopmentCard {
-    KNIGHT = 0;
-    YEAR_OF_PLENTY = 1;
-    MONOPOLY = 2;
-    ROAD_BUILDER = 3;
-    VICTORY_POINT = 4;
+    UNKNOWN_DEVELOPMENT_CARD = 0;
+    KNIGHT = 1;
+    YEAR_OF_PLENTY = 2;
+    MONOPOLY = 3;
+    ROAD_BUILDER = 4;
+    VICTORY_POINT = 5;
 }
 
 message ResourceCount {
