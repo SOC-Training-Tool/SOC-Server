@@ -6,17 +6,17 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import soc.aws.Constants;
 
-@DynamoDBTable(tableName = "Player-MoveSet-Board")
-public class PlayerIndexDAO
+@DynamoDBTable(tableName = "GameTable")
+public class GameIndexDAO
 {
-    @DynamoDBHashKey(attributeName = "Player")
-    public String getPlayerName()
+    @DynamoDBHashKey(attributeName = "GameID")
+    public String getGameID()
     {
-        return mPlayerName;
+        return mGameID;
     }
 
-    public void setPlayerName(String playerName) {
-        this.mPlayerName = playerName;
+    public void setGameID(String gameId) {
+        this.mGameID = gameId;
     }
 
     @DynamoDBRangeKey(attributeName = "TimeStamp")
@@ -28,24 +28,6 @@ public class PlayerIndexDAO
     public void setTimeStamp(Long timeStamp)
     {
         this.mTimeStamp = timeStamp;
-    }
-
-    @DynamoDBAttribute(attributeName = "VictoryPoints")
-    public Integer getVictoryPoints() {
-        return mVictoryPoints;
-    }
-
-    public void setVictoryPoints(Integer victoryPoints) {
-        this.mVictoryPoints = victoryPoints;
-    }
-
-    @DynamoDBAttribute(attributeName = "Position")
-    public Integer getPosition() {
-        return mPosition;
-    }
-
-    public void setPosition(Integer position) {
-        this.mPosition = position;
     }
 
     @DynamoDBAttribute(attributeName = Constants.BOARD_S3KEY)
@@ -67,9 +49,7 @@ public class PlayerIndexDAO
     }
 
     private Long mTimeStamp;
-    private String mPlayerName;
-    private Integer mVictoryPoints;
-    private Integer mPosition;
+    private String mGameID;
     private String mBoardKey;
     private String mMoveSetKey;
 }

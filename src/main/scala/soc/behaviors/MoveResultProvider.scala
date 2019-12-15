@@ -19,7 +19,7 @@ import scala.util.{Failure, Random, Success}
 
 object MoveResultProvider {
 
-  def moveResultProvider[GAME <: Inventory[GAME]](provider: MoveResultProvider[GAME])(implicit ec: ExecutionContext) = Behaviors.setup[MoveResultProviderMessage[GAME]] { context =>
+  def moveResultProvider[GAME <: Inventory[GAME]](provider: MoveResultProvider[GAME])(implicit ec: ExecutionContext): Behavior[MoveResultProviderMessage[GAME]] = Behaviors.setup[MoveResultProviderMessage[GAME]] { context =>
 
     Behaviors.receiveMessage[MoveResultProviderMessage[GAME]] {
 
@@ -85,7 +85,6 @@ object MoveResultProvider {
           case Failure(ex) => null
         }
         Behaviors.same
-
 
       case SendMoveResultProviderMessage(id, result, respondTo) =>
         respondTo ! ResultResponse(id, result)

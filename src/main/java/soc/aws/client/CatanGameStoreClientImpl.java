@@ -9,8 +9,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
 import io.circe.Json;
 import soc.aws.Constants;
-import soc.model.PlayerContext;
-import soc.model.PlayerIndexDAO;
+import soc.model.GameIndexDAO;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class CatanGameStoreClientImpl implements CatanGameStoreClient
     }
 
     @Override
-    public void save(List<PlayerContext> playerList, Json moveSet, Json board)
+    public void save(String gameId, byte[] moveSet, byte[] board)
     {
         String moveSetKey = generateS3Key(MOVE_SET);
         ByteArrayInputStream moveSetData = convertJsonToBytes(moveSet);
@@ -38,26 +37,20 @@ public class CatanGameStoreClientImpl implements CatanGameStoreClient
         String boardKey = generateS3Key(BOARD);
         ByteArrayInputStream boardData = convertJsonToBytes(board);
 
-        indexInDynamo(playerList, moveSetKey, boardKey);
+        indexInDynamo(gameId, moveSetKey, boardKey);
 
         s3Put(moveSetKey, moveSetData, Constants.MOVESET_BUCKET);
         s3Put(boardKey, boardData, Constants.BOARD_BUCKET);
     }
 
-    private void indexInDynamo(List<PlayerContext> playerList, String moveSetKey, String boardKey)
+    private void indexInDynamo(String gameId, String moveSetKey, String boardKey)
     {
-        for (PlayerContext player : playerList)
-        {
-            PlayerIndexDAO dao = new PlayerIndexDAO();
-            dao.setBoardKey(boardKey);
-            dao.setMoveSetKey(moveSetKey);
-            dao.setPlayerName(player.getPlayerName());
-            dao.setPosition(player.getPosition());
-            dao.setVictoryPoints(player.getVictoryPoints());
-            dao.setTimeStamp(new Date().getTime());
-
-            mDynamoDb.save(dao);
-        }
+        GameIndexDAO dao = new GameIndexDAO();
+        dao.setGameID(gameId);
+        dao.setTimeStamp(new Date().getTime());
+        dao.setBoardKey(boardKey);
+        dao.setMoveSetKey(moveSetKey);
+        mDynamoDb.save(dao);
     }
 
     private void s3Put(String key, ByteArrayInputStream data, String bucket)
@@ -68,33 +61,33 @@ public class CatanGameStoreClientImpl implements CatanGameStoreClient
     }
 
     @Override
-    public List<Json> getMoveSetsForPlayer(String player)
+    public List<Json> getMoveSetsForPlayer(String gameId)
     {
-        return queryAndGet(player, MOVE_SET);
+        return queryAndGet(gameId, MOVE_SET);
     }
 
     @Override
-    public List<Json> getBoardsForPlayer(String player)
+    public List<Json> getBoardsForPlayer(String gameId)
     {
-        return queryAndGet(player, BOARD);
+        return queryAndGet(gameId, BOARD);
     }
 
-    private List<Json> queryAndGet(String player, String type)
+    private List<Json> queryAndGet(String gameId, String type)
     {
-        PlayerIndexDAO hashKeyValues = new PlayerIndexDAO();
-        hashKeyValues.setPlayerName(player);
+        GameIndexDAO hashKeyValues = new GameIndexDAO();
+        hashKeyValues.setGameID(gameId);
 
         String queryType = type.equals(MOVE_SET) ? Constants.MOVESET_S3KEY : Constants.BOARD_S3KEY;
         String bucket = type.equals(MOVE_SET) ? Constants.MOVESET_BUCKET : Constants.BOARD_BUCKET;
 
-        List<PlayerIndexDAO> queryList =
-                mDynamoDb.query(PlayerIndexDAO.class, buildQueryExpression(hashKeyValues, queryType));
+        List<GameIndexDAO> queryList =
+                mDynamoDb.query(GameIndexDAO.class, buildQueryExpression(hashKeyValues, queryType));
 
         List<Json> jsonList = new ArrayList<>();
 
         try
         {
-            for (PlayerIndexDAO playerDao : queryList)
+            for (GameIndexDAO playerDao : queryList)
             {
                 S3Object s3Object =
                         type.equals(MOVE_SET)
@@ -112,7 +105,7 @@ public class CatanGameStoreClientImpl implements CatanGameStoreClient
         return jsonList;
     }
 
-    private <T extends PlayerIndexDAO> DynamoDBQueryExpression<T> buildQueryExpression(T hashKeyValues, String attribute)
+    private <T extends GameIndexDAO> DynamoDBQueryExpression<T> buildQueryExpression(T hashKeyValues, String attribute)
     {
         return new DynamoDBQueryExpression<T>()
                 .withHashKeyValues(hashKeyValues)
@@ -129,9 +122,9 @@ public class CatanGameStoreClientImpl implements CatanGameStoreClient
     /**
      * TODO: build a serialization / compression module for this
      */
-    private ByteArrayInputStream convertJsonToBytes(Json json)
+    private ByteArrayInputStream convertJsonToBytes(byte[] array)
     {
-        return new ByteArrayInputStream(json.toString().getBytes());
+        return new ByteArrayInputStream(array);
     }
 
     private AmazonS3 mS3Client;

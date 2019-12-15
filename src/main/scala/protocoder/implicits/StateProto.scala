@@ -93,7 +93,7 @@ object StateProto {
 
   implicit def requestProto[GAME <: Inventory[GAME]]: ProtoCoder[(GamePhase, GameState[PublicInfo], GAME), ActionRequest] = {
     case (req: GamePhase, gs: GameState[_], inv: GAME) =>
-      ActionRequest(typeMap(req), gs.toPublicGameState.proto, inv.proto)
+      ActionRequest(typeMap(req), Some(gs.toPublicGameState.proto), Some(inv.proto))
   }
 
 }

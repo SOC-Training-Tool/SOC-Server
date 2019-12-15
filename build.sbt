@@ -13,6 +13,7 @@ val akkatyped = "com.typesafe.akka" %% "akka-actor-typed" % "2.5.23"
 val s3 = "com.amazonaws" % "aws-java-sdk-s3" % "1.11.311"
 val ddb = "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.11.311"
 val junit = "junit" % "junit" % "4.11"
+val cache = "com.github.cb372" %% "scalacache-caffeine" % "0.28.0"
 
 val immutablesoc = "io.github.soc-training-tool" %% "immutablesoc" % "0.4.5"
 
@@ -24,7 +25,7 @@ val circe = Seq(
 
 
 
-libraryDependencies ++= Seq(scalatest, akka, akkatyped, akkatest, s3, ddb, junit, immutablesoc) ++ circe
+libraryDependencies ++= Seq(scalatest, akka, akkatyped, akkatest, s3, ddb, junit, immutablesoc, cache) ++ circe
 libraryDependencies ++= Seq(
     "io.grpc" % "grpc-netty" % scalapb.compiler.Version.grpcJavaVersion,
     "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion

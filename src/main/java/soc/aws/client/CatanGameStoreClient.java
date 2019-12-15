@@ -1,13 +1,11 @@
 package soc.aws.client;
 
 import io.circe.Json;
-import soc.model.PlayerContext;
-
 import java.util.List;
 
 public interface CatanGameStoreClient
 {
-    void save(List<PlayerContext> playerList, Json moveSet, Json board);
+    void save(String gameId, byte[] moveSet, byte[] board);
 
     List<Json> getMoveSetsForPlayer(String player);
 

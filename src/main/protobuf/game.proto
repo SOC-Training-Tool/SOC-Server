@@ -52,8 +52,8 @@ message GameMessage {
     PROPOSE_TRADE_OR_PASS = 9;
   }
   required ActionRequestType type = 2;
-  required PublicGameState public_game_state = 3;
-  required Inventory inventory = 4;
+  optional PublicGameState public_game_state = 3;
+  optional Inventory inventory = 4;
 }
 
 
@@ -158,7 +158,6 @@ message SubscribeRequest {
   optional int32 position = 4; // Optional, raises an exception if type = OBSERVER. If not supplied default to next open position.
 }
 
-
 message MoveResponse {
   // We can make this response richer
   required string status = 1; // ACCEPTED, NOT_YOUR_TURN, ILLEGAL_MOVE etc.
@@ -181,6 +180,8 @@ message StartGameRequest {
 }
 
 message StartGameResponse {
+    required bool successful = 1;
+
     // Maybe string status
 }
 
@@ -199,4 +200,13 @@ enum GameStatus {
     PLAYING = 1;
     FINISHED = 2;
     IN_QUEUE = 3;
+}
+
+message GameResults {
+    message ActionResultContainer {
+        repeated ActionResult results = 1;
+    }
+    required string gameId = 1;
+    required Board initialBoard = 2;
+    required ActionResultContainer results = 3;
 }
